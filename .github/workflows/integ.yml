@@ -20,7 +20,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       - name: TS+React 19 test
         run: ./run-tests.sh ts-react19
       - name: TS+React 18 test
