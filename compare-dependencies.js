@@ -16,7 +16,7 @@ const folder1 = process.argv[2];
 const folder2 = process.argv[3];
 
 if (!folder1 || !folder2) {
-    console.error('Usage: ./compare-dependencies.js <folder1> <folder2>');
+    console.error('Usage: node compare-dependencies.js <folder1> <folder2>');
     process.exit(1);
 }
 
