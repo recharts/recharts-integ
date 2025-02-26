@@ -1,2 +1,2 @@
 # recharts-integ
-Recharts integration tests for different react versions, etc.
+Recharts integration tests for different React versions and various other frameworks.
