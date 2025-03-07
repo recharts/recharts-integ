@@ -36,6 +36,7 @@ function verify_single_dependency {
 function test {
   local integration=$1
   pushd "$integration"
+  rm -rf node_modules
   npm install --package-lock=false
   npm run build
   verify_single_dependency recharts
