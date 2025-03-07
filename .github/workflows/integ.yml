@@ -26,3 +26,5 @@ jobs:
         run: ./run-tests.sh ts-react18
       - name: TS+React 16 test
         run: ./run-tests.sh ts-react16
+      - name: TS4+React 17 test
+        run: ./run-tests.sh ts4-react17
