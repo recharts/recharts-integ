@@ -1,0 +1,42 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+# ignores all react* and @types/react* packages on purpose - we want to keep the old versions around so that we can test compatibility.
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/integrations/ts-react16"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+      
+  - package-ecosystem: "npm"
+    directory: "/integrations/ts-react18"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+      
+  - package-ecosystem: "npm"
+    directory: "/integrations/ts-react19"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+      
+  - package-ecosystem: "npm"
+    directory: "/integrations/ts4-react17"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+      # also ignore typescript again because this particular folder is testing compatibility with old typescript version
+      - dependency-name: "typescript"
