@@ -9,22 +9,18 @@ jobs:
   build-and-test:
     name: Build and Test on ${{ matrix.node-version }}
     runs-on: ubuntu-latest
+    fail-fast: false
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [18.x, 20.x, 22.x]
+        integration: [ts-react19, ts-react18, ts-react16, ts4-react17]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: TS+React 19 test
-        run: ./run-test.sh integrations/ts-react19
-      - name: TS+React 18 test
-        run: ./run-test.sh integrations/ts-react18
-      - name: TS+React 16 test
-        run: ./run-test.sh integrations/ts-react16
-      - name: TS4+React 17 test
-        run: ./run-test.sh integrations/ts4-react17
+      - name: Test ${{ matrix.integration }}
+        run: ./run-test.sh integrations/${{ matrix.integration }}
