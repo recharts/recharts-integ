@@ -21,10 +21,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: TS+React 19 test
-        run: ./run-tests.sh ts-react19
+        run: ./run-test.sh integrations/ts-react19
       - name: TS+React 18 test
-        run: ./run-tests.sh ts-react18
+        run: ./run-test.sh integrations/ts-react18
       - name: TS+React 16 test
-        run: ./run-tests.sh ts-react16
+        run: ./run-test.sh integrations/ts-react16
       - name: TS4+React 17 test
-        run: ./run-tests.sh ts4-react17
+        run: ./run-test.sh integrations/ts4-react17
