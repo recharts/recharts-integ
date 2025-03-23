@@ -63,7 +63,7 @@ function yarn_test {
   local integration=$1
   pushd "$integration"
   rm -rf node_modules
-  rm yarn.lock
+  rm -f yarn.lock
   # so we don't want to generate the lockfile for CI run but yarn refuses to run `yarn list` and `yarn why` without lockfile so we need one anyway
   yarn install # --frozen-lockfile
   yarn build
