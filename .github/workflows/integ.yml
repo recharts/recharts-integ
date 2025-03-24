@@ -7,7 +7,7 @@ on: [push, pull_request]
 
 jobs:
   build-and-test:
-    name: Build and Test on ${{ matrix.node-version }}
+    name: ${{matrix.integration}} on ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
     strategy:
