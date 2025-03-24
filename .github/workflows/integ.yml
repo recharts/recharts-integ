@@ -9,9 +9,9 @@ jobs:
   build-and-test:
     name: Build and Test on ${{ matrix.node-version }}
     runs-on: ubuntu-latest
-    fail-fast: false
 
     strategy:
+      fail-fast: false
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         node-version: [18.x, 20.x, 22.x]
