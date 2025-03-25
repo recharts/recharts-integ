@@ -78,12 +78,12 @@ function npm_test {
 function yarn_test {
   local integration=$1
   pushd "$integration"
-#  rm -rf node_modules
-#  rm -f yarn.lock
+  rm -rf node_modules
+  rm -f yarn.lock
   # so we don't want to generate the lockfile for CI run but yarn refuses to run `yarn list` and `yarn why` without lockfile so we need one anyway
-#  yarn install # --frozen-lockfile
+  yarn install # --frozen-lockfile
   run_yarn_test_if_exists
-#  yarn build
+  yarn build
   yarn_verify_single_dependency recharts
   yarn_verify_single_dependency react
   yarn_verify_single_dependency 'react-dom'
