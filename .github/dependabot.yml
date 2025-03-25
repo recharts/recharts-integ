@@ -8,31 +8,65 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/integrations/ts-react16"
+    directory: "/integrations-npm/ts-react16"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "react*"
       - dependency-name: "@types/react*"
-      
+
   - package-ecosystem: "npm"
-    directory: "/integrations/ts-react18"
+    directory: "/integrations-yarn/ts-react16"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "react*"
       - dependency-name: "@types/react*"
-      
+
   - package-ecosystem: "npm"
-    directory: "/integrations/ts-react19"
+    directory: "/integrations-npm/ts-react18"
     schedule:
       interval: "weekly"
     ignore:
       - dependency-name: "react*"
       - dependency-name: "@types/react*"
-      
+
   - package-ecosystem: "npm"
-    directory: "/integrations/ts4-react17"
+    directory: "/integrations-yarn/ts-react18"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+
+  - package-ecosystem: "npm"
+    directory: "/integrations-npm/ts-react19"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+
+  - package-ecosystem: "npm"
+    directory: "/integrations-yarn/ts-react19"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+
+  - package-ecosystem: "npm"
+    directory: "/integrations-npm/ts4-react17"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "react*"
+      - dependency-name: "@types/react*"
+      # also ignore typescript again because this particular folder is testing compatibility with old typescript version
+      - dependency-name: "typescript"
+
+  - package-ecosystem: "npm"
+    directory: "/integrations-yarn/ts4-react17"
     schedule:
       interval: "weekly"
     ignore:
