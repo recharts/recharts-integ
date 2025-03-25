@@ -75,16 +75,14 @@ function yarn_test {
   popd
 }
 
-# first argument is the runner, second argument is the folder
-if [ $# -eq 2 ]; then
-  runner=$1
-  integration=$2
-  if [ "$runner" == "npm" ]; then
+if [ $# -eq 1 ]; then
+  folder=$1
+  if [[ "$folder" == *"npm"* ]]; then
     npm_test "$integration"
-  elif [ "$runner" == "yarn" ]; then
+  elif [[ "$folder" == *"yarn"* ]]; then
     yarn_test "$integration"
   else
-    echo "Error: unknown runner $runner"
+    echo "Error: not sure which runner to use for $folder"
     exit 1
   fi
   exit 0

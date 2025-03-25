@@ -3,36 +3,27 @@
 
 name: Recharts integration tests
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   build-and-test:
-    name: ${{ matrix.folder }} using ${{ matrix.runner }} on node ${{ matrix.node-version }}
+    name: ${{ matrix.folder }} on node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        node-version: [18.x, 20.x, 22.x]
-        runner: [npm, yarn]
-        include:
-          - folder: integrations-npm/ts-react16
-            runner: npm
-          - folder: integrations-npm/ts4-react17
-            runner: npm
-          - folder: integrations-npm/ts-react18
-            runner: npm
-          - folder: integrations-npm/ts-react19
-            runner: npm
-          - folder: integrations-yarn/ts-react16
-            runner: yarn
-          - folder: integrations-yarn/ts4-react17
-            runner: yarn
-          - folder: integrations-yarn/ts-react18
-            runner: yarn
-          - folder: integrations-yarn/ts-react19
-            runner: yarn
+        node-version: [ 18.x, 20.x, 22.x ]
+        folder:
+          - integrations-npm/ts-react16
+          - integrations-npm/ts4-react17
+          - integrations-npm/ts-react18
+          - integrations-npm/ts-react19
+          - integrations-yarn/ts-react16
+          - integrations-yarn/ts4-react17
+          - integrations-yarn/ts-react18
+          - integrations-yarn/ts-react19
     steps:
       - uses: actions/checkout@v3
       - name: Setup node.js
@@ -40,4 +31,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test app and check dependencies
-        run: ./run-test.sh ${{ matrix.runner }} ${{ matrix.folder }}
+        run: ./run-test.sh ${{ matrix.folder }}
