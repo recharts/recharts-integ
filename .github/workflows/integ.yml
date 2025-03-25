@@ -15,6 +15,7 @@ jobs:
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         node-version: [18.x, 20.x, 22.x]
+        runner: [npm, yarn]
         include:
           - folder: integrations-npm/ts-react16
             runner: npm
