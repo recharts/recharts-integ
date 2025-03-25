@@ -1,13 +1,13 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Node.js CI
+name: Recharts integration tests
 
 on: [push, pull_request]
 
 jobs:
   build-and-test:
-    name: ${{matrix.integration}} on ${{ matrix.node-version }}
+    name: ${{ matrix.folder }} using ${{ matrix.runner }} on node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,12 +15,28 @@ jobs:
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         node-version: [18.x, 20.x, 22.x]
-        integration: [ts-react19, ts-react18, ts-react16, ts4-react17]
+        include:
+          - folder: integrations-npm/ts-react16
+            runner: npm
+          - folder: integrations-npm/ts4-react17
+            runner: npm
+          - folder: integrations-npm/ts-react18
+            runner: npm
+          - folder: integrations-npm/ts-react19
+            runner: npm
+          - folder: integrations-yarn/ts-react16
+            runner: yarn
+          - folder: integrations-yarn/ts4-react17
+            runner: yarn
+          - folder: integrations-yarn/ts-react18
+            runner: yarn
+          - folder: integrations-yarn/ts-react19
+            runner: yarn
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Test ${{ matrix.integration }}
-        run: ./run-test.sh integrations/${{ matrix.integration }}
+      - name: Test app and check dependencies
+        run: ./run-test.sh ${{ matrix.runner }} ${{ matrix.folder }}
