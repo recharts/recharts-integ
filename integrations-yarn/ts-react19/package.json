@@ -1,5 +1,5 @@
 {
-  "name": "ts-react16",
+  "name": "ts-react19",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,33 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^16.8.x",
-    "react-dom": "^16.8.x",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "recharts": "^3.0.0-alpha.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "@types/react": "^16.8.x",
-    "@types/react-dom": "^16.8.x",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.19.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^16.0.0",
-    "typescript": "~5.8.2",
+    "typescript": "~5.7.2",
     "typescript-eslint": "^8.22.0",
     "vite": "^6.1.0"
-  },
-  "overrides": {
-    "@reduxjs/toolkit": {
-      ".": "^1.9.7",
-      "dependencies": {
-        "react": "^16.8.x"
-      }
-    },
-    "react-redux": {
-      ".": "^8.1.3",
-      "react": "^16.8.x"
-    }
   }
 }

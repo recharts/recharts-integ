@@ -1,30 +1,34 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Node.js CI
+name: Recharts integration tests
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   build-and-test:
-    name: Build and Test on ${{ matrix.node-version }}
+    name: ${{ matrix.folder }} on node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [ 18.x, 20.x, 22.x ]
+        folder:
+          - integrations-npm/ts-react16
+          - integrations-npm/ts4-react17
+          - integrations-npm/ts-react18
+          - integrations-npm/ts-react19
+          - integrations-yarn/ts-react16
+          - integrations-yarn/ts4-react17
+          - integrations-yarn/ts-react18
+          - integrations-yarn/ts-react19
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: TS+React 19 test
-        run: ./run-tests.sh ts-react19
-      - name: TS+React 18 test
-        run: ./run-tests.sh ts-react18
-      - name: TS+React 16 test
-        run: ./run-tests.sh ts-react16
-      - name: TS4+React 17 test
-        run: ./run-tests.sh ts4-react17
+      - name: Test app and check dependencies
+        run: ./run-test.sh ${{ matrix.folder }}
