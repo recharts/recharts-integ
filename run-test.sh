@@ -78,9 +78,9 @@ function yarn_test {
 if [ $# -eq 1 ]; then
   folder=$1
   if [[ "$folder" == *"npm"* ]]; then
-    npm_test "$integration"
+    npm_test "folder"
   elif [[ "$folder" == *"yarn"* ]]; then
-    yarn_test "$integration"
+    yarn_test "folder"
   else
     echo "Error: not sure which runner to use for $folder"
     exit 1
