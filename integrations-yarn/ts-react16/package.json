@@ -27,16 +27,8 @@
     "typescript-eslint": "^8.22.0",
     "vite": "^6.1.0"
   },
-  "overrides": {
-    "@reduxjs/toolkit": {
-      ".": "^1.9.7",
-      "dependencies": {
-        "react": "^16.8.x"
-      }
-    },
-    "react-redux": {
-      ".": "^8.1.3",
-      "react": "^16.8.x"
-    }
+  "resolutions": {
+    "react": "^16.8.x",
+    "react-dom": "^16.8.x"
   }
 }
