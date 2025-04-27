@@ -2,8 +2,14 @@
 
 # script for running integration tests
 # How to use:
-# `./scripts/run-test.sh <test-folder-name>`
+# `./scripts/run-test.sh <test-folder-name> [optional-recharts-version]`
 # The script will run an integration test in the given folder.
+# If a version is provided, it will be used to install the recharts package.
+# You can also provide a tgz file with the version of recharts you want to test
+# as both npm and yarn support installing from a tgz file:
+# https://docs.npmjs.com/cli/v8/commands/npm-install
+# https://classic.yarnpkg.com/lang/en/docs/cli/add/
+# https://yarnpkg.com/cli/add
 # it will exit with 0 on success and non-0 on failure
 
 set -o pipefail
@@ -92,8 +98,27 @@ function yarn_test {
   popd
 }
 
-if [ $# -eq 1 ]; then
+function replace_version_in_package_json {
+  local package_json_file=$1
+  local version=$2
+  if [ -z "$version" ]; then
+    return 0
+  fi
+  if [ -f "$package_json_file" ]; then
+    echo "Replacing recharts version in '$package_json_file' with '$version'"
+    # uses pipe character | instead of the more common / to escape the slashes in the version in case it is a file path
+    sed -i.bak "s|\"recharts\": \".*\"|\"recharts\": \"$version\"|" "$package_json_file"
+    rm "$package_json_file.bak"
+  else
+    echo "Error: $package_json_file not found"
+    exit 1
+  fi
+}
+
+if [ $# -ge 1 ] && [ $# -le 2 ]; then
   folder=$1
+  version=${2:-}
+  replace_version_in_package_json "$folder/package.json" "$version"
   if [[ "$folder" == *"npm"* ]]; then
     npm_test "$folder"
   elif [[ "$folder" == *"yarn"* ]]; then
@@ -106,7 +131,7 @@ if [ $# -eq 1 ]; then
 else
   # otherwise log usage and exit
   all_available_tests=$(find integrations -mindepth 1 -maxdepth 1 -type d | tr '\n' ' ')
-  echo "Usage: $0 <test-folder>"
+  echo "Usage: $0 <test-folder> [optional-recharts-version]"
   echo "available tests are: $all_available_tests"
   exit 1
 fi
