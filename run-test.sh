@@ -130,7 +130,7 @@ if [ $# -ge 1 ] && [ $# -le 2 ]; then
   exit 0
 else
   # otherwise log usage and exit
-  all_available_tests=$(find integrations -mindepth 1 -maxdepth 1 -type d | tr '\n' ' ')
+  all_available_tests=$(find integrations* -mindepth 1 -maxdepth 1 -type d | tr '\n' ' ')
   echo "Usage: $0 <test-folder> [optional-recharts-version]"
   echo "available tests are: $all_available_tests"
   exit 1
