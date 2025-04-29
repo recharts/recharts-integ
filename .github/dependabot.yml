@@ -78,3 +78,4 @@ updates:
       - dependency-name: "@types/react*"
       # also ignore typescript again because this particular folder is testing compatibility with old typescript version
       - dependency-name: "typescript"
+      - dependency-name: "@testing-library/react"
