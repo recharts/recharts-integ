@@ -10,7 +10,10 @@
 # https://docs.npmjs.com/cli/v8/commands/npm-install
 # https://classic.yarnpkg.com/lang/en/docs/cli/add/
 # https://yarnpkg.com/cli/add
-# it will exit with 0 on success and non-0 on failure
+# If you want to use the tgz file then the version should be prefixed with `file:`
+# so for example:
+# `./scripts/run-test.sh integrations/npm file:../recharts-snapshot.tgz`
+# This script will exit with 0 on success and non-0 on failure
 
 set -o pipefail
 set -o errexit
@@ -70,7 +73,9 @@ function npm_test {
   local integration=$1
   pushd "$integration"
   rm -rf node_modules
-  npm install --package-lock=false
+  rm -f package-lock.json
+  # so we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
+  npm install # --package-lock=false
   npm run test --if-present
   npm run build
   npm_verify_single_dependency recharts
@@ -86,7 +91,7 @@ function yarn_test {
   pushd "$integration"
   rm -rf node_modules
   rm -f yarn.lock
-  # so we don't want to generate the lockfile for CI run but yarn refuses to run `yarn list` and `yarn why` without lockfile so we need one anyway
+  # same story as npm: we don't want to generate the lockfile for CI run but yarn refuses to run `yarn list` and `yarn why` without lockfile so we need one anyway
   yarn install # --frozen-lockfile
   run_yarn_test_if_exists
   yarn build
