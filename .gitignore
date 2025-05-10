@@ -2,3 +2,7 @@ node_modules
 .DS_Store
 dist
 /.idea/*
+
+# we don't want to commit lock files for the integration tests, we want to have a fresh install always
+package-lock.json
+yarn.lock

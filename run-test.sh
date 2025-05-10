@@ -103,6 +103,39 @@ function yarn_test {
   popd
 }
 
+function library_of_library_test {
+  pushd "library-inside-library"
+  pushd "my-charts"
+  rm -rf node_modules
+  rm -f package-lock.json
+  rm -f yarn.lock
+  # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
+  npm install # --package-lock=false
+  npm run build
+  npm_verify_single_dependency recharts
+  npm_verify_single_dependency react
+  npm_verify_single_dependency 'react-dom'
+  npm_verify_single_dependency 'react-redux'
+  npm_verify_single_dependency '@reduxjs/toolkit'
+  popd
+
+  pushd "app"
+  rm -rf node_modules
+  rm -f package-lock.json
+  rm -f yarn.lock
+  # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
+  npm install # --package-lock=false
+  npm run build
+  npm run test --if-present
+  npm_verify_single_dependency recharts
+  npm_verify_single_dependency react
+  npm_verify_single_dependency 'react-dom'
+  npm_verify_single_dependency 'react-redux'
+  npm_verify_single_dependency '@reduxjs/toolkit'
+  popd
+  popd
+}
+
 function replace_version_in_package_json {
   local package_json_file=$1
   local version=$2
@@ -128,6 +161,8 @@ if [ $# -ge 1 ] && [ $# -le 2 ]; then
     npm_test "$folder"
   elif [[ "$folder" == *"yarn"* ]]; then
     yarn_test "$folder"
+  elif [[ "$folder" == *"library-inside-library"* ]]; then
+    library_of_library_test
   else
     echo "Error: not sure which runner to use for $folder"
     exit 1
