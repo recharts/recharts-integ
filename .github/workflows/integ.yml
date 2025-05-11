@@ -6,26 +6,40 @@ name: Recharts integration tests
 on: [ push, pull_request ]
 
 jobs:
+  list_integration_tests:
+   name: List Integration Test Directories
+   runs-on: ubuntu-latest
+   outputs:
+     # Output the list of directories as a JSON array string
+     directories: ${{ steps.set_matrix.outputs.directories }}
+   steps:
+     - name: Checkout Integration Tests Repository
+       uses: actions/checkout@v4
+       with:
+         repository: recharts/recharts-integ
+
+     - name: List Integration Test Directories
+       id: set_matrix
+       # This command finds all integration test directories
+       # and formats them as a JSON array.
+       run: |
+         JSON_ARRAY=$(node list.js --ci --json)
+         echo "Generated directory list: $JSON_ARRAY"
+         echo "directories=$JSON_ARRAY" >> $GITHUB_OUTPUT
+
   build-and-test:
-    name: ${{ matrix.folder }} on node ${{ matrix.node-version }}
+
+    name: ${{ matrix.test_dir }} on node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
+    needs: [list_integration_tests]
 
     strategy:
       fail-fast: false
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         node-version: [ 18.x, 20.x, 22.x ]
-        folder:
-          - integrations-npm/ts-react16
-          - integrations-npm/ts4-react17
-          - integrations-npm/ts-react18
-          - integrations-npm/ts-react19
-          - integrations-yarn/ts-react16
-          - integrations-yarn/ts4-react17
-          - integrations-yarn/ts-react18
-          - integrations-yarn/ts-react19
-          # the "library inside library" test fails so let's not run it for now
-          # - integrations-library-inside-library
+        # Dynamically generate the matrix from the JSON output of the previous job
+        test_dir: ${{ fromJson(needs.list_integration_tests.outputs.directories) }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup node.js
@@ -33,4 +47,4 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test app and check dependencies
-        run: ./run-test.sh ${{ matrix.folder }}
+        run: ./run-test.sh ${{ matrix.test_dir }}
