@@ -10,9 +10,9 @@
 # https://docs.npmjs.com/cli/v8/commands/npm-install
 # https://classic.yarnpkg.com/lang/en/docs/cli/add/
 # https://yarnpkg.com/cli/add
-# If you want to use the tgz file then the version should be prefixed with `file:`
+# If you want to use the tgz file then the version should be prefixed with `file:` and it should be an absolute path
 # so for example:
-# `./scripts/run-test.sh integrations/npm file:../recharts-snapshot.tgz`
+# `./scripts/run-test.sh integrations/npm file:$(realpath ../recharts-snapshot.tgz)`
 # This script will exit with 0 on success and non-0 on failure
 
 set -o pipefail
@@ -106,7 +106,7 @@ function yarn_test {
 function library_of_library_test {
   pushd "integrations-library-inside-library"
   pushd "my-charts"
-  replace_version_in_package_json "package.json" "$version"
+  replace_version_in_package_json "package.json" "recharts" "$version"
   rm -rf node_modules
   rm -f package-lock.json
   rm -f yarn.lock
@@ -118,12 +118,16 @@ function library_of_library_test {
   npm_verify_single_dependency 'react-dom'
   npm_verify_single_dependency 'react-redux'
   npm_verify_single_dependency '@reduxjs/toolkit'
+  # now we need to pack the library as a tgz file too,
+  # otherwise npm refuses to install a tgz nested in a unpacked folder.
+  my_charts_file="$(npm pack)"
   popd
 
   pushd "app"
   rm -rf node_modules
   rm -f package-lock.json
   rm -f yarn.lock
+  replace_version_in_package_json "package.json" "my-charts" "file:../my-charts/$my_charts_file"
   # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
   npm install # --package-lock=false
   npm run build
@@ -139,14 +143,15 @@ function library_of_library_test {
 
 function replace_version_in_package_json {
   local package_json_file=$1
-  local version=$2
+  local dependency_name=$2
+  local version=$3
   if [ -z "$version" ]; then
     return 0
   fi
   if [ -f "$package_json_file" ]; then
     echo "Replacing recharts version in '$package_json_file' with '$version'"
     # uses pipe character | instead of the more common / to escape the slashes in the version in case it is a file path
-    sed -i.bak "s|\"recharts\": \".*\"|\"recharts\": \"$version\"|" "$package_json_file"
+    sed -i.bak "s|\"$dependency_name\": \".*\"|\"$dependency_name\": \"$version\"|" "$package_json_file"
     rm "$package_json_file.bak"
   else
     echo "Error: $package_json_file not found"
@@ -159,10 +164,10 @@ if [ $# -ge 1 ] && [ $# -le 2 ]; then
   version=${2:-}
 
   if [[ "$folder" == *"npm"* ]]; then
-    replace_version_in_package_json "$folder/package.json" "$version"
+    replace_version_in_package_json "$folder/package.json" "recharts" "$version"
     npm_test "$folder"
   elif [[ "$folder" == *"yarn"* ]]; then
-    replace_version_in_package_json "$folder/package.json" "$version"
+    replace_version_in_package_json "$folder/package.json" "recharts" "$version"
     yarn_test "$folder"
   elif [[ "$folder" == *"library-inside-library"* ]]; then
     library_of_library_test "$version"
