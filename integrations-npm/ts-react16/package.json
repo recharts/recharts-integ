@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^16.8.x",
     "react-dom": "^16.8.x",
-    "recharts": "^3.0.0-beta.0"
+    "recharts": "^3.0.0-beta.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.26.0",
