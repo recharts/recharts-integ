@@ -44,11 +44,12 @@ const yarnTests = listAllFolders('integrations-yarn');
 const libraryTests = ['integrations-library-inside-library']
 
 const output = [].concat(
-    npmTests, yarnTests
+    npmTests, yarnTests, libraryTests
 )
 
 if (!isCi) {
-    output.push(...libraryTests);
+    // all the tests we have now are stable and should be run in CI
+    // output.push(...libraryTests);
 }
 
 if (isJson) {
