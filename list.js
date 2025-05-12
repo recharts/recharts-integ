@@ -39,8 +39,7 @@ function listAllFolders(dir) {
 
 const npmTests = listAllFolders('integrations-npm');
 
-const yarnTests = listAllFolders('integrations-yarn')
-;
+const yarnTests = listAllFolders('integrations-yarn');
 
 const libraryTests = ['integrations-library-inside-library']
 
