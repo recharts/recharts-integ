@@ -104,8 +104,9 @@ function yarn_test {
 }
 
 function library_of_library_test {
-  pushd "library-inside-library"
+  pushd "integrations-library-inside-library"
   pushd "my-charts"
+  replace_version_in_package_json "package.json" "$version"
   rm -rf node_modules
   rm -f package-lock.json
   rm -f yarn.lock
@@ -156,13 +157,15 @@ function replace_version_in_package_json {
 if [ $# -ge 1 ] && [ $# -le 2 ]; then
   folder=$1
   version=${2:-}
-  replace_version_in_package_json "$folder/package.json" "$version"
+
   if [[ "$folder" == *"npm"* ]]; then
+    replace_version_in_package_json "$folder/package.json" "$version"
     npm_test "$folder"
   elif [[ "$folder" == *"yarn"* ]]; then
+    replace_version_in_package_json "$folder/package.json" "$version"
     yarn_test "$folder"
   elif [[ "$folder" == *"library-inside-library"* ]]; then
-    library_of_library_test
+    library_of_library_test "$version"
   else
     echo "Error: not sure which runner to use for $folder"
     exit 1
