@@ -106,7 +106,7 @@ function yarn_test {
 function library_of_library_test {
   pushd "integrations-library-inside-library"
   pushd "my-charts"
-  replace_version_in_package_json "package.json" "recharts" "$version"
+  node "$SCRIPTS_DIR/replace-package-version.js" "package.json" "recharts" "$version"
   node "$SCRIPTS_DIR/clean.js" "$(pwd)"
   # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
   npm install # --package-lock=false
@@ -123,7 +123,7 @@ function library_of_library_test {
 
   pushd "app"
   node "$SCRIPTS_DIR/clean.js" "$(pwd)"
-  replace_version_in_package_json "package.json" "my-charts" "file:../my-charts/$my_charts_file"
+  node "$SCRIPTS_DIR/replace-package-version.js" "package.json" "my-charts" "file:../my-charts/$my_charts_file"
   # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
   npm install # --package-lock=false
   npm run build
@@ -137,33 +137,15 @@ function library_of_library_test {
   popd
 }
 
-function replace_version_in_package_json {
-  local package_json_file=$1
-  local dependency_name=$2
-  local version=$3
-  if [ -z "$version" ]; then
-    return 0
-  fi
-  if [ -f "$package_json_file" ]; then
-    echo "Replacing recharts version in '$package_json_file' with '$version'"
-    # uses pipe character | instead of the more common / to escape the slashes in the version in case it is a file path
-    sed -i.bak "s|\"$dependency_name\": \".*\"|\"$dependency_name\": \"$version\"|" "$package_json_file"
-    rm "$package_json_file.bak"
-  else
-    echo "Error: $package_json_file not found"
-    exit 1
-  fi
-}
-
 if [ $# -ge 1 ] && [ $# -le 2 ]; then
   folder=$1
   version=${2:-}
 
   if [[ "$folder" == *"npm"* ]]; then
-    replace_version_in_package_json "$folder/package.json" "recharts" "$version"
+    node "$SCRIPTS_DIR/replace-package-version.js" "$folder/package.json" "recharts" "$version"
     npm_test "$folder"
   elif [[ "$folder" == *"yarn"* ]]; then
-    replace_version_in_package_json "$folder/package.json" "recharts" "$version"
+    node "$SCRIPTS_DIR/replace-package-version.js" "$folder/package.json" "recharts" "$version"
     yarn_test "$folder"
   elif [[ "$folder" == *"library-inside-library"* ]]; then
     library_of_library_test "$version"
