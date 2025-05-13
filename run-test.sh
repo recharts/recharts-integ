@@ -19,6 +19,8 @@ set -o pipefail
 set -o errexit
 set -o nounset
 
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/scripts"
+
 # this function will verify that a given dependency is only installed once.
 # it will throw an error if there are two different versions of the same package
 function npm_verify_single_dependency {
@@ -72,8 +74,7 @@ function run_yarn_test_if_exists {
 function npm_test {
   local integration=$1
   pushd "$integration"
-  rm -rf node_modules
-  rm -f package-lock.json
+  node "$SCRIPTS_DIR/clean.js" "$(pwd)"
   # so we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
   npm install # --package-lock=false
   npm run test --if-present
@@ -89,8 +90,7 @@ function npm_test {
 function yarn_test {
   local integration=$1
   pushd "$integration"
-  rm -rf node_modules
-  rm -f yarn.lock
+  node "$SCRIPTS_DIR/clean.js" "$(pwd)"
   # same story as npm: we don't want to generate the lockfile for CI run but yarn refuses to run `yarn list` and `yarn why` without lockfile so we need one anyway
   yarn install # --frozen-lockfile
   run_yarn_test_if_exists
@@ -107,9 +107,7 @@ function library_of_library_test {
   pushd "integrations-library-inside-library"
   pushd "my-charts"
   replace_version_in_package_json "package.json" "recharts" "$version"
-  rm -rf node_modules
-  rm -f package-lock.json
-  rm -f yarn.lock
+  node "$SCRIPTS_DIR/clean.js" "$(pwd)"
   # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
   npm install # --package-lock=false
   npm run build
@@ -124,9 +122,7 @@ function library_of_library_test {
   popd
 
   pushd "app"
-  rm -rf node_modules
-  rm -f package-lock.json
-  rm -f yarn.lock
+  node "$SCRIPTS_DIR/clean.js" "$(pwd)"
   replace_version_in_package_json "package.json" "my-charts" "file:../my-charts/$my_charts_file"
   # same story as npm: we don't want to generate the lockfile for CI run but npm refuses to run `npm list` without lockfile so we need one anyway
   npm install # --package-lock=false
