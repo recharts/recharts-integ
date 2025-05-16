@@ -16,7 +16,10 @@ exports.YarnController = class YarnController extends Controller {
          */
         fs.rmSync(path.join(this.absolutePath, 'node_modules'), {recursive: true, force: true});
         fs.rmSync(path.join(this.absolutePath, 'yarn.lock'), {force: true});
-        fs.rmSync(path.join(this.absolutePath, '*.tgz'), {force: true});
+        const files = fs.readdirSync(this.absolutePath);
+        files.filter(file => file.endsWith('.tgz')).forEach(file => {
+            fs.rmSync(path.join(this.absolutePath, file), {force: true});
+        });
         return TestResult.ok('clean');
     }
 

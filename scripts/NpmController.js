@@ -16,7 +16,10 @@ exports.NpmController = class NpmController extends Controller {
          */
         fs.rmSync(path.join(this.absolutePath, 'node_modules'), {recursive: true, force: true});
         fs.rmSync(path.join(this.absolutePath, 'package-lock.json'), {force: true});
-        fs.rmSync(path.join(this.absolutePath, '*.tgz'), {force: true});
+        const files = fs.readdirSync(this.absolutePath);
+        files.filter(file => file.endsWith('.tgz')).forEach(file => {
+            fs.rmSync(path.join(this.absolutePath, file), {force: true});
+        });
         return TestResult.ok('clean');
     }
 
@@ -44,7 +47,7 @@ exports.NpmController = class NpmController extends Controller {
     test() {
         try {
             this.execSync('npm run test --if-present');
-            return TestResult.ok('test');
+            return TestResult.ok('unit test');
         } catch (ex) {
             return TestResult.fail('unit test', ex);
         }
