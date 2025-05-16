@@ -27,4 +27,6 @@ fi
 
 absolute_path=$(realpath "$test_name")
 
-node scripts/run.js "$absolute_path" "$2"
+version="${2:-}"
+
+node scripts/run.js "$absolute_path" "$version"
