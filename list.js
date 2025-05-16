@@ -32,6 +32,12 @@ function listAllFolders(dir) {
         .map(file => path.join(dir, file));
 }
 
+/**
+ * Lists all integration tests, optionally filtering for stable tests suitable for CI.
+ * 
+ * @param {boolean} isCi - If true, only stable tests that should run in CI are included.
+ * @returns {string[]} An array of test folder paths.
+ */
 function listAllTests(isCi) {
     const npmTests = listAllFolders('integrations-npm');
     const yarnTests = listAllFolders('integrations-yarn');
