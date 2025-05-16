@@ -18,12 +18,7 @@
  */
 
 const fs = require('fs');
-
 const path = require('path');
-
-const isJson = process.argv.includes('--json');
-
-const isCi = process.argv.includes('--ci');
 
 /**
  * Will return all folders in the given directory
@@ -37,24 +32,37 @@ function listAllFolders(dir) {
         .map(file => path.join(dir, file));
 }
 
-const npmTests = listAllFolders('integrations-npm');
+function listAllTests(isCi) {
+    const npmTests = listAllFolders('integrations-npm');
+    const yarnTests = listAllFolders('integrations-yarn');
+    const libraryTests = ['integrations-library-inside-library']
 
-const yarnTests = listAllFolders('integrations-yarn');
+    const output = [].concat(
+        npmTests, yarnTests, libraryTests
+    )
 
-const libraryTests = ['integrations-library-inside-library']
+    if (!isCi) {
+        // all the tests we have now are stable and should be run in CI
+        // output.push(...libraryTests);
+    }
 
-const output = [].concat(
-    npmTests, yarnTests, libraryTests
-)
-
-if (!isCi) {
-    // all the tests we have now are stable and should be run in CI
-    // output.push(...libraryTests);
+    return output
 }
 
-if (isJson) {
-    console.log(JSON.stringify(output));
-} else {
-    console.log(output.join('\n'));
+function main() {
+    const isJson = process.argv.includes('--json');
+    const isCi = process.argv.includes('--ci');
+    const tests = listAllTests(isCi);
+
+    if (isJson) {
+        console.log(JSON.stringify(tests));
+    } else {
+        console.log(tests.join('\n'));
+    }
 }
 
+if (require.main === module) {
+    main();
+}
+
+exports.listAllTests = listAllTests

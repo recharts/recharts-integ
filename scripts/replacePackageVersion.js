@@ -9,20 +9,22 @@
  * If you want to pass a filename instead of a version, then that filename should be
  * prefixed with `file:`.
  *
- * Usage: node scripts/replace-package-version.js <package.json-path> <dependency-name> <version>
+ * Usage: node scripts/replacePackageVersion.js <package.json-path> <dependency-name> <version>
  *
  * Example with a version:
- * node scripts/replace-package-version.js ./package.json react 18.0.0
+ * node scripts/replacePackageVersion.js ./package.json react 18.0.0
  *
  * Example with a file:
- * node scripts/replace-package-version.js ./package.json react file:./react-18.0.0.tgz
+ * node scripts/replacePackageVersion.js ./package.json react file:./react-18.0.0.tgz
  */
 
 const fs = require('fs');
+const {TestResult} = require("./TestResult.js");
 
 exports.replacePackageVersion = function(packageJsonPath, dependencyName, version) {
     if (version == null || version === '') {
-        return;
+        // nothing to do here
+        return TestResult.ok('replace-package-version');
     }
 
     // Read the package.json file
@@ -46,16 +48,17 @@ exports.replacePackageVersion = function(packageJsonPath, dependencyName, versio
     if (!replaced) {
         // Dependency not found in either dependencies or peerDependencies
         console.error(`Dependency ${dependencyName} not found in ${packageJsonPath}`);
-        return;
+        return TestResult.fail('replace-package-version', new Error(`Dependency ${dependencyName} not found in ${packageJsonPath}`));
     }
 
     // Write the updated package.json back to the file
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    return TestResult.ok('replace-package-version');
 }
 
 if (require.main === module) {
     if (process.argv.length < 5) {
-        console.error('Usage: node scripts/replace-package-version.js <package.json-path> <dependency-name> <version>');
+        console.error('Usage: node scripts/replacePackageVersion.js <package.json-path> <dependency-name> <version>');
         process.exit(1);
     }
 
