@@ -19,4 +19,12 @@ set -o pipefail
 set -o errexit
 set -o nounset
 
-node scripts/run.js "$@"
+test_name="${1:-}"
+if [[ -z "$test_name" ]]; then
+  echo "Please provide a test folder name"
+  exit 1
+fi
+
+absolute_path=$(realpath "$test_name")
+
+node scripts/run.js "$absolute_path" "$2"
