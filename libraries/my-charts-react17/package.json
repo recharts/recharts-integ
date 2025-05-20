@@ -1,0 +1,33 @@
+{
+  "name": "my-charts-react17",
+  "version": "0.1.0",
+  "description": "A trivial React component library wrapping Recharts BarChart.",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "babel src -d dist --copy-files",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0",
+    "recharts": "^3.0.0-beta.1"
+  },
+  "keywords": [
+    "react",
+    "recharts",
+    "chart",
+    "component"
+  ],
+  "author": "Pavel Vanecek",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.27.2",
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1"
+  }
+}

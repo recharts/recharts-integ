@@ -12,8 +12,7 @@ if (require.main === module) {
 
     const output = tests.map(name => {
         console.log('running test', name);
-        const absolutePath = `${__dirname}/../${name}`;
-        const results = run(absolutePath).map(result => ({ name: result.name, success: result.success }));
+        const results = run(name).map(result => ({ name: result.name, success: result.success }));
         return { name, results };
     })
 
