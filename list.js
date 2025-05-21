@@ -20,6 +20,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const allSupportedPackageManagers = ['npm', 'yarn']
+
 /**
  * Will return all folders in the given directory
  * joined with the directory name as a prefix.
@@ -43,11 +45,19 @@ function listAllLibraryTests() {
         { library: 'my-charts-react19', app: 'app-react19' },
     ]
     const allTestCombinations = [...react16Tests, ...react17Tests, ...react18Tests];
-    const allSupportedPackageManagers = ['npm', 'yarn']
 
     return allSupportedPackageManagers.flatMap((packageManager) => {
         return allTestCombinations.map(({ library, app }) => {
             return `${packageManager}:${library}:${app}`
+        })
+    })
+}
+
+function listAllDirectDependencyTests() {
+    const allIntegrations = listAllFolders('integrations-npm');
+    return allIntegrations.flatMap((integration) => {
+        return allSupportedPackageManagers.map((packageManager) => {
+            return `${packageManager}:${integration}`
         })
     })
 }
@@ -68,7 +78,10 @@ function listAllTests(isCi) {
     )
 
     if (!isCi) {
-        output.push(...listAllLibraryTests());
+        output.push(
+            ...(listAllDirectDependencyTests()),
+            ...listAllLibraryTests()
+        );
     }
 
     return output
