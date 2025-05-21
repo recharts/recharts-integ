@@ -32,6 +32,26 @@ function listAllFolders(dir) {
         .map(file => path.join(dir, file));
 }
 
+function listAllLibraryTests() {
+    // Because of how we have defined the package.json dependencies, not everything is compatible with everything.
+    const react16Tests = [{ library: 'my-charts-react16', app: 'app-react16' }]
+    const react17Tests = [{ library: 'my-charts-react17', app: 'app-react17' }]
+    const react18Tests = [
+        { library: 'my-charts-react18', app: 'app-react18' },
+        { library: 'my-charts-react19', app: 'app-react18' },
+        { library: 'my-charts-react18', app: 'app-react19' },
+        { library: 'my-charts-react19', app: 'app-react19' },
+    ]
+    const allTestCombinations = [...react16Tests, ...react17Tests, ...react18Tests];
+    const allSupportedPackageManagers = ['npm', 'yarn']
+
+    return allSupportedPackageManagers.flatMap((packageManager) => {
+        return allTestCombinations.map(({ library, app }) => {
+            return `${packageManager}:${library}:${app}`
+        })
+    })
+}
+
 /**
  * Lists all integration tests, optionally filtering for stable tests suitable for CI.
  * 
@@ -41,15 +61,14 @@ function listAllFolders(dir) {
 function listAllTests(isCi) {
     const npmTests = listAllFolders('integrations-npm');
     const yarnTests = listAllFolders('integrations-yarn');
-    const libraryTests = ['integrations-library-inside-library']
+    const stableLibraryTests = ['integrations-library-inside-library']
 
     const output = [].concat(
-        npmTests, yarnTests, libraryTests
+        npmTests, yarnTests, stableLibraryTests
     )
 
     if (!isCi) {
-        // all the tests we have now are stable and should be run in CI
-        // output.push(...libraryTests);
+        output.push(...listAllLibraryTests());
     }
 
     return output

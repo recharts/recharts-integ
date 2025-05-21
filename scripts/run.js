@@ -33,17 +33,38 @@ function runLibraryInLibraryTest(libController, appController, rechartsVersion) 
     verifyAllSingleDependencyVersions(libController)
     const myChartsTgzFile = libController.pack()
 
-    return [
-        appController.clean(),
-        appController.replacePackageJsonVersion("my-charts", myChartsTgzFile),
-        appController.install(),
-        appController.test(),
-        appController.build(),
-        ...verifyAllSingleDependencyVersions(appController)
-    ]
+    const results = []
+
+    results.push(appController.clean())
+    results.push(appController.replacePackageJsonVersion("my-charts", myChartsTgzFile))
+    const installResult = appController.install()
+    results.push(installResult)
+    if (!installResult.success) {
+        console.warn('Failed to install the app. Skipping test and build checks because those are guaranteed to fail too!');
+        return results
+    }
+
+    results.push(appController.test())
+    results.push(appController.build())
+    results.push(...verifyAllSingleDependencyVersions(appController))
+    return results;
 }
 
-function runTest(absolutePath, rechartsVersion) {
+function runTest(testName, rechartsVersion) {
+    if (testName.includes(":")) {
+        const [packageManager, library, app] = testName.split(":");
+        const libPath = path.join(__dirname, "../libraries", library);
+        const appPath = path.join(__dirname, "../apps-3rd-party", app);
+        if (packageManager === "npm") {
+            return runLibraryInLibraryTest(new NpmController(libPath), new NpmController(appPath), rechartsVersion);
+        } else if (packageManager === "yarn") {
+            return runLibraryInLibraryTest(new YarnController(libPath), new YarnController(appPath), rechartsVersion);
+        } else {
+            console.error('Unknown package manager. Please provide a valid package manager.');
+            process.exit(1);
+        }
+    }
+    const absolutePath = path.resolve(__dirname, "../", testName);
     if (absolutePath.includes('npm')) {
         return runDirectDependencyAppTest(new NpmController(absolutePath), rechartsVersion);
     } else if (absolutePath.includes('yarn')) {
