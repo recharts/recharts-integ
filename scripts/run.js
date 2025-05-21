@@ -50,20 +50,38 @@ function runLibraryInLibraryTest(libController, appController, rechartsVersion) 
     return results;
 }
 
-function runTest(testName, rechartsVersion) {
-    if (testName.includes(":")) {
-        const [packageManager, library, app] = testName.split(":");
-        const libPath = path.join(__dirname, "../libraries", library);
-        const appPath = path.join(__dirname, "../apps-3rd-party", app);
-        if (packageManager === "npm") {
-            return runLibraryInLibraryTest(new NpmController(libPath), new NpmController(appPath), rechartsVersion);
-        } else if (packageManager === "yarn") {
-            return runLibraryInLibraryTest(new YarnController(libPath), new YarnController(appPath), rechartsVersion);
-        } else {
-            console.error('Unknown package manager. Please provide a valid package manager.');
-            process.exit(1);
-        }
+function getControllerConstructor(packageManager) {
+    if (packageManager === "npm") {
+        return NpmController;
+    } else if (packageManager === "yarn") {
+        return YarnController;
+    } else {
+        throw new Error(`Unknown package manager: ${packageManager}`);
     }
+}
+
+function runLibraryTest(testName, rechartsVersion) {
+    const [packageManager, library, app] = testName.split(":");
+    const libPath = path.join(__dirname, "../libraries", library);
+    const appPath = path.join(__dirname, "../apps-3rd-party", app);
+    const Controller = getControllerConstructor(packageManager);
+    return runLibraryInLibraryTest(new Controller(libPath), new Controller(appPath), rechartsVersion);
+}
+
+function runDirectDependencyTest(testName, rechartsVersion) {
+    const [packageManager, testType] = testName.split(":");
+    const Controller = getControllerConstructor(packageManager);
+    return runDirectDependencyAppTest(new Controller(testType), rechartsVersion);
+}
+
+function runTest(testName, rechartsVersion) {
+    if (testName.split(":").length > 2) {
+        return runLibraryTest(testName, rechartsVersion);
+    }
+    if (testName.split(":").length === 2) {
+        return runDirectDependencyTest(testName, rechartsVersion);
+    }
+
     const absolutePath = path.resolve(__dirname, "../", testName);
     if (absolutePath.includes('npm')) {
         return runDirectDependencyAppTest(new NpmController(absolutePath), rechartsVersion);
