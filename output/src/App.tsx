@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {Bar, BarChart, CartesianGrid, XAxis, YAxis} from "recharts";
+import {Bar, BarChart, CartesianGrid, XAxis, YAxis, ScatterChart, Scatter, Tooltip, Legend, ZAxis} from "recharts";
 
 type UnitTestResult = {
     name: string,
@@ -14,6 +14,12 @@ type TestResult = {
 type Details = {
     name: string,
     score: number,
+}
+
+type ScatterPoint = {
+    test: string,
+    framework: string,
+    success: boolean,
 }
 
 const dependencies = [
@@ -54,6 +60,33 @@ function calculateDetails(input: TestResult): Details {
     };
 }
 
+const frameworkSortOrder = (a: string, b: string): number => {
+    return b - a
+};
+
+const scatterTicks = ['install', 'unit test', 'build', 'recharts', 'react', 'react-dom', '@reduxjs/toolkit', 'react-redux'];
+
+function generateScatterData(testResults: ReadonlyArray<TestResult>): ScatterPoint[] {
+    const scatterData: ScatterPoint[] = [];
+
+    testResults
+        .forEach(result => {
+            result.results
+                .filter(test => scatterTicks.includes(test.name))
+                .forEach(test => {
+                    scatterData.push({
+                        test: test.name,
+                        framework: result.name,
+                        success: test.success,
+                    });
+                });
+        });
+
+    return scatterData.sort((a, b) => {
+        return a - b
+    })
+}
+
 const tickFormatter = (value: unknown) => {
     switch (value) {
         case 0:
@@ -73,8 +106,24 @@ const tickFormatter = (value: unknown) => {
 
 const ticks = [0, 1, 2, 3, 4];
 
+const CustomTooltip = ({active, payload}: any) => {
+    if (active && payload && payload.length) {
+        const data = payload[0].payload;
+        return (
+            <div style={{backgroundColor: '#333', padding: '10px', border: '1px solid #ccc'}}>
+                <p><strong>Framework:</strong> {data.framework}</p>
+                <p><strong>Test:</strong> {data.test}</p>
+                <p><strong>Status:</strong> {data.success ? 'Success' : 'Failed'}</p>
+            </div>
+        );
+    }
+    return null;
+};
+
 function App() {
     const [details, setDetails] = useState<ReadonlyArray<Details> | null>(null);
+    const [scatterData, setScatterData] = useState<ScatterPoint[] | null>(null);
+
     useEffect(() => {
         fetch("./public/output.json").then((response) => {
             if (response.ok) {
@@ -85,25 +134,80 @@ function App() {
             .then((body: ReadonlyArray<TestResult>) => {
                 const details = body.map(calculateDetails);
                 setDetails(details);
+                setScatterData(generateScatterData(body));
             })
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
     }, [])
 
-    if (details == null) {
+    if (details == null || scatterData == null) {
         return <div>Loading...</div>;
     }
-    console.log({details})
 
     return (
         <>
-            <BarChart width={1000} height={300} data={details} layout='vertical' margin={{left: 250}}>
+            <h2>Test Score Summary</h2>
+            <BarChart width={1000} height={500} data={details} layout='vertical' margin={{left: 250, bottom: 80, right: 20}}>
                 <CartesianGrid/>
                 <Bar dataKey="score" fill="#8884d8"/>
-                <XAxis dataKey='score' type='number' ticks={ticks} interval={0} tickFormatter={tickFormatter}/>
-                <YAxis dataKey='name' type='category'/>
+                <XAxis dataKey='score'
+                       type='number'
+                       ticks={ticks}
+                       angle={-25}
+                       interval={0}
+                       textAnchor="end"
+                       tickFormatter={tickFormatter}/>
+                <YAxis dataKey='name'
+                       type='category'
+                       interval={0}
+                />
             </BarChart>
+
+            <h2>Detailed Test Results</h2>
+            <ScatterChart
+                width={1000}
+                height={500}
+                margin={{top: 20, right: 20, bottom: 80, left: 250}}
+            >
+                <XAxis
+                    dataKey="test"
+                    type="category"
+                    allowDuplicatedCategory={false}
+                    name="Test"
+                    angle={-25}
+                    textAnchor="end"
+                    tick={{fontSize: 12}}
+                />
+                <YAxis
+                    dataKey="framework"
+                    type="category"
+                    allowDuplicatedCategory={false}
+                    interval={0}
+                    name="Framework"
+                    width={240}
+                    scale="band"
+                />
+                <ZAxis type='number' range={[200, 200]}/>
+                <Tooltip content={<CustomTooltip/>} />
+                <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    wrapperStyle={{paddingTop: 30}}
+                />
+                <Scatter
+                    name="Success"
+                    data={scatterData.filter(d => d.success)}
+                    fill="#4CAF50"
+                    shape="star"
+                />
+                <Scatter
+                    name="Failure"
+                    data={scatterData.filter(d => !d.success)}
+                    fill="#F44336"
+                    shape="diamond"
+                />
+            </ScatterChart>
         </>
     )
 }
