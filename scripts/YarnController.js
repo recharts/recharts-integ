@@ -67,8 +67,28 @@ exports.YarnController = class YarnController extends Controller {
         }
     }
 
+    /**
+     * This function will create a tgz file using Yarn and return the name of the file prefixed with file:
+     * so that it is ready to be used in the package.json file.
+     * @returns {string} The file reference created by yarn pack to be used in the package.json file.
+     */
     pack() {
-        return this.tgzFileNameToPackageJsonReference(this.execSync('yarn pack').trim());
+        const output = this.execSync('yarn pack --json').trim();
+        try {
+            // Parse the JSON output from yarn pack --json
+            const jsonOutput = JSON.parse(output);
+            if (jsonOutput.type === 'success' && jsonOutput.data) {
+                // Extract the tgz filename from the path in the response
+                const tgzPath = jsonOutput.data.match(/\\"(.+\.tgz)\\"/)[1];
+                const tgzFileName = path.basename(tgzPath);
+                return this.tgzFileNameToPackageJsonReference(this.absolutePath, tgzFileName);
+            } else {
+                throw new Error(`Unexpected output format from yarn pack: ${output}`);
+            }
+        } catch (error) {
+            console.error(`Error parsing yarn pack output: ${error.message}`);
+            throw error;
+        }
     }
 
     /**
