@@ -28,36 +28,29 @@ function extractReactVersion(framework: string): string {
     return match ? `React ${match[1]}` : 'Unknown';
 }
 
+function passesCommonFilters(framework: string, filters: Filters): boolean {
+    const packageManager = extractPackageManager(framework);
+    const reactVersion = extractReactVersion(framework);
+
+    const passesPackageManager = filters.packageManagers.length === 0 ||
+        filters.packageManagers.includes(packageManager);
+
+    const passesReactVersion = filters.reactVersions.length === 0 ||
+        filters.reactVersions.includes(reactVersion);
+
+    return passesPackageManager && passesReactVersion;
+}
 function applyFilters(data: ReadonlyArray<TestResult>, filters: Filters): ReadonlyArray<TestResult> {
-    return data.filter(result => {
-        const packageManager = extractPackageManager(result.name);
-        const reactVersion = extractReactVersion(result.name);
-
-        const passesPackageManager = filters.packageManagers.length === 0 ||
-            filters.packageManagers.includes(packageManager);
-
-        const passesReactVersion = filters.reactVersions.length === 0 ||
-            filters.reactVersions.includes(reactVersion);
-
-        return passesPackageManager && passesReactVersion;
-    });
+    return data.filter(result => passesCommonFilters(result.name, filters));
 }
 
 function filterScatterData(data: ScatterPoint[], filters: Filters): ScatterPoint[] {
     return data.filter(point => {
-        const packageManager = extractPackageManager(point.framework);
-        const reactVersion = extractReactVersion(point.framework);
-
-        const passesPackageManager = filters.packageManagers.length === 0 ||
-            filters.packageManagers.includes(packageManager);
-
-        const passesReactVersion = filters.reactVersions.length === 0 ||
-            filters.reactVersions.includes(reactVersion);
-
+        const passesCommon = passesCommonFilters(point.framework, filters);
         const passesTestType = filters.testTypes.length === 0 ||
             filters.testTypes.includes(point.test);
 
-        return passesPackageManager && passesReactVersion && passesTestType;
+        return passesCommon && passesTestType;
     });
 }
 
