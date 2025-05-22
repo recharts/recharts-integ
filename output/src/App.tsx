@@ -1,26 +1,8 @@
 import {useEffect, useState} from 'react'
-import {Bar, BarChart, CartesianGrid, XAxis, YAxis, ScatterChart, Scatter, Tooltip, Legend, ZAxis} from "recharts";
-
-type UnitTestResult = {
-    name: string,
-    success: boolean,
-}
-
-type TestResult = {
-    name: string,
-    results: ReadonlyArray<UnitTestResult>,
-}
-
-type Details = {
-    name: string,
-    score: number,
-}
-
-type ScatterPoint = {
-    test: string,
-    framework: string,
-    success: boolean,
-}
+import {Bar, BarChart, CartesianGrid, Legend, Scatter, ScatterChart, Tooltip, XAxis, YAxis, ZAxis} from "recharts";
+import type {Details, ScatterPoint, TestResult} from "./types.ts";
+import Collapsible from "./Collapsible.tsx";
+import type {TooltipContentProps} from "recharts/types/component/Tooltip";
 
 const dependencies = [
     'react',
@@ -29,6 +11,55 @@ const dependencies = [
     'react-redux',
     '@reduxjs/toolkit',
 ]
+
+type Filters = {
+    packageManagers: string[];
+    reactVersions: string[];
+    testTypes: string[];
+}
+
+// Helper functions for filtering
+function extractPackageManager(framework: string): string {
+    return framework.split(':')[0];
+}
+
+function extractReactVersion(framework: string): string {
+    const match = framework.match(/react(\d+)/);
+    return match ? `React ${match[1]}` : 'Unknown';
+}
+
+function applyFilters(data: ReadonlyArray<TestResult>, filters: Filters): ReadonlyArray<TestResult> {
+    return data.filter(result => {
+        const packageManager = extractPackageManager(result.name);
+        const reactVersion = extractReactVersion(result.name);
+
+        const passesPackageManager = filters.packageManagers.length === 0 ||
+            filters.packageManagers.includes(packageManager);
+
+        const passesReactVersion = filters.reactVersions.length === 0 ||
+            filters.reactVersions.includes(reactVersion);
+
+        return passesPackageManager && passesReactVersion;
+    });
+}
+
+function filterScatterData(data: ScatterPoint[], filters: Filters): ScatterPoint[] {
+    return data.filter(point => {
+        const packageManager = extractPackageManager(point.framework);
+        const reactVersion = extractReactVersion(point.framework);
+
+        const passesPackageManager = filters.packageManagers.length === 0 ||
+            filters.packageManagers.includes(packageManager);
+
+        const passesReactVersion = filters.reactVersions.length === 0 ||
+            filters.reactVersions.includes(reactVersion);
+
+        const passesTestType = filters.testTypes.length === 0 ||
+            filters.testTypes.includes(point.test);
+
+        return passesPackageManager && passesReactVersion && passesTestType;
+    });
+}
 
 function calculateScore(input: TestResult): number {
     const installWorked = input.results.some((result) => result.name === 'install' && result.success);
@@ -60,10 +91,6 @@ function calculateDetails(input: TestResult): Details {
     };
 }
 
-const frameworkSortOrder = (a: string, b: string): number => {
-    return b - a
-};
-
 const scatterTicks = ['install', 'unit test', 'build', 'recharts', 'react', 'react-dom', '@reduxjs/toolkit', 'react-redux'];
 
 function generateScatterData(testResults: ReadonlyArray<TestResult>): ScatterPoint[] {
@@ -82,9 +109,7 @@ function generateScatterData(testResults: ReadonlyArray<TestResult>): ScatterPoi
                 });
         });
 
-    return scatterData.sort((a, b) => {
-        return a - b
-    })
+    return scatterData;
 }
 
 const tickFormatter = (value: unknown) => {
@@ -106,7 +131,7 @@ const tickFormatter = (value: unknown) => {
 
 const ticks = [0, 1, 2, 3, 4];
 
-const CustomTooltip = ({active, payload}: any) => {
+const CustomTooltip = ({active, payload}: TooltipContentProps) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
         return (
@@ -120,9 +145,83 @@ const CustomTooltip = ({active, payload}: any) => {
     return null;
 };
 
+// Filter component
+const FilterForm = ({
+                        availableFilters,
+                        selectedFilters,
+                        onFilterChange
+                    }: {
+    availableFilters: {
+        packageManagers: string[],
+        reactVersions: string[],
+        testTypes: string[]
+    },
+    selectedFilters: Filters,
+    onFilterChange: (newFilters: Filters) => void
+}) => {
+    const handleCheckboxChange = (filterType: keyof Filters, value: string) => {
+        const currentValues = [...selectedFilters[filterType]];
+        const index = currentValues.indexOf(value);
+
+        if (index === -1) {
+            currentValues.push(value);
+        } else {
+            currentValues.splice(index, 1);
+        }
+
+        onFilterChange({
+            ...selectedFilters,
+            [filterType]: currentValues
+        });
+    };
+
+    const filterSection = (title: string, filterType: keyof Filters, options: string[]) => (
+        <div style={{marginBottom: '20px'}}>
+            <h3 style={{margin: '10px 0'}}>{title}</h3>
+            <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
+                {options.map(option => (
+                    <label key={option} style={{display: 'flex', alignItems: 'center', marginRight: '15px'}}>
+                        <input
+                            type="checkbox"
+                            checked={selectedFilters[filterType].includes(option)}
+                            onChange={() => handleCheckboxChange(filterType, option)}
+                            style={{marginRight: '5px'}}
+                        />
+                        {option}
+                    </label>
+                ))}
+            </div>
+        </div>
+    );
+
+    return (
+        <>
+            {filterSection('Package Manager', 'packageManagers', availableFilters.packageManagers)}
+            {filterSection('React Version', 'reactVersions', availableFilters.reactVersions)}
+            {filterSection('Test Type', 'testTypes', availableFilters.testTypes)}
+        </>
+    );
+};
+
 function App() {
-    const [details, setDetails] = useState<ReadonlyArray<Details> | null>(null);
+    const [rawData, setRawData] = useState<ReadonlyArray<TestResult> | null>(null);
     const [scatterData, setScatterData] = useState<ScatterPoint[] | null>(null);
+    const [filteredDetails, setFilteredDetails] = useState<ReadonlyArray<Details> | null>(null);
+    const [filteredScatterData, setFilteredScatterData] = useState<ScatterPoint[] | null>(null);
+    const [availableFilters, setAvailableFilters] = useState<{
+        packageManagers: string[];
+        reactVersions: string[];
+        testTypes: string[];
+    }>({
+        packageManagers: [],
+        reactVersions: [],
+        testTypes: []
+    });
+    const [selectedFilters, setSelectedFilters] = useState<Filters>({
+        packageManagers: [],
+        reactVersions: [],
+        testTypes: []
+    });
 
     useEffect(() => {
         fetch("./public/output.json").then((response) => {
@@ -132,82 +231,123 @@ function App() {
             throw new Error("Network response was not ok.");
         })
             .then((body: ReadonlyArray<TestResult>) => {
+                setRawData(body);
+
                 const details = body.map(calculateDetails);
-                setDetails(details);
-                setScatterData(generateScatterData(body));
+                setFilteredDetails(details);
+
+                const scatterPoints = generateScatterData(body);
+                setScatterData(scatterPoints);
+                setFilteredScatterData(scatterPoints);
+
+                // Extract available filter options
+                const packageManagers: string[] = [...new Set(body.map(item => extractPackageManager(item.name)))];
+                const reactVersions: string[] = [...new Set(body.map(item => extractReactVersion(item.name)))];
+                const testTypes: string[] = [...new Set(scatterTicks)];
+
+                const filters: { packageManagers: string[]; reactVersions: string[]; testTypes: string[] } = {
+                    packageManagers,
+                    reactVersions,
+                    testTypes
+                };
+                setAvailableFilters(filters);
             })
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
     }, [])
 
-    if (details == null || scatterData == null) {
+    useEffect(() => {
+        if (rawData && scatterData) {
+            const filtered = applyFilters(rawData, selectedFilters);
+            setFilteredDetails(filtered.map(calculateDetails));
+            setFilteredScatterData(filterScatterData(scatterData, selectedFilters));
+        }
+    }, [selectedFilters, rawData, scatterData]);
+
+    if (!filteredDetails || !filteredScatterData) {
         return <div>Loading...</div>;
     }
 
     return (
         <>
-            <h2>Test Score Summary</h2>
-            <BarChart width={1000} height={500} data={details} layout='vertical' margin={{left: 250, bottom: 80, right: 20}}>
-                <CartesianGrid/>
-                <Bar dataKey="score" fill="#8884d8"/>
-                <XAxis dataKey='score'
-                       type='number'
-                       ticks={ticks}
-                       angle={-25}
-                       interval={0}
-                       textAnchor="end"
-                       tickFormatter={tickFormatter}/>
-                <YAxis dataKey='name'
-                       type='category'
-                       interval={0}
-                />
-            </BarChart>
+            <h1>Test Results Dashboard</h1>
 
-            <h2>Detailed Test Results</h2>
-            <ScatterChart
-                width={1000}
-                height={500}
-                margin={{top: 20, right: 20, bottom: 80, left: 250}}
-            >
-                <XAxis
-                    dataKey="test"
-                    type="category"
-                    allowDuplicatedCategory={false}
-                    name="Test"
-                    angle={-25}
-                    textAnchor="end"
-                    tick={{fontSize: 12}}
+            <Collapsible title='Filters'>
+                <FilterForm
+                    availableFilters={availableFilters}
+                    selectedFilters={selectedFilters}
+                    onFilterChange={setSelectedFilters}
                 />
-                <YAxis
-                    dataKey="framework"
-                    type="category"
-                    allowDuplicatedCategory={false}
-                    interval={0}
-                    name="Framework"
-                    width={240}
-                    scale="band"
-                />
-                <ZAxis type='number' range={[200, 200]}/>
-                <Tooltip content={<CustomTooltip/>} />
-                <Legend
-                    verticalAlign="bottom"
-                    height={36}
-                    wrapperStyle={{paddingTop: 30}}
-                />
-                <Scatter
-                    name="Success"
-                    data={scatterData.filter(d => d.success)}
-                    fill="#4CAF50"
-                    shape="star"
-                />
-                <Scatter
-                    name="Failure"
-                    data={scatterData.filter(d => !d.success)}
-                    fill="#F44336"
-                    shape="diamond"
-                />
-            </ScatterChart>
+            </Collapsible>
+
+            <Collapsible title="Test score Summary">
+                <BarChart width={1000}
+                          height={500}
+                          data={filteredDetails}
+                          layout='vertical'
+                          margin={{left: 250, bottom: 80, right: 20}}>
+                    <CartesianGrid/>
+                    <Bar dataKey="score" fill="#8884d8"/>
+                    <XAxis dataKey='score'
+                           type='number'
+                           ticks={ticks}
+                           angle={-25}
+                           interval={0}
+                           textAnchor="end"
+                           tickFormatter={tickFormatter}/>
+                    <YAxis dataKey='name'
+                           type='category'
+                           interval={0}
+                    />
+                </BarChart>
+            </Collapsible>
+
+            <Collapsible title="Detailed Test Results">
+                <ScatterChart
+                    width={1000}
+                    height={500}
+                    margin={{top: 20, right: 20, bottom: 80, left: 250}}
+                >
+                    <XAxis
+                        dataKey="test"
+                        type="category"
+                        allowDuplicatedCategory={false}
+                        name="Test"
+                        angle={-25}
+                        textAnchor="end"
+                        interval={0}
+                    />
+                    <YAxis
+                        dataKey="framework"
+                        type="category"
+                        allowDuplicatedCategory={false}
+                        interval={0}
+                        name="Framework"
+                        width={240}
+                        scale="band"
+                    />
+                    <ZAxis type='number' range={[200, 200]}/>
+                    <Tooltip content={<CustomTooltip/>}/>
+                    <Legend
+                        verticalAlign="bottom"
+                        height={36}
+                        wrapperStyle={{paddingTop: 30}}
+                    />
+                    <Scatter
+                        name="Success"
+                        data={filteredScatterData.filter(d => d.success)}
+                        fill="#4CAF50"
+                        shape="star"
+                    />
+                    <Scatter
+                        name="Failure"
+                        data={filteredScatterData.filter(d => !d.success)}
+                        fill="#F44336"
+                        shape="diamond"
+                    />
+                </ScatterChart>
+            </Collapsible>
         </>
     )
 }
