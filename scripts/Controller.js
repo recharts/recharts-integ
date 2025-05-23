@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const {TestResult} = require("./TestResult");
 
-exports.Controller = class Controller {
+class Controller {
     constructor(absolutePath) {
         this.absolutePath = absolutePath;
     }
@@ -30,7 +30,22 @@ exports.Controller = class Controller {
     }
 
     execSync(cmd) {
-        return execSync(cmd, {cwd: this.absolutePath, encoding: 'utf-8'});
+        const env = this.getEnv();
+        return execSync(cmd, {
+            cwd: this.absolutePath, encoding: 'utf-8', env
+        });
+    }
+
+    getEnv() {
+        return {
+            PATH: process.env.PATH,
+            /*
+             * Disables the automatic adding of 'packageManager' into every package.json file
+             * https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
+            */
+            COREPACK_ENABLE_AUTO_PIN: 0,
+            COREPACK_ENABLE_STRICT: 0
+        };
     }
 
     replacePackageJsonVersion(dependencyName, version) {
@@ -41,4 +56,27 @@ exports.Controller = class Controller {
     tgzFileNameToPackageJsonReference(tgzFileName) {
         return tgzFileNameToPackageJsonReference(this.absolutePath, tgzFileName);
     }
+
+    /* abstract methods */
+    verifySingleDependencyVersion(dependencyName) {
+        throw new Error('abstract method verifySingleDependencyVersion');
+    }
+
+    install() {
+        throw new Error('abstract method install');
+    }
+
+    test() {
+        throw new Error('abstract method test');
+    }
+
+    build() {
+        throw new Error('abstract method build');
+    }
+
+    pack() {
+        throw new Error('abstract method pack');
+    }
 }
+
+exports.Controller = Controller;

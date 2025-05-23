@@ -35,16 +35,20 @@ function listAllFolders(dir) {
 }
 
 function listAllLibraryTests() {
-    // Because of how we have defined the package.json dependencies, not everything is compatible with everything.
-    const react16Tests = [{ library: 'my-charts-react16', app: 'app-react16' }]
-    const react17Tests = [{ library: 'my-charts-react17', app: 'app-react17' }]
-    const react18Tests = [
+    // Because of how we have defined the package.json dependencies, only certain combinations of libraries and apps are supported.
+    const allTestCombinations = [
+        { library: 'my-charts-react16', app: 'app-react16' },
+        { library: 'my-charts-react17', app: 'app-react16' },
+
+        { library: 'my-charts-react17', app: 'app-react17' },
+        { library: 'my-charts-react18', app: 'app-react17' },
+        { library: 'my-charts-react19', app: 'app-react17' },
+
         { library: 'my-charts-react18', app: 'app-react18' },
         { library: 'my-charts-react19', app: 'app-react18' },
-        { library: 'my-charts-react18', app: 'app-react19' },
+
         { library: 'my-charts-react19', app: 'app-react19' },
     ]
-    const allTestCombinations = [...react16Tests, ...react17Tests, ...react18Tests];
 
     return allSupportedPackageManagers.flatMap((packageManager) => {
         return allTestCombinations.map(({ library, app }) => {

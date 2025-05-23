@@ -1,7 +1,7 @@
 const {Controller} = require("./Controller");
 const {TestResult} = require("./TestResult");
 
-exports.NpmController = class NpmController extends Controller {
+class NpmController extends Controller {
 
     /**
      * This function will install all dependencies in the given directory.
@@ -87,3 +87,5 @@ exports.NpmController = class NpmController extends Controller {
         return TestResult.ok(dependencyName);
     }
 }
+
+exports.NpmController = NpmController

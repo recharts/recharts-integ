@@ -11,7 +11,7 @@
     "test": "vitest --run"
   },
   "dependencies": {
-    "my-charts": "file:../my-charts",
+    "my-charts": "file:/Users/pavelvanecek/github/recharts-integ/integrations-library-inside-library/my-charts/my-charts-0.1.0.tgz",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

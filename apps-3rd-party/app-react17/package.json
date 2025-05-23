@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^12.1.5",
     "@types/react": "^17.x",
     "@types/react-dom": "^17.x",
     "@vitejs/plugin-react": "^4.4.1",
