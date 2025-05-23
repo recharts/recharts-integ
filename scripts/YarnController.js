@@ -4,7 +4,7 @@ const {Controller} = require("./Controller");
 const {execSync} = require("child_process");
 const {TestResult} = require("./TestResult");
 
-exports.YarnController = class YarnController extends Controller {
+class YarnController extends Controller {
 
     /**
      * This function will install all dependencies in the given directory using Yarn.
@@ -79,9 +79,8 @@ exports.YarnController = class YarnController extends Controller {
             const jsonOutput = JSON.parse(output);
             if (jsonOutput.type === 'success' && jsonOutput.data) {
                 // Extract the tgz filename from the path in the response
-                const tgzPath = jsonOutput.data.match(/\\"(.+\.tgz)\\"/)[1];
-                const tgzFileName = path.basename(tgzPath);
-                return this.tgzFileNameToPackageJsonReference(this.absolutePath, tgzFileName);
+                const tgzPath = jsonOutput.data.match(/"(.+\.tgz)"/)[1];
+                return `file:${tgzPath}`
             } else {
                 throw new Error(`Unexpected output format from yarn pack: ${output}`);
             }
@@ -107,7 +106,7 @@ exports.YarnController = class YarnController extends Controller {
         let rawOutput;
 
         try {
-            rawOutput = execSync(command, { encoding: 'utf-8', cwd: this.absolutePath, stdio: 'pipe' });
+            rawOutput = execSync(command, { encoding: 'utf-8', cwd: this.absolutePath, stdio: 'pipe', env: this.getEnv() });
         } catch (error) {
             // 'yarn list' exits with a non-zero code if the package is not found or other errors.
             // error.stdout might contain partial output.
@@ -164,3 +163,5 @@ exports.YarnController = class YarnController extends Controller {
         return TestResult.ok(dependencyName);
     }
 }
+
+exports.YarnController = YarnController;

@@ -3,6 +3,10 @@ const path = require("path");
 const {NpmController} = require("./NpmController.js");
 const {YarnController} = require("./YarnController");
 
+/**
+ * @param {Controller} controller
+ * @returns {TestResult[]}
+ */
 function verifyAllSingleDependencyVersions(controller) {
     return [
         controller.verifySingleDependencyVersion('recharts'),
@@ -13,6 +17,11 @@ function verifyAllSingleDependencyVersions(controller) {
     ]
 }
 
+/**
+ * @param {Controller} controller
+ * @param {string} rechartsVersion
+ * @returns {TestResult[]}
+ */
 function runDirectDependencyAppTest(controller, rechartsVersion) {
     return [
         controller.clean(),
@@ -24,6 +33,13 @@ function runDirectDependencyAppTest(controller, rechartsVersion) {
     ]
 }
 
+/**
+ *
+ * @param {Controller} libController
+ * @param {Controller} appController
+ * @param {string} rechartsVersion
+ * @returns {TestResult[]}
+ */
 function runLibraryInLibraryTest(libController, appController, rechartsVersion) {
     libController.clean();
     libController.replacePackageJsonVersion("recharts", rechartsVersion);
@@ -33,6 +49,9 @@ function runLibraryInLibraryTest(libController, appController, rechartsVersion) 
     verifyAllSingleDependencyVersions(libController)
     const myChartsTgzFile = libController.pack()
 
+    /**
+     * @type {TestResult[]}
+     */
     const results = []
 
     results.push(appController.clean())
@@ -50,6 +69,10 @@ function runLibraryInLibraryTest(libController, appController, rechartsVersion) 
     return results;
 }
 
+/**
+ * @param {string} packageManager
+ * @returns {Controller}
+ */
 function getControllerConstructor(packageManager) {
     if (packageManager === "npm") {
         return NpmController;
@@ -74,6 +97,11 @@ function runDirectDependencyTest(testName, rechartsVersion) {
     return runDirectDependencyAppTest(new Controller(testType), rechartsVersion);
 }
 
+/**
+ * @param {string} testName
+ * @param {string | undefined} rechartsVersion
+ * @returns {TestResult[]}
+ */
 function runTest(testName, rechartsVersion) {
     if (testName.split(":").length > 2) {
         return runLibraryTest(testName, rechartsVersion);
@@ -110,17 +138,31 @@ if (require.main === module) {
 
     const results = runTest(absolutePath, rechartsVersion);
 
-    console.table(results);
+    const errors = results.filter(result => result.success === false);
+    const skipped = results.filter(result => result.success == null);
+    const passed = results.filter(result => result.success === true);
 
-    const errors = results.filter(result => !result.success);
+    if (passed.length > 0) {
+        passed.forEach(result => {
+            console.log(`✅ ${result.name}`);
+        });
+    }
+
+    if (skipped.length > 0) {
+        skipped.forEach(result => {
+            console.warn(`⏭️  ${result.name}: ${result.error}`);
+        });
+    }
 
     if (errors.length > 0) {
-        console.error(`${errors.length} tests failed:`);
-        errors.forEach(error => {
-            console.error(`- ${error.name}: ${error.message}`);
+        errors.forEach(result => {
+            console.error(`❌ ${result.name}: ${result.error}`);
         });
         process.exit(1);
-    } else {
-        console.log(`${results.length} tests passed successfully.`);
     }
+    if (passed.length === 0 && skipped.length === 0) {
+        console.error('No tests were run.');
+        process.exit(1);
+    }
+    process.exit(0);
 }

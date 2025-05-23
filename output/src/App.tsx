@@ -276,7 +276,7 @@ function App() {
 
             <Collapsible title="Test score Summary">
                 <BarChart width={1000}
-                          height={500}
+                          height={800}
                           data={filteredDetails}
                           layout='vertical'
                           margin={{left: 250, bottom: 80, right: 20}}>
@@ -299,7 +299,7 @@ function App() {
             <Collapsible title="Detailed Test Results">
                 <ScatterChart
                     width={1000}
-                    height={500}
+                    height={800}
                     margin={{top: 20, right: 20, bottom: 80, left: 250}}
                 >
                     <XAxis
