@@ -14,6 +14,7 @@ class YarnController extends Controller {
          * but contents are different.
          */
         this.execSync('yarn cache clean')
+        return TestResult.ok('clean');
     }
 
     /**
