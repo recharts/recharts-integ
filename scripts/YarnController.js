@@ -6,6 +6,16 @@ const {TestResult} = require("./TestResult");
 
 class YarnController extends Controller {
 
+    clean() {
+        super.clean()
+        /*
+         * Clean yarn cache too because yarn caches tgz files too based on the filename,
+         * and it makes some tests fail because the tgz file name is the same
+         * but contents are different.
+         */
+        this.execSync('yarn cache clean')
+    }
+
     /**
      * This function will install all dependencies in the given directory using Yarn.
      */
