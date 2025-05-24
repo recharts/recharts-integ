@@ -133,7 +133,7 @@ const CustomTooltip = ({active, payload}: TooltipContentProps) => {
         const data = payload[0].payload;
         return (
             <div style={{backgroundColor: '#333', padding: '10px', border: '1px solid #ccc'}}>
-                <p><strong>Framework:</strong> {data.framework}</p>
+                <p><strong>Framework:</strong> {data.framework} (Click to copy)</p>
                 <p><strong>Test:</strong> {data.test}</p>
                 <p><strong>Status:</strong> {data.success ? 'Success' : 'Failed'}</p>
             </div>
@@ -293,6 +293,17 @@ function App() {
         }
     }, [selectedFilters, rawData, scatterData]);
 
+    // Add clipboard copy function
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                console.log('Copied to clipboard:', text);
+            })
+            .catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+    };
+
     if (!filteredDetails || !filteredScatterData) {
         return <div>Loading...</div>;
     }
@@ -367,12 +378,16 @@ function App() {
                         data={filteredScatterData.filter(d => d.success)}
                         fill="#4CAF50"
                         shape="star"
+                        onClick={(data) => copyToClipboard(data.framework)}
+                        cursor="pointer"
                     />
                     <Scatter
                         name="Failure"
                         data={filteredScatterData.filter(d => !d.success)}
                         fill="#F44336"
                         shape="diamond"
+                        onClick={(data) => copyToClipboard(data.framework)}
+                        cursor="pointer"
                     />
                 </ScatterChart>
             </Collapsible>
