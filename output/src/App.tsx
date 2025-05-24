@@ -16,6 +16,7 @@ type Filters = {
     packageManagers: string[];
     reactVersions: string[];
     testTypes: string[];
+    testStatus: string; // 'all', 'success', or 'failed'
 }
 
 // Helper functions for filtering
@@ -49,8 +50,11 @@ function filterScatterData(data: ScatterPoint[], filters: Filters): ScatterPoint
         const passesCommon = passesCommonFilters(point.framework, filters);
         const passesTestType = filters.testTypes.length === 0 ||
             filters.testTypes.includes(point.test);
+        const passesTestStatus = filters.testStatus === 'all' ||
+            (filters.testStatus === 'success' && point.success) ||
+            (filters.testStatus === 'failed' && !point.success);
 
-        return passesCommon && passesTestType;
+        return passesCommon && passesTestType && passesTestStatus;
     });
 }
 
@@ -168,6 +172,13 @@ const FilterForm = ({
         });
     };
 
+    const handleRadioChange = (value: string) => {
+        onFilterChange({
+            ...selectedFilters,
+            testStatus: value
+        });
+    };
+
     const filterSection = (title: string, filterType: keyof Filters, options: string[]) => (
         <div style={{marginBottom: '20px'}}>
             <h3 style={{margin: '10px 0'}}>{title}</h3>
@@ -187,8 +198,31 @@ const FilterForm = ({
         </div>
     );
 
+    const statusOptions = [
+        { value: 'all', label: 'All Tests' },
+        { value: 'success', label: 'Only Successful Tests' },
+        { value: 'failed', label: 'Only Failed Tests' }
+    ];
+
     return (
         <>
+            <div style={{marginBottom: '20px'}}>
+                <h3 style={{margin: '10px 0'}}>Test Status</h3>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
+                    {statusOptions.map(option => (
+                        <label key={option.value} style={{display: 'flex', alignItems: 'center', marginRight: '15px'}}>
+                            <input
+                                type="radio"
+                                checked={selectedFilters.testStatus === option.value}
+                                onChange={() => handleRadioChange(option.value)}
+                                style={{marginRight: '5px'}}
+                            />
+                            {option.label}
+                        </label>
+                    ))}
+                </div>
+            </div>
+
             {filterSection('Package Manager', 'packageManagers', availableFilters.packageManagers)}
             {filterSection('React Version', 'reactVersions', availableFilters.reactVersions)}
             {filterSection('Test Type', 'testTypes', availableFilters.testTypes)}
@@ -213,7 +247,8 @@ function App() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         packageManagers: [],
         reactVersions: [],
-        testTypes: []
+        testTypes: [],
+        testStatus: 'all'
     });
 
     useEffect(() => {
