@@ -133,33 +133,10 @@ class YarnController extends Controller {
             // If stdout is empty, and it wasn't a "not found" error, the parsing below will likely result in 0 versions found.
         }
 
-        const installedVersions = new Set();
-        if (rawOutput) {
-            const lines = rawOutput.trim().split('\n');
-            lines.forEach(line => {
-                try {
-                    const entry = JSON.parse(line);
-                    // Yarn list --json output stream contains objects; those of type 'tree' list dependencies.
-                    if (entry.type === 'tree' && entry.data && entry.data.trees) {
-                        entry.data.trees.forEach(pkg => {
-                            // pkg.name is typically "packageName@versionString" or "@scope/packageName@versionString"
-                            const nameParts = pkg.name.split('@');
-                            if (nameParts.length < 2) return; // Malformed entry, skip.
-
-                            const version = nameParts.pop(); // The last part is the version.
-                            const name = nameParts.join('@'); // The rest joined is the package name.
-
-                            if (name === dependencyName) {
-                                installedVersions.add(version);
-                            }
-                        });
-                    }
-                } catch (e) {
-                    // Silently ignore lines that are not valid JSON or don't match the expected structure.
-                    // These could be info lines or other non-data messages from yarn.
-                }
-            });
+        if (!rawOutput) {
+            return TestResult.fail(dependencyName, new Error(`No output received from 'yarn list' command for ${dependencyName}.`));
         }
+        const installedVersions = this.parseYarnListOutput(rawOutput, dependencyName);
 
         if (installedVersions.size === 0) {
             // This condition is met if the package was not found (either by execSync error or by parsing yielding no versions).
@@ -172,6 +149,59 @@ class YarnController extends Controller {
 
         console.log(`Dependency ${dependencyName} is installed with a single version: ${Array.from(installedVersions)[0]}`);
         return TestResult.ok(dependencyName);
+    }
+
+    /**
+     *
+     * @param {string} rawOutput from `yarn list --json` stdout
+     * @param {string} dependencyName The name of the dependency to parse versions for.
+     * @returns {Set<string>} A set of installed versions of the specified dependency.
+     */
+    parseYarnListOutput(rawOutput, dependencyName) {
+        /**
+         * @type {Set<string>}
+         */
+        const installedVersions = new Set();
+        const lines = rawOutput.trim().split('\n');
+
+        /**
+         * Helper function to process a package and its children recursively
+         * @param {Object} pkg The package object from yarn list
+         */
+        const processPackage = (pkg) => {
+            /**
+             * pkg.name is typically "packageName@versionString" or "@scope/packageName@versionString"
+             * @type {string[]}
+             */
+            const nameParts = pkg.name.split('@');
+            if (nameParts.length < 2) return; // Malformed entry, skip.
+
+            const version = nameParts.pop(); // The last part is the version.
+            const name = nameParts.join('@'); // The rest joined is the package name.
+
+            if (name === dependencyName) {
+                installedVersions.add(version);
+            }
+
+            // Process children recursively if they exist
+            if (pkg.children && Array.isArray(pkg.children)) {
+                pkg.children.forEach(child => processPackage(child));
+            }
+        };
+
+        lines.forEach(line => {
+            try {
+                const entry = JSON.parse(line);
+                // Yarn list --json output stream contains objects; those of type 'tree' list dependencies.
+                if (entry.type === 'tree' && entry.data && entry.data.trees) {
+                    entry.data.trees.forEach(pkg => processPackage(pkg));
+                }
+            } catch (e) {
+                // Silently ignore lines that are not valid JSON or don't match the expected structure.
+                // These could be info lines or other non-data messages from yarn.
+            }
+        });
+        return installedVersions;
     }
 }
 
