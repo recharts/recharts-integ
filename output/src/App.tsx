@@ -16,6 +16,7 @@ type Filters = {
     packageManagers: string[];
     reactVersions: string[];
     testTypes: string[];
+    testStatus: string; // 'all', 'success', or 'failed'
 }
 
 // Helper functions for filtering
@@ -49,8 +50,11 @@ function filterScatterData(data: ScatterPoint[], filters: Filters): ScatterPoint
         const passesCommon = passesCommonFilters(point.framework, filters);
         const passesTestType = filters.testTypes.length === 0 ||
             filters.testTypes.includes(point.test);
+        const passesTestStatus = filters.testStatus === 'all' ||
+            (filters.testStatus === 'success' && point.success) ||
+            (filters.testStatus === 'failed' && !point.success);
 
-        return passesCommon && passesTestType;
+        return passesCommon && passesTestType && passesTestStatus;
     });
 }
 
@@ -129,7 +133,7 @@ const CustomTooltip = ({active, payload}: TooltipContentProps) => {
         const data = payload[0].payload;
         return (
             <div style={{backgroundColor: '#333', padding: '10px', border: '1px solid #ccc'}}>
-                <p><strong>Framework:</strong> {data.framework}</p>
+                <p><strong>Framework:</strong> {data.framework} (Click to copy)</p>
                 <p><strong>Test:</strong> {data.test}</p>
                 <p><strong>Status:</strong> {data.success ? 'Success' : 'Failed'}</p>
             </div>
@@ -168,6 +172,13 @@ const FilterForm = ({
         });
     };
 
+    const handleRadioChange = (value: string) => {
+        onFilterChange({
+            ...selectedFilters,
+            testStatus: value
+        });
+    };
+
     const filterSection = (title: string, filterType: keyof Filters, options: string[]) => (
         <div style={{marginBottom: '20px'}}>
             <h3 style={{margin: '10px 0'}}>{title}</h3>
@@ -187,8 +198,31 @@ const FilterForm = ({
         </div>
     );
 
+    const statusOptions = [
+        { value: 'all', label: 'All Tests' },
+        { value: 'success', label: 'Only Successful Tests' },
+        { value: 'failed', label: 'Only Failed Tests' }
+    ];
+
     return (
         <>
+            <div style={{marginBottom: '20px'}}>
+                <h3 style={{margin: '10px 0'}}>Test Status</h3>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
+                    {statusOptions.map(option => (
+                        <label key={option.value} style={{display: 'flex', alignItems: 'center', marginRight: '15px'}}>
+                            <input
+                                type="radio"
+                                checked={selectedFilters.testStatus === option.value}
+                                onChange={() => handleRadioChange(option.value)}
+                                style={{marginRight: '5px'}}
+                            />
+                            {option.label}
+                        </label>
+                    ))}
+                </div>
+            </div>
+
             {filterSection('Package Manager', 'packageManagers', availableFilters.packageManagers)}
             {filterSection('React Version', 'reactVersions', availableFilters.reactVersions)}
             {filterSection('Test Type', 'testTypes', availableFilters.testTypes)}
@@ -213,7 +247,8 @@ function App() {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         packageManagers: [],
         reactVersions: [],
-        testTypes: []
+        testTypes: [],
+        testStatus: 'all'
     });
 
     useEffect(() => {
@@ -257,6 +292,17 @@ function App() {
             setFilteredScatterData(filterScatterData(scatterData, selectedFilters));
         }
     }, [selectedFilters, rawData, scatterData]);
+
+    // Add clipboard copy function
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                console.log('Copied to clipboard:', text);
+            })
+            .catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+    };
 
     if (!filteredDetails || !filteredScatterData) {
         return <div>Loading...</div>;
@@ -332,12 +378,16 @@ function App() {
                         data={filteredScatterData.filter(d => d.success)}
                         fill="#4CAF50"
                         shape="star"
+                        onClick={(data) => copyToClipboard(data.framework)}
+                        cursor="pointer"
                     />
                     <Scatter
                         name="Failure"
                         data={filteredScatterData.filter(d => !d.success)}
                         fill="#F44336"
                         shape="diamond"
+                        onClick={(data) => copyToClipboard(data.framework)}
+                        cursor="pointer"
                     />
                 </ScatterChart>
             </Collapsible>

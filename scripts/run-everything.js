@@ -10,8 +10,8 @@ if (require.main === module) {
     }
     const tests = listAllTests(false)
 
-    const output = tests.map(name => {
-        console.log('running test', name);
+    const output = tests.map((name, index) => {
+        console.log(`running test ${name} (${index + 1} of ${tests.length})`);
         const results = run(name).map(result => ({ name: result.name, success: result.success, error: result.error }));
         return { name, results };
     })
