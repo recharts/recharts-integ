@@ -39,6 +39,7 @@ function runDirectDependencyAppTest(controller, rechartsVersion) {
     results.push(controller.test())
     results.push(controller.build())
     results.push(...verifyAllSingleDependencyVersions(controller))
+    return results;
 }
 
 /**
