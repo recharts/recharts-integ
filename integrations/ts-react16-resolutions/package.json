@@ -13,27 +13,27 @@
   "dependencies": {
     "react": "^16.8.x",
     "react-dom": "^16.8.x",
-    "recharts": "^3.0.0-alpha.8"
+    "recharts": "^3.0.0-beta.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.19.0",
-    "@testing-library/react": "12",
+    "@eslint/js": "^9.27.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^12.1.5",
     "@types/react": "^16.8.x",
     "@types/react-dom": "^16.8.x",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.19.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.27.0",
     "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.18",
-    "globals": "^16.0.0",
-    "jsdom": "^26.0.0",
-    "typescript": "~5.8.2",
-    "typescript-eslint": "^8.22.0",
-    "vite": "^6.1.0",
-    "vitest": "^3.0.9"
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.1.0",
+    "jsdom": "^26.1.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.4"
   },
   "resolutions": {
     "react": "^16.8.x",
     "react-dom": "^16.8.x"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  }
 }
