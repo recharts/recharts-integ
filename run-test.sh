@@ -25,8 +25,6 @@ if [[ -z "$test_name" ]]; then
   exit 1
 fi
 
-absolute_path=$(realpath "$test_name")
-
 version="${2:-}"
 
-node scripts/run.js "$absolute_path" "$version"
+node scripts/run.js "$test_name" "$version"
