@@ -37,28 +37,28 @@ function listAllFolders(dir) {
 function listAllLibraryTests() {
     // Because of how we have defined the package.json dependencies, only certain combinations of libraries and apps are supported.
     const allTestCombinations = [
-        { library: 'my-charts-react16', app: 'app-react16' },
-        { library: 'my-charts-react17', app: 'app-react16' },
+        {library: 'my-charts-react16', app: 'app-react16'},
+        {library: 'my-charts-react17', app: 'app-react16'},
 
-        { library: 'my-charts-react17', app: 'app-react17' },
-        { library: 'my-charts-react18', app: 'app-react17' },
-        { library: 'my-charts-react19', app: 'app-react17' },
+        {library: 'my-charts-react17', app: 'app-react17'},
+        {library: 'my-charts-react18', app: 'app-react17'},
+        {library: 'my-charts-react19', app: 'app-react17'},
 
-        { library: 'my-charts-react18', app: 'app-react18' },
-        { library: 'my-charts-react19', app: 'app-react18' },
+        {library: 'my-charts-react18', app: 'app-react18'},
+        {library: 'my-charts-react19', app: 'app-react18'},
 
-        { library: 'my-charts-react19', app: 'app-react19' },
+        {library: 'my-charts-react19', app: 'app-react19'},
     ]
 
     return allSupportedPackageManagers.flatMap((packageManager) => {
-        return allTestCombinations.map(({ library, app }) => {
+        return allTestCombinations.map(({library, app}) => {
             return `${packageManager}:${library}:${app}`
         })
     })
 }
 
 function listAllDirectDependencyTests() {
-    const allIntegrations = listAllFolders('integrations-npm');
+    const allIntegrations = listAllFolders('integrations');
     return allIntegrations.flatMap((integration) => {
         return allSupportedPackageManagers.map((packageManager) => {
             return `${packageManager}:${integration}`
@@ -68,27 +68,49 @@ function listAllDirectDependencyTests() {
 
 /**
  * Lists all integration tests, optionally filtering for stable tests suitable for CI.
- * 
+ *
  * @param {boolean} isCi - If true, only stable tests that should run in CI are included.
  * @returns {string[]} An array of test folder paths.
  */
 function listAllTests(isCi) {
-    const npmTests = listAllFolders('integrations-npm');
-    const yarnTests = listAllFolders('integrations-yarn');
-    const stableLibraryTests = ['integrations-library-inside-library']
-
-    const output = [].concat(
-        npmTests, yarnTests, stableLibraryTests
-    )
-
-    if (!isCi) {
-        output.push(
-            ...(listAllDirectDependencyTests()),
-            ...listAllLibraryTests()
-        );
+    if (isCi) {
+        return [
+            'npm:integrations-npm/ts-react16',
+            'npm:integrations-npm/ts-react18',
+            'npm:integrations-npm/ts-react16',
+            'npm:integrations-npm/ts-react18',
+            'npm:integrations-npm/ts-react19',
+            'npm:integrations-npm/ts4-react17',
+            'npm:my-charts-react16:app-react16',
+            'npm:my-charts-react17:app-react17',
+            'npm:my-charts-react18:app-react17',
+            'npm:my-charts-react18:app-react18',
+            'npm:my-charts-react19:app-react17',
+            'npm:my-charts-react19:app-react18',
+            'npm:my-charts-react19:app-react19',
+            'yarn:integrations-npm/ts-react16',
+            'yarn:integrations-npm/ts-react18',
+            'yarn:integrations-npm/ts-react19',
+            'yarn:integrations-npm/ts4-react17',
+            'yarn:my-charts-react16:app-react16',
+            'yarn:my-charts-react17:app-react16',
+            'yarn:my-charts-react17:app-react17',
+            'yarn:my-charts-react18:app-react17',
+            'yarn:my-charts-react18:app-react18',
+            'yarn:my-charts-react19:app-react17',
+            'yarn:my-charts-react19:app-react18',
+            'yarn:my-charts-react19:app-react19',
+        ]
     }
 
-    return output
+    if (!isCi) {
+        return [].concat(
+            listAllDirectDependencyTests(),
+            listAllLibraryTests()
+        )
+    }
+
+    return output.sort()
 }
 
 function main() {
