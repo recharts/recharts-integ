@@ -77,11 +77,9 @@ function listAllTests(isCi) {
         return [
             'npm:integrations/ts-react16-overrides',
             'npm:integrations/ts-react18',
-            'npm:integrations/ts-react16',
             'npm:integrations/ts-react18',
             'npm:integrations/ts-react19',
             'npm:integrations/ts4-react17',
-            'npm:my-charts-react16:app-react16',
             'npm:my-charts-react18:app-react18',
             'npm:my-charts-react19:app-react18',
             'npm:my-charts-react19:app-react19',
