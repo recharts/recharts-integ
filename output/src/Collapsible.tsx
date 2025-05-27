@@ -48,7 +48,7 @@ const Collapsible: React.FC<CollapsibleProps> = ({
             <div
                 style={{
                     padding: isExpanded ? '15px' : '0 15px',
-                    maxHeight: isExpanded ? '1000px' : '0',
+                    maxHeight: isExpanded ? '1900px' : '0',
                     overflow: 'hidden',
                     transition: 'all 0.3s ease-in-out',
                 }}

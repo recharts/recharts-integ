@@ -3,6 +3,7 @@ import {Bar, BarChart, CartesianGrid, Legend, Scatter, ScatterChart, Tooltip, XA
 import type {Details, ScatterPoint, TestResult} from "./types.ts";
 import Collapsible from "./Collapsible.tsx";
 import type {TooltipContentProps} from "recharts/types/component/Tooltip";
+import ResultsTable from "./ResultsTable.tsx";
 
 const dependencies = [
     'react',
@@ -71,7 +72,8 @@ function calculateScore(input: TestResult): number {
     if (!testWorked) {
         return 2;
     }
-    const uniqueDependenciesWorked = input.results.filter((result) => dependencies.includes(result.name))
+    const uniqueDependenciesWorked = input.results
+        .filter((result) => dependencies.includes(result.name))
         .every((result) => result.success);
     if (!uniqueDependenciesWorked) {
         return 3;
@@ -128,7 +130,7 @@ const tickFormatter = (value: unknown) => {
 
 const ticks = [0, 1, 2, 3, 4];
 
-const CustomTooltip = ({active, payload}: TooltipContentProps) => {
+const CustomTooltip = ({active, payload}: TooltipContentProps<any, any>) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
         return (
@@ -252,7 +254,7 @@ function App() {
     });
 
     useEffect(() => {
-        fetch("./public/output.json").then((response) => {
+        fetch("./public/baseline.json").then((response) => {
             if (response.ok) {
                 return response.json();
             }
@@ -367,7 +369,7 @@ function App() {
                         scale="band"
                     />
                     <ZAxis type='number' range={[200, 200]}/>
-                    <Tooltip content={<CustomTooltip/>}/>
+                    <Tooltip content={CustomTooltip}/>
                     <Legend
                         verticalAlign="bottom"
                         height={36}
@@ -390,6 +392,14 @@ function App() {
                         cursor="pointer"
                     />
                 </ScatterChart>
+            </Collapsible>
+
+            <Collapsible title="Test Results Table">
+                <ResultsTable
+                    scatterData={filteredScatterData}
+                    scatterTicks={scatterTicks}
+                    onCopyToClipboard={copyToClipboard}
+                />
             </Collapsible>
         </>
     )

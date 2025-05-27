@@ -23,14 +23,23 @@ function verifyAllSingleDependencyVersions(controller) {
  * @returns {TestResult[]}
  */
 function runDirectDependencyAppTest(controller, rechartsVersion) {
-    return [
-        controller.clean(),
-        controller.replacePackageJsonVersion("recharts", rechartsVersion),
-        controller.install(),
-        controller.test(),
-        controller.build(),
-        ...verifyAllSingleDependencyVersions(controller)
-    ]
+    /**
+     * @type {TestResult[]}
+     */
+    const results = []
+
+    results.push(controller.clean())
+    results.push(controller.replacePackageJsonVersion("recharts", rechartsVersion))
+    const installResult = controller.install()
+    results.push(installResult)
+    if (!installResult.success) {
+        console.warn('Failed to install the app. Skipping test and build checks because those are guaranteed to fail too!');
+        return results;
+    }
+    results.push(controller.test())
+    results.push(controller.build())
+    results.push(...verifyAllSingleDependencyVersions(controller))
+    return results;
 }
 
 /**
