@@ -1,0 +1,1542 @@
+[
+  {
+    "name": "npm:integrations/ts-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": false,
+        "error": "Command failed: npm run build"
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@16.14.0 /Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_04_12_862Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react16-overrides",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react16-overrides",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react16-resolutions",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": false,
+        "error": "Command failed: npm run build"
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@16.14.0 /Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_06_18_681Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react16-resolutions",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts4-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts4-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": false,
+        "error": "Command failed: yarn run build\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react16:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@16.14.0 /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_10_46_062Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react17:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@16.14.0 /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_11_01_093Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react17:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@17.0.2 /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_11_32_510Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react18:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@17.0.2 /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_11_49_773Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react19:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Command failed: npm ls react --json\nnpm error code ELSPROBLEMS\nnpm error invalid: react@17.0.2 /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react\nnpm error A complete log of this run can be found in: /Users/pavelvanecek/.npm/_logs/2025-05-26T14_12_07_726Z-debug-0.log\n"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react18:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react19:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react19:app-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react16:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react17:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react17:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react18:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react19:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react18:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react19:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react19:app-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,1542 @@
+[
+  {
+    "name": "npm:integrations/ts-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:237:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:292:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:23203:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:22157:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13413:15\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14313:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16762:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16835:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:18645:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:188:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://fb.me/react-error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13413:15\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14313:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:16762:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:16835:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:18645:16\n ❯ HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:188:14\n ❯ HTMLUnknownElement.callTheUserObjectsOperation node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30\n ❯ innerInvokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25\n ❯ invokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3\n ❯ HTMLUnknownElementImpl._dispatch node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": false,
+        "error": "Command failed: npm run build"
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react16-overrides",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react16-resolutions",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/react-dom/cjs/react-dom.development.js:237:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/react-dom/cjs/react-dom.development.js:292:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/react-dom/cjs/react-dom.development.js:23203:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/node_modules/react-dom/cjs/react-dom.development.js:22157:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13413:15\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14313:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16762:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16835:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:18645:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:188:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-resolutions/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://fb.me/react-error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13413:15\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14313:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:16762:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:16835:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:18645:16\n ❯ HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:188:14\n ❯ HTMLUnknownElement.callTheUserObjectsOperation node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30\n ❯ innerInvokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25\n ❯ invokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3\n ❯ HTMLUnknownElementImpl._dispatch node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": false,
+        "error": "Command failed: npm run build"
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:integrations/ts4-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react16:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react17:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react17:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react18:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react18:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react19:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: npm run test --if-present\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react19:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "npm:my-charts-react19:app-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:237:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:292:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:23203:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/node_modules/react-dom/cjs/react-dom.development.js:22157:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13413:15\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14313:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16762:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16835:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:18645:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:188:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://fb.me/react-error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13413:15\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14313:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:16762:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:16835:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:18645:16\n ❯ HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:188:14\n ❯ HTMLUnknownElement.callTheUserObjectsOperation node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30\n ❯ innerInvokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25\n ❯ invokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3\n ❯ HTMLUnknownElementImpl._dispatch node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react16-overrides",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/react-dom/cjs/react-dom.development.js:237:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/react-dom/cjs/react-dom.development.js:292:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/react-dom/cjs/react-dom.development.js:23203:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/node_modules/react-dom/cjs/react-dom.development.js:22157:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13413:15\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14313:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16762:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:16835:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:18645:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:188:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react16-overrides/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://fb.me/react-error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    in BarChart (at App.tsx:8)\n    in App (at App.spec.tsx:7)\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13413:15\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14313:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:16762:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:16835:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:18645:16\n ❯ HTMLUnknownElement.callCallback node_modules/react-dom/cjs/react-dom.development.js:188:14\n ❯ HTMLUnknownElement.callTheUserObjectsOperation node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30\n ❯ innerInvokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25\n ❯ invokeEventListeners node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3\n ❯ HTMLUnknownElementImpl._dispatch node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react16-resolutions",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13123:9\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14064:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19186:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19277:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:21675:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:4164:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13123:9\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14064:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19186:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19277:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:21675:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:4164:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n\n    at CategoricalChart (/Users/pavelvanecek/github/recharts-integ/integrations/ts-react18/node_modules/recharts/lib/chart/generateCategoricalChart.js:182:7)\n    at App\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://reactjs.org/link/error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13123:9\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14064:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:19186:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:19277:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:21675:16\n ❯ beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27465:14\n ❯ performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26599:12\n ❯ workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:5\n ❯ renderRootSync node_modules/react-dom/cjs/react-dom.development.js:26473:7\n ❯ recoverFromConcurrentError node_modules/react-dom/cjs/react-dom.development.js:25889:20\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:integrations/ts4-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.1, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react16:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react17:app-react16",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react16/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 16.14.0, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react17:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react18:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react18:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13123:9\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14064:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19186:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19277:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:21675:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:4164:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13123:9\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14064:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19186:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19277:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:21675:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:4164:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n\n    at CategoricalChart (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/recharts/lib/chart/generateCategoricalChart.js:182:7)\n    at MyChart (file:///Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/my-charts/dist/index.js:26:24)\n    at App\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://reactjs.org/link/error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13123:9\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14064:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:19186:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:19277:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:21675:16\n ❯ beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27465:14\n ❯ performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26599:12\n ❯ workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:5\n ❯ renderRootSync node_modules/react-dom/cjs/react-dom.development.js:26473:7\n ❯ recoverFromConcurrentError node_modules/react-dom/cjs/react-dom.development.js:25889:20\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react19:app-react17",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx [ src/App.spec.tsx ]\nError: Cannot find module '/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/react/jsx-runtime' imported from /Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react17/node_modules/my-charts/dist/index.js\nDid you mean to import \"react/jsx-runtime.js\"?\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 17.0.2, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react19:app-react18",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": false,
+        "error": "Command failed: yarn run test\nstderr | src/App.spec.tsx > App > should render svg and two bars\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13123:9\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14064:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19186:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19277:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:21675:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:4164:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nError: Uncaught [Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.]\n    at reportException (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n    at throwOnInvalidObjectType \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:13123:9\u001b[90m)\u001b[39m\n    at reconcileChildFibers \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:14064:7\u001b[90m)\u001b[39m\n    at reconcileChildren \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19186:28\u001b[90m)\u001b[39m\n    at updateForwardRef \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:19277:3\u001b[90m)\u001b[39m\n    at beginWork \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:21675:16\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callCallback \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mreact-dom\u001b[24m/cjs/react-dom.development.js:4164:14\u001b[90m)\u001b[39m\n    at HTMLUnknownElement.callTheUserObjectsOperation \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/generated/EventListener.js:26:30\u001b[90m)\u001b[39m\n    at innerInvokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:350:25\u001b[90m)\u001b[39m\n    at invokeEventListeners \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:286:3\u001b[90m)\u001b[39m\n    at HTMLUnknownElementImpl._dispatch \u001b[90m(/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/\u001b[39mnode_modules/\u001b[4mjsdom\u001b[24m/lib/jsdom/living/events/EventTarget-impl.js:233:9\u001b[90m)\u001b[39m\nThe above error occurred in the <BarChart> component:\n\n    at CategoricalChart (/Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/recharts/lib/chart/generateCategoricalChart.js:182:7)\n    at MyChart (file:///Users/pavelvanecek/github/recharts-integ/apps-3rd-party/app-react18/node_modules/my-charts/dist/index.js:26:24)\n    at App\n\nConsider adding an error boundary to your tree to customize error handling behavior.\nVisit https://reactjs.org/link/error-boundaries to learn more about error boundaries.\n\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/App.spec.tsx > App > should render svg and two bars\nError: Objects are not valid as a React child (found: object with keys {$$typeof, type, key, props, _owner, _store}). If you meant to render a collection of children, use an array instead.\n ❯ throwOnInvalidObjectType node_modules/react-dom/cjs/react-dom.development.js:13123:9\n ❯ reconcileChildFibers node_modules/react-dom/cjs/react-dom.development.js:14064:7\n ❯ reconcileChildren node_modules/react-dom/cjs/react-dom.development.js:19186:28\n ❯ updateForwardRef node_modules/react-dom/cjs/react-dom.development.js:19277:3\n ❯ beginWork node_modules/react-dom/cjs/react-dom.development.js:21675:16\n ❯ beginWork$1 node_modules/react-dom/cjs/react-dom.development.js:27465:14\n ❯ performUnitOfWork node_modules/react-dom/cjs/react-dom.development.js:26599:12\n ❯ workLoopSync node_modules/react-dom/cjs/react-dom.development.js:26505:5\n ❯ renderRootSync node_modules/react-dom/cjs/react-dom.development.js:26473:7\n ❯ recoverFromConcurrentError node_modules/react-dom/cjs/react-dom.development.js:25889:20\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\nerror Command failed with exit code 1.\n"
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": false,
+        "error": "Multiple versions of react are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-dom",
+        "success": false,
+        "error": "Multiple versions of react-dom are installed: 18.3.1, 19.1.0"
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  },
+  {
+    "name": "yarn:my-charts-react19:app-react19",
+    "results": [
+      {
+        "name": "clean",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "replace-package-version",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "install",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "unit test",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "build",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "recharts",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-dom",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "react-redux",
+        "success": true,
+        "error": null
+      },
+      {
+        "name": "@reduxjs/toolkit",
+        "success": true,
+        "error": null
+      }
+    ]
+  }
+]
