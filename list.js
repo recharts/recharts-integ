@@ -75,30 +75,18 @@ function listAllDirectDependencyTests() {
 function listAllTests(isCi) {
     if (isCi) {
         return [
-            'npm:integrations/ts-react16',
+            'npm:integrations/ts-react16-overrides',
             'npm:integrations/ts-react18',
             'npm:integrations/ts-react16',
             'npm:integrations/ts-react18',
             'npm:integrations/ts-react19',
             'npm:integrations/ts4-react17',
             'npm:my-charts-react16:app-react16',
-            'npm:my-charts-react17:app-react17',
-            'npm:my-charts-react18:app-react17',
             'npm:my-charts-react18:app-react18',
-            'npm:my-charts-react19:app-react17',
             'npm:my-charts-react19:app-react18',
             'npm:my-charts-react19:app-react19',
-            'yarn:integrations/ts-react16',
-            'yarn:integrations/ts-react18',
+            'yarn:integrations/ts-react16-resolutions',
             'yarn:integrations/ts-react19',
-            'yarn:integrations/ts4-react17',
-            'yarn:my-charts-react16:app-react16',
-            'yarn:my-charts-react17:app-react16',
-            'yarn:my-charts-react17:app-react17',
-            'yarn:my-charts-react18:app-react17',
-            'yarn:my-charts-react18:app-react18',
-            'yarn:my-charts-react19:app-react17',
-            'yarn:my-charts-react19:app-react18',
             'yarn:my-charts-react19:app-react19',
         ]
     }
