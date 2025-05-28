@@ -38,6 +38,7 @@ class Controller {
 
     getEnv() {
         return {
+            CI: process.env.CI,
             PATH: process.env.PATH,
             /*
              * Disables the automatic adding of 'packageManager' into every package.json file
