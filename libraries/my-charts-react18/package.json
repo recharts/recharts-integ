@@ -13,10 +13,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "recharts": "^3.0.0-beta.1"
+    "recharts": "file:/Users/pavelvanecek/github/recharts-integ/recharts.peerDependencies-react-dom-is.tgz"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0"
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   },
   "keywords": [
     "react",
