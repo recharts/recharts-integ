@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "recharts": "^3.0.0-beta.1"
+    "recharts": "^3.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0",
