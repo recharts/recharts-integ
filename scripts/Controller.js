@@ -32,7 +32,7 @@ class Controller {
     execSync(cmd) {
         const env = this.getEnv();
         return execSync(cmd, {
-            cwd: this.absolutePath, encoding: 'utf-8', env
+            cwd: this.absolutePath, encoding: 'utf-8', env, stdio: ['pipe', 'pipe', 'inherit']
         });
     }
 

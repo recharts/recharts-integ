@@ -38,6 +38,7 @@ class NpmController extends Controller {
             this.execSync('npm run build');
             return TestResult.ok('build');
         } catch (ex) {
+            console.error(ex);
             return TestResult.fail('build', ex);
         }
     }
