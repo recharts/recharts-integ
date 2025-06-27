@@ -1,4 +1,4 @@
-import { Bar, BarChart, Legend, Tooltip, XAxis, YAxis } from 'recharts';
+import {Bar, BarChart, Legend, Tooltip, XAxis, YAxis} from 'recharts';
 
 function App() {
   return (
