@@ -10,28 +10,35 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   list_integration_tests:
-   name: List Integration Test Directories
-   runs-on: ubuntu-latest
-   outputs:
-     # Output the list of directories as a JSON array string
-     directories: ${{ steps.set_matrix.outputs.directories }}
-   steps:
-     - name: Checkout Integration Tests Repository
-       uses: actions/checkout@v4
-       with:
-         repository: recharts/recharts-integ
+    name: List Integration Test Directories
+    runs-on: ubuntu-latest
+    outputs:
+      # Output the list of directories as a JSON array string
+      directories: ${{ steps.set_matrix.outputs.directories }}
+    steps:
+      - name: Checkout Integration Tests Repository
+        uses: actions/checkout@v4
+        with:
+          repository: recharts/recharts-integ
 
-     - name: List Integration Test Directories
-       id: set_matrix
-       # This command finds all integration test directories
-       # and formats them as a JSON array.
-       run: |
-         JSON_ARRAY=$(node list.js --ci --json)
-         echo "Generated directory list: $JSON_ARRAY"
-         echo "directories=$JSON_ARRAY" >> $GITHUB_OUTPUT
+      - name: List Integration Test Directories
+        id: set_matrix
+        # This command finds all integration test directories and formats them as a JSON array.
+        # If the workflow is manually triggered, list all directories and run all tests. Some of those are going to fail.
+        # If the workflow is triggered by a pull request or push, only list directories that have changed in the PR or commit.
+        # We expect the CI to always pass so it only runs a subset of tests that we know should pass.
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            JSON_ARRAY=$(node list.js --json)
+          else
+            JSON_ARRAY=$(node list.js --ci --json)
+          fi
+          echo "Generated directory list: $JSON_ARRAY"
+          echo "directories=$JSON_ARRAY" >> $GITHUB_OUTPUT
 
   build-and-test:
 
