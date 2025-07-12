@@ -82,8 +82,13 @@ function listAllTests(isCi) {
             'npm:my-charts-react18:app-react18',
             'npm:my-charts-react19:app-react18',
             'npm:my-charts-react19:app-react19',
+            'yarn:integrations/ts-react16',
+            'yarn:integrations/ts-react16-overrides',
             'yarn:integrations/ts-react16-resolutions',
+            'yarn:integrations/ts-react18',
             'yarn:integrations/ts-react19',
+            'yarn:my-charts-react18:app-react18',
+            'yarn:my-charts-react19:app-react18',
             'yarn:my-charts-react19:app-react19',
         ]
     }
