@@ -6,7 +6,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node server.js",
-    "start": "concurrently \"npm run server\" \"npm run dev\""
+    "start": "concurrently \"npm run server\" \"npm run dev\"",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,9 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "concurrently": "^9.2.1",
+    "prettier": "^3.7.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vitest": "^3.2.4"
   }
 }

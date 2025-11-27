@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import testsReducer from './testsSlice';
 import websocketMiddleware from './websocketMiddleware';
 
+export const rootReducer = {
+  tests: testsReducer,
+};
+
 export const store = configureStore({
-  reducer: {
-    tests: testsReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
