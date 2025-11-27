@@ -11,6 +11,11 @@ interface TestsState {
   runningTests: Record<string, TestRun>;
   testResults: Record<string, TestRun>;
   rechartsVersion: string;
+  availableVersions: string[];
+  loadingVersions: boolean;
+  localPackagePath: string;
+  packingDirectory: string;
+  isPacking: boolean;
 }
 
 const initialState: TestsState = {
@@ -23,6 +28,11 @@ const initialState: TestsState = {
   runningTests: {},
   testResults: {},
   rechartsVersion: '',
+  availableVersions: [],
+  loadingVersions: false,
+  localPackagePath: '',
+  packingDirectory: '',
+  isPacking: false,
 };
 
 const testsSlice = createSlice({
@@ -147,6 +157,13 @@ const testsSlice = createSlice({
     loadPersistedResults: (state, action: PayloadAction<Record<string, TestRun>>) => {
       state.testResults = action.payload;
     },
+    setAvailableVersions: (state, action: PayloadAction<string[]>) => {
+      state.availableVersions = action.payload;
+      state.loadingVersions = false;
+    },
+    setLoadingVersions: (state, action: PayloadAction<boolean>) => {
+      state.loadingVersions = action.payload;
+    },
   },
 });
 
@@ -169,6 +186,8 @@ export const {
   clearTestResult,
   clearAllResults,
   loadPersistedResults,
+  setAvailableVersions,
+  setLoadingVersions,
 } = testsSlice.actions;
 
 export default testsSlice.reducer;

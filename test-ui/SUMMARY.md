@@ -31,7 +31,7 @@ start-ui.sh               # Convenience startup script (in repo root)
 - ✅ List all integration tests from `list.js`
 - ✅ Run individual tests via "Run" button
 - ✅ Bulk test execution via selection checkboxes
-- ✅ Optional Recharts version specification
+- ✅ Recharts version selector (fetched from NPM, sorted latest first)
 - ✅ Real-time test output streaming via WebSockets
 - ✅ Test status indicators (running, passed, failed)
 - ✅ Structured output by phase (6 phases: clean, set version, install, test, build, verify)

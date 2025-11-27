@@ -12,6 +12,8 @@ import {
   clearTestResult,
   clearAllResults,
   loadPersistedResults,
+  setAvailableVersions,
+  setLoadingVersions,
 } from './store/testsSlice';
 import { Test, TestRun } from './types';
 import PhaseOutput from './PhaseOutput';
@@ -31,11 +33,14 @@ function App() {
     runningTests,
     testResults,
     rechartsVersion,
+    availableVersions,
+    loadingVersions,
   } = useAppSelector((state) => state.tests);
 
   useEffect(() => {
     loadTests();
     loadPersistedResultsFromStorage();
+    loadRechartsVersions();
   }, []);
 
   // Persist test results to sessionStorage
@@ -71,6 +76,39 @@ function App() {
       }
     } catch (err) {
       console.error('Failed to load persisted results:', err);
+    }
+  };
+
+  const loadRechartsVersions = async () => {
+    try {
+      dispatch(setLoadingVersions(true));
+      // Fetch from npm registry
+      const response = await fetch('https://registry.npmjs.org/recharts');
+      const data = await response.json();
+      
+      // Get versions and sort from latest to oldest
+      const versions = Object.keys(data.versions || {})
+        .filter(v => !v.includes('-')) // Filter out pre-release versions
+        .sort((a, b) => {
+          // Compare version numbers (simple sort by version string works for semver)
+          const aParts = a.split('.').map(Number);
+          const bParts = b.split('.').map(Number);
+          
+          for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
+            const aVal = aParts[i] || 0;
+            const bVal = bParts[i] || 0;
+            if (aVal !== bVal) {
+              return bVal - aVal; // Descending order
+            }
+          }
+          return 0;
+        })
+        .slice(0, 50); // Limit to 50 most recent versions
+      
+      dispatch(setAvailableVersions(versions));
+    } catch (err) {
+      console.error('Failed to load Recharts versions:', err);
+      dispatch(setLoadingVersions(false));
     }
   };
 
@@ -190,13 +228,20 @@ function App() {
             onChange={(e) => dispatch(setFilter(e.target.value))}
             className="filter-input"
           />
-          <input
-            type="text"
-            placeholder="Recharts version (optional)"
+          <select
             value={rechartsVersion}
             onChange={(e) => dispatch(setRechartsVersion(e.target.value))}
-            className="version-input"
-          />
+            className="version-select"
+            disabled={loadingVersions}
+          >
+            <option value="">Latest version</option>
+            {loadingVersions && <option value="">Loading versions...</option>}
+            {availableVersions.map((version) => (
+              <option key={version} value={version}>
+                {version}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="control-row">

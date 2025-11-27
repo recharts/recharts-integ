@@ -71,8 +71,32 @@
   transition: border-color 0.2s;
 }
 
+.version-select {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.6rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  font-family: 'Courier New', monospace;
+}
+
+.version-select:hover:not(:disabled) {
+  border-color: #667eea;
+}
+
+.version-select:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  color: #999;
+}
+
 .filter-input:focus,
-.version-input:focus {
+.version-input:focus,
+.version-select:focus {
   outline: none;
   border-color: #667eea;
 }

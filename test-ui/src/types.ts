@@ -3,6 +3,11 @@ export interface Test {
   stable: boolean;
 }
 
+export interface NpmVersion {
+  version: string;
+  time: string;
+}
+
 export interface Phase {
   status: 'pending' | 'running' | 'passed' | 'failed';
   output: string;
