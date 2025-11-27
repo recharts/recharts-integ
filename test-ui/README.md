@@ -30,7 +30,7 @@ cd test-ui
 npm install
 ```
 
-**Note:** The UI is built with TypeScript and Redux Toolkit for better maintainability and type safety. See [REFACTORING.md](./REFACTORING.md) for technical details.
+**Note:** Both frontend and backend are built with TypeScript. The backend uses Node.js 22+ native TypeScript support with auto-restart. See [REFACTORING.md](./REFACTORING.md) for technical details.
 
 ### Running the Application
 
@@ -41,14 +41,21 @@ npm start
 ```
 
 This will start:
-- Backend API server on `http://localhost:3001`
-- Frontend React app on `http://localhost:3000`
+- Backend API server on `http://localhost:3001` (with auto-restart)
+- Frontend React app on `http://localhost:3000` (with hot reload)
+
+**Development Mode Features:**
+- 🔄 Frontend: Vite hot reload (instant updates)
+- 🔄 Backend: Nodemon auto-restart (~1s on change)
+- 📝 Both watch for file changes automatically
 
 Alternatively, you can run them separately:
 
 ```bash
-# Terminal 1 - Backend server
-npm run server
+# Terminal 1 - Backend server (development with auto-restart)
+npm run server:dev
+
+# Terminal 1 - Backend server (production, no auto-restart)
 
 # Terminal 2 - Frontend dev server
 npm run dev

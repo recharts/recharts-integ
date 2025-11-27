@@ -1,0 +1,8 @@
+{
+  "watch": ["server.ts"],
+  "ext": "ts",
+  "exec": "node --experimental-strip-types server.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
