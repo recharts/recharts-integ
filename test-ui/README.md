@@ -9,7 +9,7 @@ A React-based web interface for managing and running Recharts integration tests.
 - ▶️ Run tests individually or in bulk
 - 🔄 Serial execution (tests run one at a time)
 - 📊 Real-time test output and status updates via WebSockets
-- 🔍 Filter tests by name
+- 🔍 Filter tests by name, stability, or keywords
 - ✅ View test results with pass/fail status
 - 📝 Inspect detailed logs for each test run
 - 💾 Persistent results (survives page reload)

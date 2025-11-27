@@ -260,8 +260,20 @@ function App() {
 
   const getFilteredTests = () => {
     if (!filter) return tests;
+    
+    const filterLower = filter.toLowerCase();
+    
+    // Check for stability keywords
+    if ("stable".startsWith(filterLower)) {
+      return tests.filter(test => test.stable === true);
+    }
+    if ('experimental'.startsWith(filterLower)) {
+      return tests.filter(test => test.stable === false);
+    }
+    
+    // Regular text search in test name
     return tests.filter(test => 
-      test.name.toLowerCase().includes(filter.toLowerCase())
+      test.name.toLowerCase().includes(filterLower)
     );
   };
 
@@ -305,7 +317,7 @@ function App() {
         <div className="control-row">
           <input
             type="text"
-            placeholder="Filter tests..."
+            placeholder="Filter tests... (try: stable, experimental, npm, react18)"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="filter-input"

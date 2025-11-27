@@ -35,6 +35,7 @@ npm start          # Starts both servers
 
 ## 💡 Tips
 
+- **Filter by stability**: Type "stable" or "experimental"
 - **Filter by package manager**: Type "npm" or "yarn"
 - **Filter by React version**: Type "react18" or "react19"
 - **Specify version**: Use the "Recharts version" input
@@ -85,17 +86,29 @@ If something doesn't work:
 4. Check the browser console for errors (F12)
 5. Look at terminal output for backend errors
 
-## ✨ Example Workflow
+## ✨ Example Workflows
 
+**Run all stable tests:**
 ```bash
 # 1. Start the UI
 ./start-ui.sh
 
 # 2. In browser (http://localhost:3000)
-#    - Type "react18" in filter
+#    - Type "stable" in filter
 #    - Click "Select All"
 #    - Click "Run Selected"
 #    - Watch tests run in real-time!
+```
+
+**Run experimental tests for React 18:**
+```bash
+# 1. Start the UI
+./start-ui.sh
+
+# 2. In browser (http://localhost:3000)
+#    - Type "experimental" in filter
+#    - Manually select React 18 tests
+#    - Click "Run Selected"
 ```
 
 ---

@@ -37,7 +37,7 @@ start-ui.sh               # Convenience startup script (in repo root)
 - ✅ Full test logs display
 
 ### UI Features
-- ✅ Filter tests by name
+- ✅ Filter tests by name, stability (stable/experimental), or keywords
 - ✅ Select All / Deselect All functionality
 - ✅ Two-panel layout (test list | output)
 - ✅ Color-coded test states
