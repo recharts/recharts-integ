@@ -207,6 +207,20 @@ function verifyAllSingleDependencyVersions(
   }
 }
 
+function getControllerFactory(
+  packageManager: string,
+): (projectPath: string) => Controller {
+  return (projectPath: string) => {
+    if (packageManager === "npm") {
+      return new NpmController(projectPath);
+    } else if (packageManager === "yarn") {
+      return new YarnController(projectPath);
+    } else {
+      throw new Error(`Unknown package manager: ${packageManager}`);
+    }
+  };
+}
+
 // Get the appropriate controller
 function getController(
   testName: string,
@@ -290,20 +304,17 @@ function getController(
     const [packageManager, library, app] = parts;
     const libPath = path.join(rootDir, "libraries", library);
     const appPath = path.join(rootDir, "apps-3rd-party", app);
-    const Controller = getControllerConstructor(packageManager);
+    const factory = getControllerFactory(packageManager);
     return {
       controller: null,
-      fn: runLibraryInLibraryTest(
-        new Controller(libPath),
-        new Controller(appPath),
-        version,
-      ),
+      fn: runLibraryInLibraryTest(factory(libPath), factory(appPath), version),
     };
   } else if (parts.length === 2) {
     // Direct dependency test: packageManager:testType
     const [packageManager, testType] = parts;
-    const Controller = getControllerConstructor(packageManager);
-    const controller = new Controller(testType);
+    const factory = getControllerFactory(packageManager);
+    const absolutePath = path.join(rootDir, testType);
+    const controller = factory(absolutePath);
     return {
       controller,
       fn: runDirectDependencyAppTest(controller, version),
