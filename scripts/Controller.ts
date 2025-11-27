@@ -1,9 +1,9 @@
 import { execSync } from 'child_process';
-import { replacePackageVersion } from './replacePackageVersion.js';
-import { tgzFileNameToPackageJsonReference } from './tgzFileNameToPackageJsonReference.js';
+import { replacePackageVersion } from './replacePackageVersion.ts';
+import { tgzFileNameToPackageJsonReference } from './tgzFileNameToPackageJsonReference.ts';
 import path from 'path';
 import fs from 'fs';
-import { TestResult } from './TestResult.js';
+import { TestOutcome } from './TestOutcome.ts';
 
 export abstract class Controller {
     absolutePath: string;
@@ -12,7 +12,7 @@ export abstract class Controller {
         this.absolutePath = absolutePath;
     }
 
-    clean(): TestResult {
+    clean(): TestOutcome {
         fs.rmSync(path.join(this.absolutePath, 'node_modules'), { recursive: true, force: true });
         fs.rmSync(path.join(this.absolutePath, 'package-lock.json'), { force: true });
         fs.rmSync(path.join(this.absolutePath, 'yarn.lock'), { force: true });
@@ -20,7 +20,7 @@ export abstract class Controller {
         files.filter(file => file.endsWith('.tgz')).forEach(file => {
             fs.rmSync(path.join(this.absolutePath, file), { force: true });
         });
-        return TestResult.ok('clean');
+        return TestOutcome.ok('clean');
     }
 
     execSync(cmd: string): string {
@@ -42,7 +42,7 @@ export abstract class Controller {
         };
     }
 
-    replacePackageJsonVersion(dependencyName: string, version: string): TestResult {
+    replacePackageJsonVersion(dependencyName: string, version: string): TestOutcome {
         const packageJsonPath = path.join(this.absolutePath, 'package.json');
         return replacePackageVersion(packageJsonPath, dependencyName, version);
     }
@@ -51,9 +51,9 @@ export abstract class Controller {
         return tgzFileNameToPackageJsonReference(this.absolutePath, tgzFileName);
     }
 
-    abstract verifySingleDependencyVersion(dependencyName: string): TestResult;
-    abstract install(): TestResult;
-    abstract test(): TestResult;
-    abstract build(): TestResult;
+    abstract verifySingleDependencyVersion(dependencyName: string): TestOutcome;
+    abstract install(): TestOutcome;
+    abstract test(): TestOutcome;
+    abstract build(): TestOutcome;
     abstract pack(): string;
 }

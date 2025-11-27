@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { Controller } from './Controller.js';
+import { Controller } from './Controller.ts';
 import { execSync } from 'child_process';
-import { TestResult } from './TestResult.js';
+import { TestOutcome } from './TestOutcome.ts';
 
 interface YarnPackJson {
     type: string;
@@ -22,54 +22,54 @@ interface YarnPackage {
 }
 
 export class YarnController extends Controller {
-    clean(): TestResult {
+    clean(): TestOutcome {
         super.clean();
         this.execSync('yarn cache clean');
-        return TestResult.ok('clean');
+        return TestOutcome.ok('clean');
     }
 
-    install(): TestResult {
+    install(): TestOutcome {
         try {
             this.execSync('yarn install');
-            return TestResult.ok('install');
+            return TestOutcome.ok('install');
         } catch (e) {
-            return TestResult.fail('install', e as Error);
+            return TestOutcome.fail('install', e as Error);
         }
     }
 
-    test(): TestResult {
+    test(): TestOutcome {
         const packageJsonPath = path.join(this.absolutePath, 'package.json');
 
         if (!fs.existsSync(packageJsonPath)) {
             console.log(`No package.json found at ${packageJsonPath}. Skipping 'yarn run test'.`);
-            return TestResult.fail('unit test', new Error(`No package.json found at ${packageJsonPath}`));
+            return TestOutcome.fail('unit test', new Error(`No package.json found at ${packageJsonPath}`));
         }
 
         try {
             const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
             if (!(packageJson.scripts && packageJson.scripts.test)) {
                 console.log(`No 'test' script found in package.json at ${this.absolutePath}. Skipping 'yarn run test'.`);
-                return TestResult.ok('unit test');
+                return TestOutcome.ok('unit test');
             }
 
             try {
                 this.execSync('yarn run test');
-                return TestResult.ok('unit test');
+                return TestOutcome.ok('unit test');
             } catch (e) {
-                return TestResult.fail('unit test', e as Error);
+                return TestOutcome.fail('unit test', e as Error);
             }
         } catch (error: any) {
             console.error(`Error reading or parsing package.json at ${packageJsonPath}: ${error.message}. Skipping 'yarn run test'.`);
-            return TestResult.fail('unit test', error);
+            return TestOutcome.fail('unit test', error);
         }
     }
 
-    build(): TestResult {
+    build(): TestOutcome {
         try {
             this.execSync('yarn run build');
-            return TestResult.ok('build');
+            return TestOutcome.ok('build');
         } catch (e) {
-            return TestResult.fail('build', e as Error);
+            return TestOutcome.fail('build', e as Error);
         }
     }
 
@@ -92,7 +92,7 @@ export class YarnController extends Controller {
         }
     }
 
-    verifySingleDependencyVersion(dependencyName: string): TestResult {
+    verifySingleDependencyVersion(dependencyName: string): TestOutcome {
         const command = `yarn list --pattern "${dependencyName}" --json --no-progress`;
         let rawOutput: string;
 
@@ -109,26 +109,26 @@ export class YarnController extends Controller {
 
             if (errOutput.includes(`Package "${dependencyName}" not found`) || 
                 errOutput.includes(`pattern "${dependencyName}" did not match any packages`)) {
-                return TestResult.fail(dependencyName, new Error(`Dependency ${dependencyName} is not installed.`));
+                return TestOutcome.fail(dependencyName, new Error(`Dependency ${dependencyName} is not installed.`));
             }
         }
 
         if (!rawOutput) {
-            return TestResult.fail(dependencyName, new Error(`No output received from 'yarn list' command for ${dependencyName}.`));
+            return TestOutcome.fail(dependencyName, new Error(`No output received from 'yarn list' command for ${dependencyName}.`));
         }
 
         const installedVersions = this.parseYarnListOutput(rawOutput, dependencyName);
 
         if (installedVersions.size === 0) {
-            return TestResult.fail(dependencyName, new Error(`Dependency ${dependencyName} is not installed or no versions could be identified.`));
+            return TestOutcome.fail(dependencyName, new Error(`Dependency ${dependencyName} is not installed or no versions could be identified.`));
         }
 
         if (installedVersions.size > 1) {
-            return TestResult.fail(dependencyName, new Error(`Multiple versions of ${dependencyName} are installed: ${Array.from(installedVersions).join(', ')}`));
+            return TestOutcome.fail(dependencyName, new Error(`Multiple versions of ${dependencyName} are installed: ${Array.from(installedVersions).join(', ')}`));
         }
 
         console.log(`Dependency ${dependencyName} is installed with a single version: ${Array.from(installedVersions)[0]}`);
-        return TestResult.ok(dependencyName);
+        return TestOutcome.ok(dependencyName);
     }
 
     parseYarnListOutput(rawOutput: string, dependencyName: string): Set<string> {

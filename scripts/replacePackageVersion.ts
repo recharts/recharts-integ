@@ -1,9 +1,9 @@
 import fs from 'fs';
-import { TestResult } from './TestResult.js';
+import { TestOutcome } from './TestOutcome.ts';
 
-export function replacePackageVersion(packageJsonPath: string, dependencyName: string, version: string): TestResult {
+export function replacePackageVersion(packageJsonPath: string, dependencyName: string, version: string): TestOutcome {
     if (version == null || version === '') {
-        return TestResult.ok('replace-package-version');
+        return TestOutcome.ok('replace-package-version');
     }
 
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
@@ -24,9 +24,9 @@ export function replacePackageVersion(packageJsonPath: string, dependencyName: s
 
     if (!replaced) {
         console.error(`Dependency ${dependencyName} not found in ${packageJsonPath}`);
-        return TestResult.fail('replace-package-version', new Error(`Dependency ${dependencyName} not found in ${packageJsonPath}`));
+        return TestOutcome.fail('replace-package-version', new Error(`Dependency ${dependencyName} not found in ${packageJsonPath}`));
     }
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-    return TestResult.ok('replace-package-version');
+    return TestOutcome.ok('replace-package-version');
 }

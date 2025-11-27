@@ -2,15 +2,15 @@ import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
 import { spawn } from "child_process";
-import type { ChildProcess } from "child_process";
-import path from "path";
+import * as path from "node:path";
 import { fileURLToPath } from "url";
 import WebSocket from "ws";
 import { WebSocketServer } from "ws";
-import http from "http";
-import { NpmController } from "../scripts/NpmController.js";
-import { YarnController } from "../scripts/YarnController.js";
-import type { Controller } from "../scripts/Controller.js";
+import * as http from "http";
+import { NpmController } from "../../scripts/NpmController.ts";
+import { YarnController } from "../../scripts/YarnController.ts";
+import type { Controller } from "../../scripts/Controller.ts";
+import { TestOutcome } from "../../scripts/TestOutcome.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,7 +22,7 @@ const wss = new WebSocketServer({ server });
 app.use(cors());
 app.use(express.json());
 
-const rootDir = path.join(__dirname, "..");
+const rootDir = path.join(__dirname, "../..");
 
 // Types
 interface TestData {
@@ -121,7 +121,7 @@ app.get("/api/tests", async (req: Request, res: Response) => {
 async function runPhase(
   phaseName: PhaseName,
   testData: TestData,
-  fn: () => any,
+  fn: () => TestOutcome,
 ): Promise<void> {
   const phase = testData.phases[phaseName];
   phase.status = "running";
@@ -140,6 +140,8 @@ async function runPhase(
 
   try {
     const result = fn();
+
+    console.log("received result", result);
 
     // Capture output if result has it
     if (result && typeof result === "object") {
@@ -160,7 +162,23 @@ async function runPhase(
     }
   } catch (error: any) {
     phase.status = "failed";
-    phase.output = error.message || String(error);
+
+    // For exec errors, capture stdout/stderr which contains the actual output
+    let errorOutput = "";
+    if (error.stdout) {
+      errorOutput += error.stdout.toString();
+    }
+    if (error.stderr) {
+      errorOutput += error.stderr.toString();
+    }
+    if (!errorOutput && error.message) {
+      errorOutput = error.message;
+    }
+    if (!errorOutput) {
+      errorOutput = String(error);
+    }
+
+    phase.output = errorOutput;
     testData.error += `${phaseName} failed: ${error.message}\n`;
   }
 
@@ -185,7 +203,7 @@ async function runPhase(
 function verifyAllSingleDependencyVersions(
   controller: Controller,
   testData: TestData,
-): void {
+): TestOutcome {
   const dependencies = [
     "recharts",
     "react",
@@ -201,6 +219,7 @@ function verifyAllSingleDependencyVersions(
         ? `✅ ${dep}: single version verified\n`
         : `❌ ${dep}: ${result.error}\n`;
       testData.phases.verify.output += output;
+      return result;
     } catch (error: any) {
       testData.phases.verify.output += `❌ ${dep}: ${error.message}\n`;
     }
@@ -229,14 +248,6 @@ function getController(
   controller: Controller | null;
   fn: (testData: TestData) => Promise<void>;
 } {
-  const getControllerConstructor = (
-    packageManager: string,
-  ): typeof Controller => {
-    if (packageManager === "npm") return NpmController;
-    if (packageManager === "yarn") return YarnController;
-    throw new Error(`Unknown package manager: ${packageManager}`);
-  };
-
   const runDirectDependencyAppTest = (
     controller: Controller,
     version: string,
@@ -268,22 +279,21 @@ function getController(
     return async (testData: TestData) => {
       await runPhase("clean", testData, () => {
         libController.clean();
+        return appController.clean();
+      });
+
+      await runPhase("setVersion", testData, () => {
         libController.replacePackageJsonVersion("recharts", version);
         libController.install();
         libController.test();
         libController.build();
         verifyAllSingleDependencyVersions(libController, testData);
-        return libController.pack();
-      });
-
-      const myChartsTgzFile = libController.pack();
-
-      await runPhase("setVersion", testData, () => appController.clean());
-      await runPhase("install", testData, () => {
+        const myChartsTgzFile = libController.pack();
         appController.replacePackageJsonVersion("my-charts", myChartsTgzFile);
-        return appController.install();
+        return TestOutcome.ok("setVersion");
       });
 
+      await runPhase("install", testData, () => appController.install());
       if (testData.phases.install.status === "failed") {
         return;
       }
@@ -569,8 +579,6 @@ app.post("/api/pack", (req: Request, res: Response) => {
         directory.slice(1),
       )
     : directory;
-
-  const packId = `pack-${Date.now()}`;
 
   // Run pack-and-run.sh equivalent: build and pack
   const packProcess = spawn(

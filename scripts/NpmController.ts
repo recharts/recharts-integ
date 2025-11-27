@@ -1,32 +1,32 @@
-import { Controller } from './Controller.js';
-import { TestResult } from './TestResult.js';
+import { Controller } from './Controller.ts';
+import { TestOutcome } from './TestOutcome.ts';
 
 export class NpmController extends Controller {
-    install(): TestResult {
+    install(): TestOutcome {
         try {
             this.execSync('npm install');
-            return TestResult.ok('install');
+            return TestOutcome.ok('install');
         } catch (ex) {
-            return TestResult.fail('install', ex as Error);
+            return TestOutcome.fail('install', ex as Error);
         }
     }
 
-    test(): TestResult {
+    test(): TestOutcome {
         try {
             this.execSync('npm run test --if-present');
-            return TestResult.ok('unit test');
+            return TestOutcome.ok('unit test');
         } catch (ex) {
-            return TestResult.fail('unit test', ex as Error);
+            return TestOutcome.fail('unit test', ex as Error);
         }
     }
 
-    build(): TestResult {
+    build(): TestOutcome {
         try {
             this.execSync('npm run build');
-            return TestResult.ok('build');
+            return TestOutcome.ok('build');
         } catch (ex) {
             console.error(ex);
-            return TestResult.fail('build', ex as Error);
+            return TestOutcome.fail('build', ex as Error);
         }
     }
 
@@ -34,7 +34,7 @@ export class NpmController extends Controller {
         return this.tgzFileNameToPackageJsonReference(this.execSync('npm pack').trim());
     }
 
-    verifySingleDependencyVersion(dependencyName: string): TestResult {
+    verifySingleDependencyVersion(dependencyName: string): TestOutcome {
         const versions = this.execSync(`npm ls ${dependencyName} --json`);
         const parsedVersions = JSON.parse(versions);
 
@@ -54,13 +54,14 @@ export class NpmController extends Controller {
         walkDependencies(parsedVersions.dependencies);
 
         if (installedVersions.size > 1) {
-            return TestResult.fail(
+            return TestOutcome.fail(
                 dependencyName,
                 new Error(`Multiple versions of ${dependencyName} are installed: ${Array.from(installedVersions).join(', ')}`)
             );
         }
 
-        console.log(`Dependency ${dependencyName} is installed and only one version is present: ${Array.from(installedVersions).join(', ')}`);
-        return TestResult.ok(dependencyName);
+        const msg = `Dependency ${dependencyName} is installed and only one version is present: ${Array.from(installedVersions).join(', ')}`;
+        console.log(msg);
+        return TestOutcome.ok(msg);
     }
 }

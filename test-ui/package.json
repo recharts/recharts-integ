@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "server": "node --experimental-strip-types server.ts",
+    "server": "node server/server.ts",
     "server:dev": "nodemon",
     "start": "concurrently \"npm run server:dev\" \"npm run dev\"",
     "test": "vitest"
