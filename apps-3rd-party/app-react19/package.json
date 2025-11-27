@@ -11,7 +11,7 @@
     "test": "vitest --run"
   },
   "dependencies": {
-    "my-charts": "file:../my-charts-replace-with-tgz-file-before-running",
+    "my-charts": "file:/Users/pavelvanecek/github/recharts-integ/libraries/my-charts-react19/my-charts-react19-0.1.0.tgz",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

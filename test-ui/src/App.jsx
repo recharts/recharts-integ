@@ -10,6 +10,7 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedTests, setSelectedTests] = useState(new Set());
   const [runningTests, setRunningTests] = useState(new Map());
+  const [queuedTests, setQueuedTests] = useState(new Map());
   const [testResults, setTestResults] = useState(new Map());
   const [rechartsVersion, setRechartsVersion] = useState('');
   const [filter, setFilter] = useState('');
@@ -17,6 +18,7 @@ function App() {
 
   useEffect(() => {
     loadTests();
+    loadPersistedResults();
     connectWebSocket();
 
     return () => {
@@ -25,6 +27,26 @@ function App() {
       }
     };
   }, []);
+
+  // Persist test results to sessionStorage
+  useEffect(() => {
+    if (testResults.size > 0) {
+      const resultsArray = Array.from(testResults.entries());
+      sessionStorage.setItem('testResults', JSON.stringify(resultsArray));
+    }
+  }, [testResults]);
+
+  const loadPersistedResults = () => {
+    try {
+      const stored = sessionStorage.getItem('testResults');
+      if (stored) {
+        const resultsArray = JSON.parse(stored);
+        setTestResults(new Map(resultsArray));
+      }
+    } catch (err) {
+      console.error('Failed to load persisted results:', err);
+    }
+  };
 
   const connectWebSocket = () => {
     const ws = new WebSocket(WS_URL);
@@ -54,7 +76,20 @@ function App() {
     const { type, data } = message;
 
     switch (type) {
+      case 'test-queued':
+        setQueuedTests(prev => new Map(prev).set(data.testName, {
+          id: data.id,
+          position: data.position
+        }));
+        break;
+
       case 'test-started':
+        // Remove from queue and add to running
+        setQueuedTests(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(data.testName);
+          return newMap;
+        });
         setRunningTests(prev => new Map(prev).set(data.testName, {
           id: data.id,
           status: 'running',
@@ -114,6 +149,11 @@ function App() {
           }
           return newMap;
         });
+        break;
+
+      case 'queue-cleared':
+        setQueuedTests(new Map());
+        setRunningTests(new Map());
         break;
     }
   };
@@ -187,6 +227,37 @@ function App() {
     setSelectedTests(new Set());
   };
 
+  const cancelQueue = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/tests/cancel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to cancel queue');
+      }
+
+      const data = await response.json();
+      console.log('Queue cancelled:', data);
+    } catch (err) {
+      setError('Failed to cancel queue: ' + err.message);
+    }
+  };
+
+  const clearTestResult = (testName) => {
+    setTestResults(prev => {
+      const newMap = new Map(prev);
+      newMap.delete(testName);
+      return newMap;
+    });
+  };
+
+  const clearAllResults = () => {
+    setTestResults(new Map());
+    sessionStorage.removeItem('testResults');
+  };
+
   const getFilteredTests = () => {
     if (!filter) return tests;
     return tests.filter(test => 
@@ -195,6 +266,9 @@ function App() {
   };
 
   const getTestStatus = (testName) => {
+    if (queuedTests.has(testName)) {
+      return { ...queuedTests.get(testName), status: 'queued' };
+    }
     if (runningTests.has(testName)) {
       return runningTests.get(testName);
     }
@@ -259,6 +333,22 @@ function App() {
           >
             Run Selected ({selectedTests.size})
           </button>
+          {(queuedTests.size > 0 || runningTests.size > 0) && (
+            <button 
+              onClick={cancelQueue} 
+              className="btn btn-danger"
+            >
+              ⏹ Cancel & Clear Queue
+            </button>
+          )}
+          {testResults.size > 0 && (
+            <button 
+              onClick={clearAllResults} 
+              className="btn btn-secondary"
+            >
+              🗑 Clear All Results
+            </button>
+          )}
         </div>
       </div>
 
@@ -270,6 +360,7 @@ function App() {
             const status = getTestStatus(testName);
             const isSelected = Array.from(selectedTests).some(t => t.name === testName);
             const isRunning = runningTests.has(testName);
+            const isQueued = queuedTests.has(testName);
 
             return (
               <div
@@ -281,7 +372,7 @@ function App() {
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => toggleTestSelection(test)}
-                    disabled={isRunning}
+                    disabled={isRunning || isQueued}
                   />
                   <span className="test-name">{testName}</span>
                   <span className={`stability-badge ${test.stable ? 'stable' : 'experimental'}`}>
@@ -289,14 +380,15 @@ function App() {
                   </span>
                   {status && (
                     <span className={`status-badge ${status.status}`}>
-                      {status.status === 'running' ? '⏳' : 
+                      {status.status === 'queued' ? '⏸️' :
+                       status.status === 'running' ? '⏳' : 
                        status.status === 'passed' ? '✅' : '❌'}
-                      {' '}{status.status}
+                      {' '}{status.status === 'queued' ? `Queued (#${status.position})` : status.status}
                     </span>
                   )}
                   <button
                     onClick={() => runTest(test)}
-                    disabled={isRunning}
+                    disabled={isRunning || isQueued}
                     className="btn btn-small"
                   >
                     Run
@@ -309,9 +401,23 @@ function App() {
 
         <div className="results-panel">
           <h2>Test Output</h2>
-          {runningTests.size === 0 && testResults.size === 0 && (
+          {queuedTests.size === 0 && runningTests.size === 0 && testResults.size === 0 && (
             <div className="empty-state">
               No tests running. Select and run tests to see output.
+            </div>
+          )}
+
+          {queuedTests.size > 0 && (
+            <div className="queue-info">
+              <h3>⏸️ Queue ({queuedTests.size} test{queuedTests.size !== 1 ? 's' : ''})</h3>
+              <p>Tests will run one at a time in series.</p>
+              <ul>
+                {Array.from(queuedTests.entries())
+                  .sort((a, b) => a[1].position - b[1].position)
+                  .map(([testName, data]) => (
+                    <li key={testName}>#{data.position}: {testName}</li>
+                  ))}
+              </ul>
             </div>
           )}
 
@@ -333,8 +439,16 @@ function App() {
               <h3>
                 {testName}
                 <span className={`status-badge ${data.status}`}>
-                  {data.status === 'passed' ? '✅ Passed' : '❌ Failed'}
+                  {data.status === 'passed' ? '✅ Passed' : 
+                   data.status === 'cancelled' ? '⏹ Cancelled' : '❌ Failed'}
                 </span>
+                <button
+                  onClick={() => clearTestResult(testName)}
+                  className="btn btn-clear"
+                  title="Clear this result"
+                >
+                  ✕
+                </button>
               </h3>
               <div className="output-box">
                 <pre>{data.output}</pre>

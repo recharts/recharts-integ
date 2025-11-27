@@ -18,10 +18,13 @@ Then open http://localhost:3000 in your browser.
 - 📋 List all available integration tests
 - 🏷️ Stability indicators (Stable/Experimental badges)
 - ▶️ Run tests individually or in bulk
+- 🔄 Serial execution (tests run one at a time to prevent conflicts)
 - 📊 Real-time test output and status updates
 - 🔍 Filter tests by name or package manager
 - ✅ View test results with pass/fail indicators
 - 📝 Inspect detailed logs for each test run
+- 💾 Persistent results (survives page reload)
+- ⏹ Cancel running tests and clear queue
 
 See [test-ui/README.md](./test-ui/README.md) for more details.
 

@@ -18,8 +18,12 @@ That's it! 🎉
 3. **Filter tests** - Type in the filter box
 4. **Run single test** - Click any "Run" button
 5. **Run multiple tests** - Check boxes → "Run Selected"
-6. **Watch output** - Real-time logs appear on the right
-7. **Check results** - ✅ green = passed, ❌ red = failed
+6. **Serial execution** - Tests run one at a time (queued)
+7. **Watch output** - Real-time logs appear on the right
+8. **Check results** - ✅ green = passed, ❌ red = failed
+9. **Reload page** - Results are preserved (sessionStorage)
+10. **Cancel tests** - Use "⏹ Cancel & Clear Queue" button
+11. **Clear results** - Use ✕ button or "🗑 Clear All Results"
 
 ## 🔧 Manual Start (if script doesn't work)
 
@@ -35,7 +39,12 @@ npm start          # Starts both servers
 - **Filter by React version**: Type "react18" or "react19"
 - **Specify version**: Use the "Recharts version" input
 - **Select many**: Use "Select All" then uncheck unwanted
-- **Clear results**: Refresh the page
+- **Multiple tests**: They run one at a time (serial, not parallel)
+- **Queue position**: See "Queued (#N)" badge for position in queue
+- **Results persist**: Reload page and see previous results
+- **Cancel anytime**: Use "⏹ Cancel & Clear Queue" button
+- **Clear one result**: Click ✕ on individual test result
+- **Clear all results**: Use "🗑 Clear All Results" button
 
 ## 🐛 Troubleshooting
 

@@ -42,6 +42,9 @@ start-ui.sh               # Convenience startup script (in repo root)
 - ✅ Two-panel layout (test list | output)
 - ✅ Color-coded test states
 - ✅ Stability badges (Stable vs Experimental)
+- ✅ Test result persistence (sessionStorage)
+- ✅ Cancel queue and current test
+- ✅ Clear individual or all results
 - ✅ Responsive design
 - ✅ Loading states
 - ✅ Error handling and display
@@ -50,7 +53,7 @@ start-ui.sh               # Convenience startup script (in repo root)
 - ✅ REST API for test management
 - ✅ WebSocket server for real-time updates
 - ✅ Test process spawning and monitoring
-- ✅ Multiple concurrent test execution
+- ✅ Serial test execution (queue-based)
 - ✅ Cross-Origin Resource Sharing (CORS) enabled
 
 ## 🚀 Quick Start
@@ -72,18 +75,22 @@ Open http://localhost:3000
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/tests` | List all available tests |
-| POST | `/api/tests/run` | Start a test run |
+| POST | `/api/tests/run` | Add test to queue (runs serially) |
 | GET | `/api/tests/:testId` | Get test status by ID |
 | GET | `/api/tests/active/all` | Get all active test runs |
+| GET | `/api/tests/queue` | Get current queue status |
+| POST | `/api/tests/cancel` | Cancel current test and clear queue |
 
 ## 🔌 WebSocket Events
 
 | Event | Direction | Data |
 |-------|-----------|------|
+| `test-queued` | Server → Client | `{ id, testName, position }` |
 | `test-started` | Server → Client | `{ id, testName }` |
 | `test-output` | Server → Client | `{ id, output }` |
 | `test-error` | Server → Client | `{ id, error }` |
 | `test-completed` | Server → Client | `{ id, status, exitCode }` |
+| `queue-cleared` | Server → Client | `{ cancelledCount, wasRunning }` |
 
 ## 🏗️ Architecture
 
@@ -137,9 +144,10 @@ The UI integrates seamlessly with existing test infrastructure:
 ## 📈 Performance
 
 - Minimal dependencies (72 packages total)
-- Production build: ~198KB (gzipped: ~62KB)
+- Production build: ~199KB (gzipped: ~63KB)
 - Real-time updates via WebSocket (no polling)
 - In-memory test tracking (no database required)
+- Serial test execution prevents resource conflicts
 
 ## 🔒 Security Considerations
 
@@ -178,7 +186,7 @@ curl -X POST http://localhost:3001/api/tests/run \
 Potential improvements for future iterations:
 
 1. **Test History**: Persist results to database or file system
-2. **Test Queue**: Serialize test execution (one at a time)
+2. **Queue Persistence**: Persist queue across server restarts
 3. **Scheduling**: Cron-like test scheduling
 4. **Comparison**: Compare results between runs
 5. **Export**: Download results as JSON/CSV

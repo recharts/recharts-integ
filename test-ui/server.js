@@ -17,6 +17,11 @@ const rootDir = path.join(__dirname, '..');
 // Store active test runs
 const activeTests = new Map();
 
+// Test queue for serial execution
+const testQueue = [];
+let isRunningTest = false;
+let currentTestProcess = null;
+
 // WebSocket connections
 const clients = new Set();
 
@@ -56,7 +61,120 @@ app.get('/api/tests', (req, res) => {
   }
 });
 
-// Run a single test
+// Function to actually run a test
+function executeTest(testName, rechartsVersion, testId) {
+  return new Promise((resolve, reject) => {
+    const args = ['run-test.sh', testName];
+    if (rechartsVersion) {
+      args.push(rechartsVersion);
+    }
+
+    const testProcess = spawn('bash', args, {
+      cwd: rootDir,
+      env: { ...process.env }
+    });
+
+    currentTestProcess = testProcess;
+
+    const testData = {
+      id: testId,
+      testName,
+      rechartsVersion: rechartsVersion || 'default',
+      status: 'running',
+      output: '',
+      error: '',
+      startTime: new Date().toISOString(),
+      endTime: null,
+      exitCode: null
+    };
+
+    activeTests.set(testId, testData);
+
+    broadcast({
+      type: 'test-started',
+      data: { id: testId, testName }
+    });
+
+    testProcess.stdout.on('data', (data) => {
+      const output = data.toString();
+      testData.output += output;
+      broadcast({
+        type: 'test-output',
+        data: { id: testId, output }
+      });
+    });
+
+    testProcess.stderr.on('data', (data) => {
+      const error = data.toString();
+      testData.error += error;
+      broadcast({
+        type: 'test-error',
+        data: { id: testId, error }
+      });
+    });
+
+    testProcess.on('close', (code) => {
+      currentTestProcess = null;
+      
+      // Check if it was cancelled
+      if (code === null) {
+        testData.status = 'cancelled';
+        testData.exitCode = null;
+      } else {
+        testData.status = code === 0 ? 'passed' : 'failed';
+        testData.exitCode = code;
+      }
+      testData.endTime = new Date().toISOString();
+      
+      broadcast({
+        type: 'test-completed',
+        data: { 
+          id: testId, 
+          status: testData.status,
+          exitCode: code
+        }
+      });
+
+      resolve();
+    });
+
+    testProcess.on('error', (err) => {
+      currentTestProcess = null;
+      testData.status = 'failed';
+      testData.error += `\nProcess error: ${err.message}`;
+      testData.endTime = new Date().toISOString();
+      
+      broadcast({
+        type: 'test-completed',
+        data: { 
+          id: testId, 
+          status: 'failed',
+          exitCode: -1
+        }
+      });
+      
+      resolve();
+    });
+  });
+}
+
+// Process the test queue
+async function processQueue() {
+  if (isRunningTest || testQueue.length === 0) {
+    return;
+  }
+
+  isRunningTest = true;
+  
+  while (testQueue.length > 0) {
+    const { testName, rechartsVersion, testId } = testQueue.shift();
+    await executeTest(testName, rechartsVersion, testId);
+  }
+  
+  isRunningTest = false;
+}
+
+// Run a single test (adds to queue)
 app.post('/api/tests/run', (req, res) => {
   const { testName, rechartsVersion } = req.body;
   
@@ -66,72 +184,23 @@ app.post('/api/tests/run', (req, res) => {
 
   const testId = `${testName}-${Date.now()}`;
   
-  const args = ['run-test.sh', testName];
-  if (rechartsVersion) {
-    args.push(rechartsVersion);
-  }
-
-  const testProcess = spawn('bash', args, {
-    cwd: rootDir,
-    env: { ...process.env }
-  });
-
-  const testData = {
-    id: testId,
-    testName,
-    rechartsVersion: rechartsVersion || 'default',
-    status: 'running',
-    output: '',
-    error: '',
-    startTime: new Date().toISOString(),
-    endTime: null,
-    exitCode: null
-  };
-
-  activeTests.set(testId, testData);
-
+  // Add to queue
+  testQueue.push({ testName, rechartsVersion, testId });
+  
+  // Broadcast that test is queued
   broadcast({
-    type: 'test-started',
-    data: { id: testId, testName }
+    type: 'test-queued',
+    data: { id: testId, testName, position: testQueue.length }
   });
 
-  testProcess.stdout.on('data', (data) => {
-    const output = data.toString();
-    testData.output += output;
-    broadcast({
-      type: 'test-output',
-      data: { id: testId, output }
-    });
-  });
-
-  testProcess.stderr.on('data', (data) => {
-    const error = data.toString();
-    testData.error += error;
-    broadcast({
-      type: 'test-error',
-      data: { id: testId, error }
-    });
-  });
-
-  testProcess.on('close', (code) => {
-    testData.status = code === 0 ? 'passed' : 'failed';
-    testData.exitCode = code;
-    testData.endTime = new Date().toISOString();
-    
-    broadcast({
-      type: 'test-completed',
-      data: { 
-        id: testId, 
-        status: testData.status,
-        exitCode: code
-      }
-    });
-  });
+  // Start processing queue
+  processQueue();
 
   res.json({ 
     testId,
-    message: 'Test started',
-    testName
+    message: testQueue.length === 1 ? 'Test started' : 'Test queued',
+    testName,
+    queuePosition: testQueue.length
   });
 });
 
@@ -151,6 +220,45 @@ app.get('/api/tests/:testId', (req, res) => {
 app.get('/api/tests/active/all', (req, res) => {
   const tests = Array.from(activeTests.values());
   res.json({ tests });
+});
+
+// Get queue status
+app.get('/api/tests/queue', (req, res) => {
+  res.json({ 
+    queue: testQueue,
+    isRunning: isRunningTest,
+    queueLength: testQueue.length
+  });
+});
+
+// Cancel current test and clear queue
+app.post('/api/tests/cancel', (req, res) => {
+  const cancelledCount = testQueue.length;
+  const wasRunning = isRunningTest;
+  
+  // Clear the queue
+  testQueue.length = 0;
+  
+  // Kill current test if running
+  if (currentTestProcess) {
+    currentTestProcess.kill('SIGTERM');
+    currentTestProcess = null;
+  }
+  
+  // Broadcast cancellation
+  broadcast({
+    type: 'queue-cleared',
+    data: { 
+      cancelledCount,
+      wasRunning
+    }
+  });
+  
+  res.json({ 
+    message: 'Queue cleared and current test cancelled',
+    cancelledCount,
+    wasRunning
+  });
 });
 
 const PORT = process.env.PORT || 3001;
