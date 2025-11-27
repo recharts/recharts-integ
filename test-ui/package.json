@@ -13,15 +13,21 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-redux": "^9.2.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "concurrently": "^9.2.1",
+    "typescript": "^5.9.3",
     "vite": "^7.2.4"
   }
 }

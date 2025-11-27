@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {Phases, PhaseName, Phase} from './types';
 import './PhaseOutput.css';
 
-const PHASE_NAMES = {
+const PHASE_NAMES: Record<PhaseName, string> = {
   clean: 'Clean',
   setVersion: 'Set Recharts Version',
   install: 'Install Dependencies',
@@ -10,21 +11,26 @@ const PHASE_NAMES = {
   verify: 'Verify Dependencies'
 };
 
-const PHASE_ORDER = ['clean', 'setVersion', 'install', 'test', 'build', 'verify'];
+const PHASE_ORDER: PhaseName[] = ['clean', 'setVersion', 'install', 'test', 'build', 'verify'];
 
-function PhaseOutput({ phases, currentPhase }) {
+interface PhaseOutputProps {
+  phases: Phases;
+  currentPhase?: PhaseName | null;
+}
+
+function PhaseOutput({ phases, currentPhase }: PhaseOutputProps) {
   const [expandedPhases, setExpandedPhases] = useState(
     () => currentPhase ? { [currentPhase]: true } : {}
   );
 
-  const togglePhase = (phaseName) => {
+  const togglePhase = (phaseName: keyof Phases) => {
     setExpandedPhases(prev => ({
       ...prev,
       [phaseName]: !prev[phaseName]
     }));
   };
 
-  const getPhaseIcon = (status) => {
+  const getPhaseIcon = (status: Phase['status']) => {
     switch (status) {
       case 'passed': return '✅';
       case 'failed': return '❌';
@@ -34,7 +40,7 @@ function PhaseOutput({ phases, currentPhase }) {
     }
   };
 
-  const formatDuration = (duration) => {
+  const formatDuration = (duration:Phase['duration']) => {
     if (!duration) return '-';
     const seconds = Math.floor(duration / 1000);
     const ms = duration % 1000;
@@ -45,14 +51,14 @@ function PhaseOutput({ phases, currentPhase }) {
   };
 
   // Auto-expand current phase
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentPhase && !expandedPhases[currentPhase]) {
       setExpandedPhases(prev => ({
         ...prev,
         [currentPhase]: true
       }));
     }
-  }, [currentPhase]);
+  }, [currentPhase, expandedPhases]);
 
   return (
     <div className="phase-output">

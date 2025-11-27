@@ -27,6 +27,8 @@ cd test-ui
 npm install
 ```
 
+**Note:** The UI is built with TypeScript and Redux Toolkit for better maintainability and type safety. See [REFACTORING.md](./REFACTORING.md) for technical details.
+
 ### Running the Application
 
 Start both the backend API server and frontend dev server:

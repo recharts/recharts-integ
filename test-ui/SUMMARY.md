@@ -97,8 +97,9 @@ Open http://localhost:3000
 ## 🏗️ Architecture
 
 ### Technology Stack
-- **Frontend**: React 19, Vite 7, Pure CSS
+- **Frontend**: React 19, TypeScript 5, Redux Toolkit, Vite 7, Pure CSS
 - **Backend**: Node.js, Express 5, WebSocket (ws)
+- **State Management**: Redux Toolkit with WebSocket middleware
 - **Communication**: REST API + WebSocket for real-time updates
 
 ### Data Flow
@@ -145,11 +146,12 @@ The UI integrates seamlessly with existing test infrastructure:
 
 ## 📈 Performance
 
-- Minimal dependencies (72 packages total)
-- Production build: ~199KB (gzipped: ~63KB)
+- Dependencies: 84 packages total (includes TypeScript & Redux)
+- Production build: ~227KB (gzipped: ~73KB)
 - Real-time updates via WebSocket (no polling)
 - In-memory test tracking (no database required)
 - Serial test execution prevents resource conflicts
+- Type-safe with TypeScript for better DX
 
 ## 🔒 Security Considerations
 
