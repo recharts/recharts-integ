@@ -23,6 +23,7 @@ Then open http://localhost:3000 in your browser.
 - 🔍 Filter tests by name, stability, or package manager
 - ✅ View test results with pass/fail indicators
 - 📝 Inspect detailed logs for each test run
+- 📊 Structured phase output with collapsible sections
 - 💾 Persistent results (survives page reload)
 - ⏹ Cancel running tests and clear queue
 

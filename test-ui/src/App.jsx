@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PhaseOutput from './PhaseOutput';
 import './App.css';
 
 const API_BASE = '/api';
@@ -94,7 +95,16 @@ function App() {
           id: data.id,
           status: 'running',
           output: '',
-          error: ''
+          error: '',
+          phases: {
+            clean: { status: 'pending', output: '', duration: null },
+            setVersion: { status: 'pending', output: '', duration: null },
+            install: { status: 'pending', output: '', duration: null },
+            test: { status: 'pending', output: '', duration: null },
+            build: { status: 'pending', output: '', duration: null },
+            verify: { status: 'pending', output: '', duration: null }
+          },
+          currentPhase: 'clean'
         }));
         break;
 
@@ -106,6 +116,12 @@ function App() {
           if (testName) {
             const test = newMap.get(testName);
             test.output += data.output;
+            if (data.phases) {
+              test.phases = data.phases;
+            }
+            if (data.currentPhase) {
+              test.currentPhase = data.currentPhase;
+            }
             newMap.set(testName, { ...test });
           }
           return newMap;
@@ -439,10 +455,14 @@ function App() {
                 {testName}
                 <span className="status-badge running">⏳ Running</span>
               </h3>
-              <div className="output-box">
-                <pre>{data.output}</pre>
-                {data.error && <pre className="error-output">{data.error}</pre>}
-              </div>
+              {data.phases ? (
+                <PhaseOutput phases={data.phases} currentPhase={data.currentPhase} />
+              ) : (
+                <div className="output-box">
+                  <pre>{data.output}</pre>
+                  {data.error && <pre className="error-output">{data.error}</pre>}
+                </div>
+              )}
             </div>
           ))}
 
@@ -462,10 +482,14 @@ function App() {
                   ✕
                 </button>
               </h3>
-              <div className="output-box">
-                <pre>{data.output}</pre>
-                {data.error && <pre className="error-output">{data.error}</pre>}
-              </div>
+              {data.phases ? (
+                <PhaseOutput phases={data.phases} currentPhase={null} />
+              ) : (
+                <div className="output-box">
+                  <pre>{data.output}</pre>
+                  {data.error && <pre className="error-output">{data.error}</pre>}
+                </div>
+              )}
             </div>
           ))}
         </div>

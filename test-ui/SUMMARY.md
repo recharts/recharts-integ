@@ -34,7 +34,9 @@ start-ui.sh               # Convenience startup script (in repo root)
 - ✅ Optional Recharts version specification
 - ✅ Real-time test output streaming via WebSockets
 - ✅ Test status indicators (running, passed, failed)
-- ✅ Full test logs display
+- ✅ Structured output by phase (6 phases: clean, set version, install, test, build, verify)
+- ✅ Collapsible phase sections with duration tracking
+- ✅ Auto-expand current phase
 
 ### UI Features
 - ✅ Filter tests by name, stability (stable/experimental), or keywords

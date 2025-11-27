@@ -12,6 +12,8 @@ A React-based web interface for managing and running Recharts integration tests.
 - 🔍 Filter tests by name, stability, or keywords
 - ✅ View test results with pass/fail status
 - 📝 Inspect detailed logs for each test run
+- 📊 Structured phase output (6 phases with duration and status)
+- 🔽 Collapsible phase sections (auto-expand current phase)
 - 💾 Persistent results (survives page reload)
 - ⏹ Cancel running tests and clear queue
 - 🗑 Clear individual or all test results

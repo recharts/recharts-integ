@@ -61,6 +61,57 @@ app.get('/api/tests', (req, res) => {
   }
 });
 
+// Parse output to detect phase transitions
+function parsePhases(output, testData) {
+  const lines = output.split('\n');
+  
+  for (const line of lines) {
+    // Detect phase markers from TestResult output
+    if (line.includes('✅ clean') || line.includes('❌ clean')) {
+      updatePhase(testData, 'clean', line.includes('✅') ? 'passed' : 'failed');
+      testData.currentPhase = 'setVersion';
+    } else if (line.includes('✅ replacePackageJsonVersion') || line.includes('❌ replacePackageJsonVersion')) {
+      updatePhase(testData, 'setVersion', line.includes('✅') ? 'passed' : 'failed');
+      testData.currentPhase = 'install';
+    } else if (line.includes('✅ install') || line.includes('❌ install')) {
+      updatePhase(testData, 'install', line.includes('✅') ? 'passed' : 'failed');
+      testData.currentPhase = 'test';
+    } else if (line.includes('✅ test') || line.includes('❌ test')) {
+      updatePhase(testData, 'test', line.includes('✅') ? 'passed' : 'failed');
+      testData.currentPhase = 'build';
+    } else if (line.includes('✅ build') || line.includes('❌ build')) {
+      updatePhase(testData, 'build', line.includes('✅') ? 'passed' : 'failed');
+      testData.currentPhase = 'verify';
+    } else if (line.includes('✅ verifySingleDependencyVersion') || line.includes('❌ verifySingleDependencyVersion')) {
+      if (testData.phases.verify.status === 'pending') {
+        testData.phases.verify.status = 'running';
+        testData.phases.verify.startTime = new Date().toISOString();
+      }
+    }
+    
+    // Accumulate output to current phase
+    const phase = testData.phases[testData.currentPhase];
+    if (phase) {
+      phase.output += line + '\n';
+      if (phase.status === 'pending') {
+        phase.status = 'running';
+        phase.startTime = new Date().toISOString();
+      }
+    }
+  }
+}
+
+function updatePhase(testData, phaseName, status) {
+  const phase = testData.phases[phaseName];
+  if (phase) {
+    phase.status = status;
+    phase.endTime = new Date().toISOString();
+    if (phase.startTime) {
+      phase.duration = new Date(phase.endTime) - new Date(phase.startTime);
+    }
+  }
+}
+
 // Function to actually run a test
 function executeTest(testName, rechartsVersion, testId) {
   return new Promise((resolve, reject) => {
@@ -85,7 +136,16 @@ function executeTest(testName, rechartsVersion, testId) {
       error: '',
       startTime: new Date().toISOString(),
       endTime: null,
-      exitCode: null
+      exitCode: null,
+      phases: {
+        clean: { status: 'pending', output: '', duration: null, startTime: null, endTime: null },
+        setVersion: { status: 'pending', output: '', duration: null, startTime: null, endTime: null },
+        install: { status: 'pending', output: '', duration: null, startTime: null, endTime: null },
+        test: { status: 'pending', output: '', duration: null, startTime: null, endTime: null },
+        build: { status: 'pending', output: '', duration: null, startTime: null, endTime: null },
+        verify: { status: 'pending', output: '', duration: null, startTime: null, endTime: null }
+      },
+      currentPhase: 'clean'
     };
 
     activeTests.set(testId, testData);
@@ -98,9 +158,13 @@ function executeTest(testName, rechartsVersion, testId) {
     testProcess.stdout.on('data', (data) => {
       const output = data.toString();
       testData.output += output;
+      
+      // Parse output for phase detection
+      parsePhases(output, testData);
+      
       broadcast({
         type: 'test-output',
-        data: { id: testId, output }
+        data: { id: testId, output, phases: testData.phases, currentPhase: testData.currentPhase }
       });
     });
 
