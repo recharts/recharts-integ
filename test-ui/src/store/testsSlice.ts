@@ -164,6 +164,15 @@ const testsSlice = createSlice({
     setLoadingVersions: (state, action: PayloadAction<boolean>) => {
       state.loadingVersions = action.payload;
     },
+    setLocalPackagePath: (state, action: PayloadAction<string>) => {
+      state.localPackagePath = action.payload;
+    },
+    setPackingDirectory: (state, action: PayloadAction<string>) => {
+      state.packingDirectory = action.payload;
+    },
+    setIsPacking: (state, action: PayloadAction<boolean>) => {
+      state.isPacking = action.payload;
+    },
   },
 });
 
@@ -188,6 +197,9 @@ export const {
   loadPersistedResults,
   setAvailableVersions,
   setLoadingVersions,
+  setLocalPackagePath,
+  setPackingDirectory,
+  setIsPacking,
 } = testsSlice.actions;
 
 export default testsSlice.reducer;

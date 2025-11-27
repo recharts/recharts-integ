@@ -101,6 +101,79 @@
   border-color: #667eea;
 }
 
+.version-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.version-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 300px;
+}
+
+.version-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+.version-divider {
+  font-weight: 700;
+  color: #999;
+  padding: 0 1rem;
+  font-size: 0.9rem;
+}
+
+.local-package-group {
+  flex: 2;
+  min-width: 500px;
+}
+
+.directory-input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+  font-family: 'Courier New', monospace;
+}
+
+.directory-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.directory-input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.local-package-info {
+  padding: 0.75rem 1rem;
+  background: #e8f5e9;
+  border: 2px solid #66bb6a;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #2e7d32;
+}
+
+.local-package-info code {
+  background: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  color: #1b5e20;
+}
+
 .btn {
   padding: 0.6rem 1.2rem;
   border: none;

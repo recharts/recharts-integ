@@ -325,6 +325,71 @@ app.post('/api/tests/cancel', (req, res) => {
   });
 });
 
+// Pack a local directory
+app.post('/api/pack', (req, res) => {
+  const { directory } = req.body;
+  
+  if (!directory) {
+    return res.status(400).json({ error: 'Directory path is required' });
+  }
+
+  // Expand ~ to home directory
+  const expandedDirectory = directory.startsWith('~') 
+    ? path.join(process.env.HOME || process.env.USERPROFILE || '', directory.slice(1))
+    : directory;
+
+  const packId = `pack-${Date.now()}`;
+  
+  // Run pack-and-run.sh equivalent: build and pack
+  const packProcess = spawn('bash', ['-c', `
+    cd "${expandedDirectory}" && \
+    npm run build && \
+    npm pack | tail -n 1
+  `], {
+    cwd: rootDir,
+    env: { ...process.env }
+  });
+
+  let output = '';
+  let error = '';
+  let packedFile = '';
+
+  packProcess.stdout.on('data', (data) => {
+    const text = data.toString();
+    output += text;
+    
+    // Capture the last line which should be the packed filename
+    const lines = output.trim().split('\n');
+    const lastLine = lines[lines.length - 1];
+    if (lastLine.endsWith('.tgz')) {
+      packedFile = lastLine;
+    }
+  });
+
+  packProcess.stderr.on('data', (data) => {
+    error += data.toString();
+  });
+
+  packProcess.on('close', (code) => {
+    if (code === 0 && packedFile) {
+      const absolutePath = path.resolve(expandedDirectory, packedFile);
+      res.json({
+        success: true,
+        packagePath: `file:${absolutePath}`,
+        output,
+        packedFile: absolutePath,
+        expandedDirectory
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: error || 'Failed to pack directory',
+        output
+      });
+    }
+  });
+});
+
 const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {

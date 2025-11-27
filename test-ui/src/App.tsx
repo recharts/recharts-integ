@@ -14,6 +14,9 @@ import {
   loadPersistedResults,
   setAvailableVersions,
   setLoadingVersions,
+  setLocalPackagePath,
+  setPackingDirectory,
+  setIsPacking,
 } from './store/testsSlice';
 import { Test, TestRun } from './types';
 import PhaseOutput from './PhaseOutput';
@@ -35,12 +38,16 @@ function App() {
     rechartsVersion,
     availableVersions,
     loadingVersions,
+    localPackagePath,
+    packingDirectory,
+    isPacking,
   } = useAppSelector((state) => state.tests);
 
   useEffect(() => {
     loadTests();
     loadPersistedResultsFromStorage();
     loadRechartsVersions();
+    loadPersistedPackingDirectory();
   }, []);
 
   // Persist test results to sessionStorage
@@ -79,6 +86,22 @@ function App() {
     }
   };
 
+  const loadPersistedPackingDirectory = () => {
+    try {
+      const storedDirectory = localStorage.getItem('packingDirectory');
+      const storedPackagePath = localStorage.getItem('localPackagePath');
+      
+      if (storedDirectory) {
+        dispatch(setPackingDirectory(storedDirectory));
+      }
+      if (storedPackagePath) {
+        dispatch(setLocalPackagePath(storedPackagePath));
+      }
+    } catch (err) {
+      console.error('Failed to load persisted packing directory:', err);
+    }
+  };
+
   const loadRechartsVersions = async () => {
     try {
       dispatch(setLoadingVersions(true));
@@ -114,12 +137,18 @@ function App() {
 
   const runTest = async (test: Test) => {
     try {
+      // Determine which version to use
+      let versionToUse = rechartsVersion;
+      if (localPackagePath) {
+        versionToUse = localPackagePath;
+      }
+
       const response = await fetch(`${API_BASE}/tests/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           testName: test.name,
-          rechartsVersion: rechartsVersion || undefined,
+          rechartsVersion: versionToUse || undefined,
         }),
       });
 
@@ -166,6 +195,71 @@ function App() {
   const handleClearAllResults = () => {
     dispatch(clearAllResults());
     sessionStorage.removeItem('testResults');
+  };
+
+  const handleDirectorySelect = async () => {
+    try {
+      // Use the File System Access API for directory selection
+      // @ts-ignore - Not all browsers support this yet
+      if (!window.showDirectoryPicker) {
+        dispatch(setError('Directory picker not supported in this browser. Please use Chrome or Edge.'));
+        return;
+      }
+
+      // @ts-ignore
+      const dirHandle = await window.showDirectoryPicker();
+      const dirPath = dirHandle.name; // This gives us just the name, not full path
+      
+      // In a real implementation, we'd need to pass the handle to the backend
+      // For now, we'll ask the user to input the full path
+      const fullPath = prompt(`Selected: ${dirPath}\n\nPlease enter the full absolute path to this directory:`);
+      
+      if (fullPath) {
+        dispatch(setPackingDirectory(fullPath));
+        localStorage.setItem('packingDirectory', fullPath);
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        dispatch(setError('Failed to select directory: ' + (err as Error).message));
+      }
+    }
+  };
+
+  const handlePackDirectory = async () => {
+    if (!packingDirectory) {
+      dispatch(setError('Please select a directory first'));
+      return;
+    }
+
+    try {
+      dispatch(setIsPacking(true));
+      dispatch(setError(null));
+
+      const response = await fetch(`${API_BASE}/pack`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ directory: packingDirectory }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to pack directory');
+      }
+
+      dispatch(setLocalPackagePath(data.packagePath));
+      dispatch(setError(null));
+      
+      // Persist to localStorage
+      localStorage.setItem('packingDirectory', packingDirectory);
+      localStorage.setItem('localPackagePath', data.packagePath);
+      
+      console.log('Packed successfully:', data);
+    } catch (err) {
+      dispatch(setError('Failed to pack directory: ' + (err as Error).message));
+    } finally {
+      dispatch(setIsPacking(false));
+    }
   };
 
   const getFilteredTests = (): Test[] => {
@@ -228,21 +322,85 @@ function App() {
             onChange={(e) => dispatch(setFilter(e.target.value))}
             className="filter-input"
           />
-          <select
-            value={rechartsVersion}
-            onChange={(e) => dispatch(setRechartsVersion(e.target.value))}
-            className="version-select"
-            disabled={loadingVersions}
-          >
-            <option value="">Latest version</option>
-            {loadingVersions && <option value="">Loading versions...</option>}
-            {availableVersions.map((version) => (
-              <option key={version} value={version}>
-                {version}
-              </option>
-            ))}
-          </select>
         </div>
+
+        <div className="control-row version-controls">
+          <div className="version-group">
+            <label>NPM Version:</label>
+            <select
+              value={rechartsVersion}
+              onChange={(e) => {
+                dispatch(setRechartsVersion(e.target.value));
+                if (e.target.value) {
+                  dispatch(setLocalPackagePath(''));
+                }
+              }}
+              className="version-select"
+              disabled={loadingVersions || !!localPackagePath}
+            >
+              <option value="">Latest version</option>
+              {loadingVersions && <option value="">Loading versions...</option>}
+              {availableVersions.map((version) => (
+                <option key={version} value={version}>
+                  {version}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="version-divider">OR</div>
+
+          <div className="version-group local-package-group">
+            <label>Local Package:</label>
+            <input
+              type="text"
+              placeholder="Select directory to pack..."
+              value={packingDirectory}
+              onChange={(e) => {
+                dispatch(setPackingDirectory(e.target.value));
+                localStorage.setItem('packingDirectory', e.target.value);
+              }}
+              className="directory-input"
+              disabled={isPacking}
+            />
+            <button
+              onClick={handleDirectorySelect}
+              className="btn btn-secondary btn-small"
+              disabled={isPacking}
+              title="Browse for directory"
+            >
+              📁 Browse
+            </button>
+            <button
+              onClick={handlePackDirectory}
+              className="btn btn-primary btn-small"
+              disabled={!packingDirectory || isPacking}
+              title="Build and pack the selected directory"
+            >
+              {isPacking ? '⏳ Packing...' : '📦 Pack'}
+            </button>
+            {localPackagePath && (
+              <button
+                onClick={() => {
+                  dispatch(setLocalPackagePath(''));
+                  dispatch(setPackingDirectory(''));
+                  localStorage.removeItem('localPackagePath');
+                  localStorage.removeItem('packingDirectory');
+                }}
+                className="btn btn-secondary btn-small"
+                title="Clear local package"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+
+        {localPackagePath && (
+          <div className="local-package-info">
+            ✅ Using local package: <code>{localPackagePath}</code>
+          </div>
+        )}
 
         <div className="control-row">
           <button onClick={() => dispatch(selectAllTests(filteredTests))} className="btn btn-secondary">
