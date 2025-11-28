@@ -21,6 +21,10 @@ const wss = new WebSocketServer({ server });
 
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 const rootDir = path.join(__dirname, "../..");
 
@@ -122,7 +126,7 @@ app.get("/api/tests", async (req: Request, res: Response) => {
 async function runPhase(
   phaseName: PhaseName,
   testData: TestData,
-  fn: () => TestOutcome,
+  fn: () => TestOutcome | Promise<TestOutcome>,
 ): Promise<void> {
   // Check if cancelled before starting phase
   if (shouldCancelQueue) {
@@ -145,7 +149,7 @@ async function runPhase(
   });
 
   try {
-    const result = fn();
+    const result = await fn();
 
     console.log("received result", result);
 
@@ -206,10 +210,10 @@ async function runPhase(
 }
 
 // Helper to verify all single dependency versions
-function verifyAllSingleDependencyVersions(
+async function verifyAllSingleDependencyVersions(
   controller: Controller,
   testData: TestData,
-): TestOutcome {
+): Promise<TestOutcome> {
   const dependencies = [
     "recharts",
     "react",
@@ -220,7 +224,7 @@ function verifyAllSingleDependencyVersions(
 
   for (const dep of dependencies) {
     try {
-      const result = controller.verifySingleDependencyVersion(dep);
+      const result = await controller.verifySingleDependencyVersion(dep);
       const output = result.success
         ? `✅ ${dep}: single version verified\n`
         : `❌ ${dep}: ${result.error}\n`;
@@ -230,6 +234,7 @@ function verifyAllSingleDependencyVersions(
       testData.phases.verify.output += `❌ ${dep}: ${error.message}\n`;
     }
   }
+  return TestOutcome.ok("verify");
 }
 
 function getControllerFactory(
@@ -283,31 +288,31 @@ function getController(
     version: string,
   ) => {
     return async (testData: TestData) => {
-      await runPhase("clean", testData, () => {
-        libController.clean();
-        return appController.clean();
+      await runPhase("clean", testData, async () => {
+        await libController.clean();
+        return await appController.clean();
       });
 
-      await runPhase("setVersion", testData, () => {
+      await runPhase("setVersion", testData, async () => {
         libController.replacePackageJsonVersion("recharts", version);
-        libController.install();
-        libController.test();
-        libController.build();
-        verifyAllSingleDependencyVersions(libController, testData);
-        const myChartsTgzFile = libController.pack();
+        await libController.install();
+        await libController.test();
+        await libController.build();
+        await verifyAllSingleDependencyVersions(libController, testData);
+        const myChartsTgzFile = await libController.pack();
         appController.replacePackageJsonVersion("my-charts", myChartsTgzFile);
         return TestOutcome.ok("setVersion");
       });
 
-      await runPhase("install", testData, () => appController.install());
+      await runPhase("install", testData, async () => await appController.install());
       if (testData.phases.install.status === "failed") {
         return;
       }
 
-      await runPhase("test", testData, () => appController.test());
-      await runPhase("build", testData, () => appController.build());
-      await runPhase("verify", testData, () =>
-        verifyAllSingleDependencyVersions(appController, testData),
+      await runPhase("test", testData, async () => await appController.test());
+      await runPhase("build", testData, async () => await appController.build());
+      await runPhase("verify", testData, async () =>
+        await verifyAllSingleDependencyVersions(appController, testData),
       );
     };
   };
@@ -477,24 +482,32 @@ async function executeTest(
   });
 }
 
-// Process the test queue
+// Process the test queue (non-blocking, processes one test at a time)
 async function processQueue(): Promise<void> {
   if (isRunningTest || testQueue.length === 0) {
     return;
   }
 
   isRunningTest = true;
-  shouldCancelQueue = false;
 
-  while (testQueue.length > 0 && !shouldCancelQueue) {
-    const item = testQueue.shift();
-    if (item && !shouldCancelQueue) {
+  const item = testQueue.shift();
+  if (item && !shouldCancelQueue) {
+    try {
       await executeTest(item.testName, item.rechartsVersion, item.testId);
+    } catch (error) {
+      console.error('Error executing test:', error);
     }
   }
 
   isRunningTest = false;
-  shouldCancelQueue = false;
+
+  // Process next item in queue if available and not cancelled
+  if (testQueue.length > 0 && !shouldCancelQueue) {
+    // Use setImmediate to yield to event loop before processing next test
+    setImmediate(() => processQueue());
+  } else if (shouldCancelQueue) {
+    shouldCancelQueue = false;
+  }
 }
 
 // Run a single test (adds to queue)

@@ -1,9 +1,12 @@
-import { execSync } from "child_process";
+import { exec } from "child_process";
+import { promisify } from "util";
 import { replacePackageVersion } from "./replacePackageVersion.ts";
 import { tgzFileNameToPackageJsonReference } from "./tgzFileNameToPackageJsonReference.ts";
 import path from "path";
 import fs from "fs";
 import { TestOutcome } from "./TestOutcome.ts";
+
+const execAsync = promisify(exec);
 
 export abstract class Controller {
   absolutePath: string;
@@ -12,7 +15,7 @@ export abstract class Controller {
     this.absolutePath = absolutePath;
   }
 
-  clean(): TestOutcome {
+  async clean(): Promise<TestOutcome> {
     fs.rmSync(path.join(this.absolutePath, "node_modules"), {
       recursive: true,
       force: true,
@@ -30,14 +33,15 @@ export abstract class Controller {
     return TestOutcome.ok("clean");
   }
 
-  execSync(cmd: string): string {
+  async execAsync(cmd: string): Promise<string> {
     const env = this.getEnv();
-    return execSync(cmd, {
+    const { stdout, stderr } = await execAsync(cmd, {
       cwd: this.absolutePath,
       encoding: "utf-8",
       env,
-      stdio: "pipe",
+      maxBuffer: 10 * 1024 * 1024, // 10MB buffer
     });
+    return stdout;
   }
 
   getEnv(): NodeJS.ProcessEnv {
@@ -61,9 +65,9 @@ export abstract class Controller {
     return tgzFileNameToPackageJsonReference(this.absolutePath, tgzFileName);
   }
 
-  abstract verifySingleDependencyVersion(dependencyName: string): TestOutcome;
-  abstract install(): TestOutcome;
-  abstract test(): TestOutcome;
-  abstract build(): TestOutcome;
-  abstract pack(): string;
+  abstract verifySingleDependencyVersion(dependencyName: string): Promise<TestOutcome>;
+  abstract install(): Promise<TestOutcome>;
+  abstract test(): Promise<TestOutcome>;
+  abstract build(): Promise<TestOutcome>;
+  abstract pack(): Promise<string>;
 }

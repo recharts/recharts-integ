@@ -2,27 +2,27 @@ import { Controller } from "./Controller.ts";
 import { TestOutcome } from "./TestOutcome.ts";
 
 export class NpmController extends Controller {
-  install(): TestOutcome {
+  async install(): Promise<TestOutcome> {
     try {
-      this.execSync("npm install");
+      await this.execAsync("npm install");
       return TestOutcome.ok("install");
     } catch (ex: unknown) {
       return TestOutcome.fail("install", ex);
     }
   }
 
-  test(): TestOutcome {
+  async test(): Promise<TestOutcome> {
     try {
-      this.execSync("npm run test --if-present");
+      await this.execAsync("npm run test --if-present");
       return TestOutcome.ok("unit test");
     } catch (ex) {
       return TestOutcome.fail("unit test", ex as Error);
     }
   }
 
-  build(): TestOutcome {
+  async build(): Promise<TestOutcome> {
     try {
-      this.execSync("npm run build");
+      await this.execAsync("npm run build");
       return TestOutcome.ok("build");
     } catch (ex) {
       console.error(ex);
@@ -30,14 +30,13 @@ export class NpmController extends Controller {
     }
   }
 
-  pack(): string {
-    return this.tgzFileNameToPackageJsonReference(
-      this.execSync("npm pack").trim(),
-    );
+  async pack(): Promise<string> {
+    const output = await this.execAsync("npm pack");
+    return this.tgzFileNameToPackageJsonReference(output.trim());
   }
 
-  verifySingleDependencyVersion(dependencyName: string): TestOutcome {
-    const versions = this.execSync(`npm ls ${dependencyName} --json`);
+  async verifySingleDependencyVersion(dependencyName: string): Promise<TestOutcome> {
+    const versions = await this.execAsync(`npm ls ${dependencyName} --json`);
     const parsedVersions = JSON.parse(versions);
 
     const installedVersions = new Set<string>();

@@ -252,10 +252,10 @@ function TestItem({
         )}
         <button
           onClick={onRun}
-          disabled={isRunning || isQueued}
+          disabled={isQueued}
           className="btn btn-small"
         >
-          Run
+          {isQueued ? 'Queued' : 'Run'}
         </button>
         {completedTest && (
           <button

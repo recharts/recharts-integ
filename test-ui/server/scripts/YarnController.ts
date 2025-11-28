@@ -1,8 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { Controller } from './Controller.ts';
-import { execSync } from 'child_process';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { TestOutcome } from './TestOutcome.ts';
+
+const execAsync = promisify(exec);
 
 interface YarnPackJson {
     type: string;
@@ -22,22 +25,22 @@ interface YarnPackage {
 }
 
 export class YarnController extends Controller {
-    clean(): TestOutcome {
+    async clean(): Promise<TestOutcome> {
         super.clean();
-        this.execSync('yarn cache clean');
+        await this.execAsync('yarn cache clean');
         return TestOutcome.ok('clean');
     }
 
-    install(): TestOutcome {
+    async install(): Promise<TestOutcome> {
         try {
-            this.execSync('yarn install');
+            await this.execAsync('yarn install');
             return TestOutcome.ok('install');
         } catch (e) {
             return TestOutcome.fail('install', e as Error);
         }
     }
 
-    test(): TestOutcome {
+    async test(): Promise<TestOutcome> {
         const packageJsonPath = path.join(this.absolutePath, 'package.json');
 
         if (!fs.existsSync(packageJsonPath)) {
@@ -53,7 +56,7 @@ export class YarnController extends Controller {
             }
 
             try {
-                this.execSync('yarn run test');
+                await this.execAsync('yarn run test');
                 return TestOutcome.ok('unit test');
             } catch (e) {
                 return TestOutcome.fail('unit test', e as Error);
@@ -64,19 +67,20 @@ export class YarnController extends Controller {
         }
     }
 
-    build(): TestOutcome {
+    async build(): Promise<TestOutcome> {
         try {
-            this.execSync('yarn run build');
+            await this.execAsync('yarn run build');
             return TestOutcome.ok('build');
         } catch (e) {
             return TestOutcome.fail('build', e as Error);
         }
     }
 
-    pack(): string {
-        const output = this.execSync('yarn pack --json').trim();
+    async pack(): Promise<string> {
+        const output = await this.execAsync('yarn pack --json');
+        const trimmed = output.trim();
         try {
-            const jsonOutput: YarnPackJson = JSON.parse(output);
+            const jsonOutput: YarnPackJson = JSON.parse(trimmed);
             if (jsonOutput.type === 'success' && jsonOutput.data) {
                 const match = jsonOutput.data.match(/"(.+\.tgz)"/);
                 if (match) {
@@ -84,7 +88,7 @@ export class YarnController extends Controller {
                 }
                 throw new Error(`Could not extract tgz path from: ${jsonOutput.data}`);
             } else {
-                throw new Error(`Unexpected output format from yarn pack: ${output}`);
+                throw new Error(`Unexpected output format from yarn pack: ${trimmed}`);
             }
         } catch (error: any) {
             console.error(`Error parsing yarn pack output: ${error.message}`);
@@ -92,17 +96,18 @@ export class YarnController extends Controller {
         }
     }
 
-    verifySingleDependencyVersion(dependencyName: string): TestOutcome {
+    async verifySingleDependencyVersion(dependencyName: string): Promise<TestOutcome> {
         const command = `yarn list --pattern "${dependencyName}" --json --no-progress`;
         let rawOutput: string;
 
         try {
-            rawOutput = execSync(command, { 
+            const result = await execAsync(command, { 
                 encoding: 'utf-8', 
                 cwd: this.absolutePath, 
-                stdio: 'pipe', 
-                env: this.getEnv() 
+                env: this.getEnv(),
+                maxBuffer: 10 * 1024 * 1024,
             });
+            rawOutput = result.stdout;
         } catch (error: any) {
             rawOutput = error.stdout || "";
             const errOutput = error.stderr || "";
