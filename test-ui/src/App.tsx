@@ -34,7 +34,7 @@ const formatDuration = (ms: number): string => {
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
-  
+
   if (hours > 0) {
     return `${hours}h ${minutes % 60}m`;
   }
@@ -74,8 +74,18 @@ function TestItem({
   const [elapsedTime, setElapsedTime] = useState(0);
   const testName = test.name;
 
-  const runningTest = status && 'status' in status && status.status === "running" ? (status as TestRun) : null;
-  const completedTest = hasResult && status && 'status' in status && status.status !== "running" && status.status !== "queued" ? (status as TestRun) : null;
+  const runningTest =
+    status && "status" in status && status.status === "running"
+      ? (status as TestRun)
+      : null;
+  const completedTest =
+    hasResult &&
+    status &&
+    "status" in status &&
+    status.status !== "running" &&
+    status.status !== "queued"
+      ? (status as TestRun)
+      : null;
 
   // Calculate progress for running test
   useEffect(() => {
@@ -84,9 +94,16 @@ function TestItem({
     const interval = setInterval(() => {
       const now = Date.now();
       let totalElapsed = 0;
-      
+
       // Calculate elapsed time across all phases
-      const phaseOrder: PhaseName[] = ["clean", "setVersion", "install", "test", "build", "verify"];
+      const phaseOrder: PhaseName[] = [
+        "clean",
+        "setVersion",
+        "install",
+        "test",
+        "build",
+        "verify",
+      ];
       phaseOrder.forEach((phaseName) => {
         const phase = runningTest.phases![phaseName];
         if (phase.startTime) {
@@ -106,8 +123,13 @@ function TestItem({
   }, [runningTest]);
 
   // Calculate total estimated time for this test
-  const totalEstimated = Object.values(estimatedPhaseDurations).reduce((sum, dur) => sum + dur, 0);
-  const progressPercent = runningTest ? Math.min((elapsedTime / totalEstimated) * 100, 100) : 0;
+  const totalEstimated = Object.values(estimatedPhaseDurations).reduce(
+    (sum, dur) => sum + dur,
+    0,
+  );
+  const progressPercent = runningTest
+    ? Math.min((elapsedTime / totalEstimated) * 100, 100)
+    : 0;
 
   const handlePhaseClick = (phaseName: string) => {
     if (!isExpanded) {
@@ -119,7 +141,14 @@ function TestItem({
   const getOneLineSummary = (phases: Phases | undefined) => {
     if (!phases) return null;
 
-    const phaseOrder = ["clean", "setVersion", "install", "test", "build", "verify"] as const;
+    const phaseOrder = [
+      "clean",
+      "setVersion",
+      "install",
+      "test",
+      "build",
+      "verify",
+    ] as const;
     const phaseLabels = {
       clean: "Clean",
       setVersion: "Set Version",
@@ -141,8 +170,24 @@ function TestItem({
           const phase = phases[phaseName];
           const label = phaseLabels[phaseName];
           const icon = icons[phase.status];
-          const durationText = phase.duration ? ` (${(phase.duration / 1000).toFixed(1)}s)` : "";
-          
+          const durationText = phase.duration
+            ? ` (${(phase.duration / 1000).toFixed(1)}s)`
+            : "";
+
+          // queued phases are not clickable
+          if (phase.status === "pending") {
+            return (
+              <span
+                key={phaseName}
+                className={`phase-summary-item ${phase.status}`}
+                title={`${label}: ${phase.status}${durationText}`}
+              >
+                {icon} {label}
+              </span>
+            );
+          }
+
+          // if a phase is either completed or running, we make it clickable
           return (
             <button
               key={phaseName}
@@ -158,17 +203,19 @@ function TestItem({
     );
   };
 
-  const statusStr = status && 'status' in status ? status.status : '';
+  const statusStr = status && "status" in status ? status.status : "";
 
   return (
-    <div
-      className={`test-item ${isSelected ? "selected" : ""} ${statusStr}`}
-    >
-      <div 
+    <div className={`test-item ${isSelected ? "selected" : ""} ${statusStr}`}>
+      <div
         className="test-item-header"
-        style={runningTest ? {
-          background: `linear-gradient(to right, rgba(102, 126, 234, 0.1) ${progressPercent}%, transparent ${progressPercent}%)`
-        } : undefined}
+        style={
+          runningTest
+            ? {
+                background: `linear-gradient(to right, rgba(102, 126, 234, 0.1) ${progressPercent}%, transparent ${progressPercent}%)`,
+              }
+            : undefined
+        }
       >
         <input
           type="checkbox"
@@ -182,7 +229,7 @@ function TestItem({
         >
           {test.stable ? "✓ Stable" : "⚠ Experimental"}
         </span>
-        {status && 'status' in status && (
+        {status && "status" in status && (
           <span className={`status-badge ${status.status}`}>
             {status.status === "queued"
               ? "⏸️"
@@ -210,22 +257,22 @@ function TestItem({
         >
           Run
         </button>
-        {(runningTest || completedTest) && (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="btn btn-small btn-expand"
-            title={isExpanded ? "Collapse details" : "Expand details"}
-          >
-            {isExpanded ? "▼ Hide" : "▶ Show"}
-          </button>
-        )}
         {completedTest && (
           <button
             onClick={onClearResult}
             className="btn btn-clear"
             title="Clear this result"
           >
-            ✕
+            X️ Clear Result
+          </button>
+        )}
+        {(runningTest || completedTest) && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="btn btn-small btn-expand"
+            title={isExpanded ? "Collapse details" : "Expand details"}
+          >
+            {isExpanded ? "▼ Collapse" : "▶ Expand"}
           </button>
         )}
       </div>
@@ -259,8 +306,8 @@ function TestItem({
       {isExpanded && completedTest && (
         <div className="test-item-details">
           {completedTest.phases ? (
-            <PhaseOutput 
-              phases={completedTest.phases} 
+            <PhaseOutput
+              phases={completedTest.phases}
               currentPhase={null}
               initialExpandedPhase={expandedPhase as any}
               estimatedPhaseDurations={estimatedPhaseDurations}
@@ -300,15 +347,18 @@ function App() {
 
   const queuedETA = useAppSelector(selectQueuedTestsETA);
   const runningETA = useAppSelector(selectRunningTestsETA);
-  const estimatedPhaseDurations = useAppSelector(selectElapsedTimeForRunningTestPhases);
+  const estimatedPhaseDurations = useAppSelector(
+    selectElapsedTimeForRunningTestPhases,
+  );
   const runningTestsList = useAppSelector(selectAllRunningTests);
 
   const [globalElapsedTime, setGlobalElapsedTime] = useState(0);
 
   // Track global elapsed time
   useEffect(() => {
-    const hasRunningOrQueued = runningTestsList.length > 0 || Object.keys(queuedTests).length > 0;
-    
+    const hasRunningOrQueued =
+      runningTestsList.length > 0 || Object.keys(queuedTests).length > 0;
+
     if (!hasRunningOrQueued) {
       setGlobalElapsedTime(0);
       return;
@@ -589,18 +639,20 @@ function App() {
   const filteredTests = getFilteredTests();
 
   // Calculate global progress
-  const totalPhases = (runningTestsList.length + Object.keys(queuedTests).length) * 6; // 6 phases per test
+  const totalPhases =
+    (runningTestsList.length + Object.keys(queuedTests).length) * 6; // 6 phases per test
   let completedPhases = 0;
   runningTestsList.forEach((test) => {
     if (test.phases) {
       Object.values(test.phases).forEach((phase) => {
-        if (phase.status === 'passed' || phase.status === 'failed') {
+        if (phase.status === "passed" || phase.status === "failed") {
           completedPhases++;
         }
       });
     }
   });
-  const globalProgress = totalPhases > 0 ? (completedPhases / totalPhases) * 100 : 0;
+  const globalProgress =
+    totalPhases > 0 ? (completedPhases / totalPhases) * 100 : 0;
   const totalETA = runningETA + queuedETA;
 
   if (loading) {
@@ -623,18 +675,18 @@ function App() {
             <span>
               📊 Progress: {completedPhases} / {totalPhases} phases
             </span>
+            <span>⏱️ Elapsed: {formatDuration(globalElapsedTime)}</span>
+            <span>⏳ ETA: {formatDuration(totalETA)}</span>
             <span>
-              ⏱️ Elapsed: {formatDuration(globalElapsedTime)}
-            </span>
-            <span>
-              ⏳ ETA: {formatDuration(totalETA)}
-            </span>
-            <span>
-              🔄 Running: {runningTestsList.length} | ⏸️ Queued: {Object.keys(queuedTests).length}
+              🔄 Running: {runningTestsList.length} | ⏸️ Queued:{" "}
+              {Object.keys(queuedTests).length}
             </span>
           </div>
           <div className="progress-bar-container">
-            <div className="progress-bar-fill" style={{ width: `${globalProgress}%` }} />
+            <div
+              className="progress-bar-fill"
+              style={{ width: `${globalProgress}%` }}
+            />
           </div>
         </div>
       )}
@@ -766,7 +818,7 @@ function App() {
               onClick={handleClearAllResults}
               className="btn btn-secondary"
             >
-              🗑 Clear All Results
+              X Clear All Results
             </button>
           )}
         </div>
