@@ -17,9 +17,10 @@ interface PhaseOutputProps {
   phases: Phases;
   currentPhase?: PhaseName | null;
   initialExpandedPhase?: PhaseName | null;
+  estimatedPhaseDurations: Record<PhaseName, number>;
 }
 
-function PhaseOutput({ phases, currentPhase, initialExpandedPhase }: PhaseOutputProps) {
+function PhaseOutput({ phases, currentPhase, initialExpandedPhase, estimatedPhaseDurations }: PhaseOutputProps) {
   const [expandedPhases, setExpandedPhases] = useState(() => {
     // If specific phase requested, expand that
     if (initialExpandedPhase) {
@@ -38,6 +39,8 @@ function PhaseOutput({ phases, currentPhase, initialExpandedPhase }: PhaseOutput
     
     return lastNonPendingPhase ? { [lastNonPendingPhase]: true } : {};
   });
+
+  const [phaseElapsedTimes, setPhaseElapsedTimes] = useState<Record<string, number>>({});
 
   // Handle initial expanded phase changes
   useEffect(() => {
@@ -86,6 +89,35 @@ function PhaseOutput({ phases, currentPhase, initialExpandedPhase }: PhaseOutput
     }
   }, [currentPhase]);
 
+  // Track elapsed time for running phases
+  useEffect(() => {
+    if (!currentPhase) {
+      setPhaseElapsedTimes({});
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const newElapsed: Record<string, number> = {};
+      
+      PHASE_ORDER.forEach((phaseName) => {
+        const phase = phases[phaseName];
+        if (phase.startTime) {
+          const start = new Date(phase.startTime).getTime();
+          if (phase.endTime) {
+            newElapsed[phaseName] = new Date(phase.endTime).getTime() - start;
+          } else if (phaseName === currentPhase) {
+            newElapsed[phaseName] = now - start;
+          }
+        }
+      });
+
+      setPhaseElapsedTimes(newElapsed);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [currentPhase, phases]);
+
   return (
     <div className="phase-output">
       {PHASE_ORDER.map(phaseName => {
@@ -95,6 +127,13 @@ function PhaseOutput({ phases, currentPhase, initialExpandedPhase }: PhaseOutput
         const isExpanded = expandedPhases[phaseName];
         const isCurrent = phaseName === currentPhase;
         const hasOutput = phase.output && phase.output.trim().length > 0;
+        
+        // Calculate progress for this phase
+        const estimatedDuration = estimatedPhaseDurations[phaseName] || 1000;
+        const elapsedTime = phaseElapsedTimes[phaseName] || 0;
+        const phaseProgress = isCurrent && phase.status === 'running'
+          ? Math.min((elapsedTime / estimatedDuration) * 100, 100)
+          : 0;
 
         return (
           <div 
@@ -104,7 +143,12 @@ function PhaseOutput({ phases, currentPhase, initialExpandedPhase }: PhaseOutput
             <div 
               className="phase-header"
               onClick={() => hasOutput && togglePhase(phaseName)}
-              style={{ cursor: hasOutput ? 'pointer' : 'default' }}
+              style={{
+                cursor: hasOutput ? 'pointer' : 'default',
+                background: phaseProgress > 0 
+                  ? `linear-gradient(to right, rgba(102, 126, 234, 0.15) ${phaseProgress}%, #f8f9fa ${phaseProgress}%)`
+                  : undefined
+              }}
             >
               <span className="phase-icon">{getPhaseIcon(phase.status)}</span>
               <span className="phase-name">{PHASE_NAMES[phaseName]}</span>

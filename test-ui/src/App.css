@@ -16,6 +16,45 @@
   font-weight: 600;
 }
 
+.global-progress-bar {
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.progress-stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}
+
+.progress-bar-container {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
 .loading {
   display: flex;
   justify-content: center;
@@ -303,12 +342,23 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
+  transition: background 0.3s ease;
 }
 
 .test-item-header input[type="checkbox"] {
   width: 18px;
   height: 18px;
   cursor: pointer;
+}
+
+.progress-info {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #666;
+  padding: 0.25rem 0.6rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 12px;
+  white-space: nowrap;
 }
 
 .btn-expand {

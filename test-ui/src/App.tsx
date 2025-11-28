@@ -18,11 +18,31 @@ import {
   setPackingDirectory,
   setIsPacking,
 } from "./store/testsSlice";
-import { Test, TestRun, TestStatus, Phases } from "./types";
+import {
+  selectQueuedTestsETA,
+  selectRunningTestsETA,
+  selectElapsedTimeForRunningTestPhases,
+  selectAllRunningTests,
+} from "./store/testDurationSelectors";
+import { Test, TestRun, TestStatus, Phases, PhaseName } from "./types";
 import PhaseOutput from "./PhaseOutput";
 import "./App.css";
 
 const API_BASE = "/api";
+
+const formatDuration = (ms: number): string => {
+  const seconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  
+  if (hours > 0) {
+    return `${hours}h ${minutes % 60}m`;
+  }
+  if (minutes > 0) {
+    return `${minutes}m ${seconds % 60}s`;
+  }
+  return `${seconds}s`;
+};
 
 interface TestItemProps {
   test: Test;
@@ -34,6 +54,7 @@ interface TestItemProps {
   onToggleSelection: () => void;
   onRun: () => void;
   onClearResult: () => void;
+  estimatedPhaseDurations: Record<PhaseName, number>;
 }
 
 function TestItem({
@@ -46,13 +67,47 @@ function TestItem({
   onToggleSelection,
   onRun,
   onClearResult,
+  estimatedPhaseDurations,
 }: TestItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const testName = test.name;
 
-  const runningTest = status && status.status === "running" ? (status as TestRun) : null;
-  const completedTest = hasResult && status && status.status !== "running" && status.status !== "queued" ? (status as TestRun) : null;
+  const runningTest = status && 'status' in status && status.status === "running" ? (status as TestRun) : null;
+  const completedTest = hasResult && status && 'status' in status && status.status !== "running" && status.status !== "queued" ? (status as TestRun) : null;
+
+  // Calculate progress for running test
+  useEffect(() => {
+    if (!runningTest || !runningTest.phases) return;
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      let totalElapsed = 0;
+      
+      // Calculate elapsed time across all phases
+      const phaseOrder: PhaseName[] = ["clean", "setVersion", "install", "test", "build", "verify"];
+      phaseOrder.forEach((phaseName) => {
+        const phase = runningTest.phases![phaseName];
+        if (phase.startTime) {
+          const start = new Date(phase.startTime).getTime();
+          if (phase.endTime) {
+            totalElapsed += new Date(phase.endTime).getTime() - start;
+          } else if (phaseName === runningTest.currentPhase) {
+            totalElapsed += now - start;
+          }
+        }
+      });
+
+      setElapsedTime(totalElapsed);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [runningTest]);
+
+  // Calculate total estimated time for this test
+  const totalEstimated = Object.values(estimatedPhaseDurations).reduce((sum, dur) => sum + dur, 0);
+  const progressPercent = runningTest ? Math.min((elapsedTime / totalEstimated) * 100, 100) : 0;
 
   const handlePhaseClick = (phaseName: string) => {
     if (!isExpanded) {
@@ -103,11 +158,18 @@ function TestItem({
     );
   };
 
+  const statusStr = status && 'status' in status ? status.status : '';
+
   return (
     <div
-      className={`test-item ${isSelected ? "selected" : ""} ${status?.status || ""}`}
+      className={`test-item ${isSelected ? "selected" : ""} ${statusStr}`}
     >
-      <div className="test-item-header">
+      <div 
+        className="test-item-header"
+        style={runningTest ? {
+          background: `linear-gradient(to right, rgba(102, 126, 234, 0.1) ${progressPercent}%, transparent ${progressPercent}%)`
+        } : undefined}
+      >
         <input
           type="checkbox"
           checked={isSelected}
@@ -120,7 +182,7 @@ function TestItem({
         >
           {test.stable ? "✓ Stable" : "⚠ Experimental"}
         </span>
-        {status && (
+        {status && 'status' in status && (
           <span className={`status-badge ${status.status}`}>
             {status.status === "queued"
               ? "⏸️"
@@ -134,6 +196,11 @@ function TestItem({
             {status.status === "queued"
               ? `Queued (#${(status as any).position})`
               : status.status}
+          </span>
+        )}
+        {runningTest && (
+          <span className="progress-info">
+            {formatDuration(elapsedTime)} / {formatDuration(totalEstimated)}
           </span>
         )}
         <button
@@ -176,6 +243,7 @@ function TestItem({
               phases={runningTest.phases}
               currentPhase={runningTest.currentPhase}
               initialExpandedPhase={expandedPhase as any}
+              estimatedPhaseDurations={estimatedPhaseDurations}
             />
           ) : (
             <div className="output-box">
@@ -195,6 +263,7 @@ function TestItem({
               phases={completedTest.phases} 
               currentPhase={null}
               initialExpandedPhase={expandedPhase as any}
+              estimatedPhaseDurations={estimatedPhaseDurations}
             />
           ) : (
             <div className="output-box">
@@ -228,6 +297,30 @@ function App() {
     packingDirectory,
     isPacking,
   } = useAppSelector((state) => state.tests);
+
+  const queuedETA = useAppSelector(selectQueuedTestsETA);
+  const runningETA = useAppSelector(selectRunningTestsETA);
+  const estimatedPhaseDurations = useAppSelector(selectElapsedTimeForRunningTestPhases);
+  const runningTestsList = useAppSelector(selectAllRunningTests);
+
+  const [globalElapsedTime, setGlobalElapsedTime] = useState(0);
+
+  // Track global elapsed time
+  useEffect(() => {
+    const hasRunningOrQueued = runningTestsList.length > 0 || Object.keys(queuedTests).length > 0;
+    
+    if (!hasRunningOrQueued) {
+      setGlobalElapsedTime(0);
+      return;
+    }
+
+    const startTime = Date.now();
+    const interval = setInterval(() => {
+      setGlobalElapsedTime(Date.now() - startTime);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [runningTestsList.length, queuedTests]);
 
   useEffect(() => {
     loadTests();
@@ -495,6 +588,21 @@ function App() {
 
   const filteredTests = getFilteredTests();
 
+  // Calculate global progress
+  const totalPhases = (runningTestsList.length + Object.keys(queuedTests).length) * 6; // 6 phases per test
+  let completedPhases = 0;
+  runningTestsList.forEach((test) => {
+    if (test.phases) {
+      Object.values(test.phases).forEach((phase) => {
+        if (phase.status === 'passed' || phase.status === 'failed') {
+          completedPhases++;
+        }
+      });
+    }
+  });
+  const globalProgress = totalPhases > 0 ? (completedPhases / totalPhases) * 100 : 0;
+  const totalETA = runningETA + queuedETA;
+
   if (loading) {
     return (
       <div className="app">
@@ -508,6 +616,28 @@ function App() {
       <header className="header">
         <h1>🧪 Recharts Integration Test Runner</h1>
       </header>
+
+      {(runningTestsList.length > 0 || Object.keys(queuedTests).length > 0) && (
+        <div className="global-progress-bar">
+          <div className="progress-stats">
+            <span>
+              📊 Progress: {completedPhases} / {totalPhases} phases
+            </span>
+            <span>
+              ⏱️ Elapsed: {formatDuration(globalElapsedTime)}
+            </span>
+            <span>
+              ⏳ ETA: {formatDuration(totalETA)}
+            </span>
+            <span>
+              🔄 Running: {runningTestsList.length} | ⏸️ Queued: {Object.keys(queuedTests).length}
+            </span>
+          </div>
+          <div className="progress-bar-container">
+            <div className="progress-bar-fill" style={{ width: `${globalProgress}%` }} />
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="error-banner">
@@ -683,6 +813,7 @@ function App() {
                 onToggleSelection={() => dispatch(toggleTestSelection(test))}
                 onRun={() => runTest(test)}
                 onClearResult={() => handleClearTestResult(testName)}
+                estimatedPhaseDurations={estimatedPhaseDurations}
               />
             );
           })}
