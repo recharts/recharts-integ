@@ -250,12 +250,8 @@ function TestItem({
             {formatDuration(elapsedTime)} / {formatDuration(totalEstimated)}
           </span>
         )}
-        <button
-          onClick={onRun}
-          disabled={isQueued}
-          className="btn btn-small"
-        >
-          {isQueued ? 'Queued' : 'Run'}
+        <button onClick={onRun} disabled={isQueued} className="btn btn-small">
+          {isQueued ? "Queued" : "Run"}
         </button>
         {completedTest && (
           <button
@@ -343,6 +339,8 @@ function App() {
     localPackagePath,
     packingDirectory,
     isPacking,
+    initialQueueSize,
+    completedTestsCount,
   } = useAppSelector((state) => state.tests);
 
   const queuedETA = useAppSelector(selectQueuedTestsETA);
@@ -353,6 +351,7 @@ function App() {
   const runningTestsList = useAppSelector(selectAllRunningTests);
 
   const [globalElapsedTime, setGlobalElapsedTime] = useState(0);
+  const [globalStartTime, setGlobalStartTime] = useState<number | null>(null);
 
   // Track global elapsed time
   useEffect(() => {
@@ -361,16 +360,23 @@ function App() {
 
     if (!hasRunningOrQueued) {
       setGlobalElapsedTime(0);
+      setGlobalStartTime(null);
       return;
     }
 
-    const startTime = Date.now();
+    // Set start time only once when queue starts
+    if (globalStartTime === null) {
+      setGlobalStartTime(Date.now());
+    }
+
     const interval = setInterval(() => {
-      setGlobalElapsedTime(Date.now() - startTime);
+      if (globalStartTime !== null) {
+        setGlobalElapsedTime(Date.now() - globalStartTime);
+      }
     }, 100);
 
     return () => clearInterval(interval);
-  }, [runningTestsList.length, queuedTests]);
+  }, [runningTestsList.length, queuedTests, globalStartTime]);
 
   useEffect(() => {
     loadTests();
@@ -638,21 +644,10 @@ function App() {
 
   const filteredTests = getFilteredTests();
 
-  // Calculate global progress
-  const totalPhases =
-    (runningTestsList.length + Object.keys(queuedTests).length) * 6; // 6 phases per test
-  let completedPhases = 0;
-  runningTestsList.forEach((test) => {
-    if (test.phases) {
-      Object.values(test.phases).forEach((phase) => {
-        if (phase.status === "passed" || phase.status === "failed") {
-          completedPhases++;
-        }
-      });
-    }
-  });
-  const globalProgress =
-    totalPhases > 0 ? (completedPhases / totalPhases) * 100 : 0;
+  // Calculate global progress using test counts instead of phase counts
+  const totalTests = initialQueueSize || 0;
+  const currentTests = completedTestsCount;
+  const globalProgress = totalTests > 0 ? (currentTests / totalTests) * 100 : 0;
   const totalETA = runningETA + queuedETA;
 
   if (loading) {
@@ -673,7 +668,7 @@ function App() {
         <div className="global-progress-bar">
           <div className="progress-stats">
             <span>
-              📊 Progress: {completedPhases} / {totalPhases} phases
+              📊 Progress: {currentTests} / {totalTests} tests
             </span>
             <span>⏱️ Elapsed: {formatDuration(globalElapsedTime)}</span>
             <span>⏳ ETA: {formatDuration(totalETA)}</span>
@@ -711,7 +706,7 @@ function App() {
 
         <div className="control-row version-controls">
           <div className="version-group">
-            <label>NPM Version:</label>
+            <label>Recharts version:</label>
             <select
               value={rechartsVersion}
               onChange={(e) => {
@@ -723,7 +718,7 @@ function App() {
               className="version-select"
               disabled={loadingVersions || !!localPackagePath}
             >
-              <option value="">Latest version</option>
+              <option value="">As decided by each test</option>
               {loadingVersions && <option value="">Loading versions...</option>}
               {availableVersions.map((version) => (
                 <option key={version} value={version}>

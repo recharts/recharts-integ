@@ -16,6 +16,8 @@ interface TestsState {
   localPackagePath: string;
   packingDirectory: string;
   isPacking: boolean;
+  initialQueueSize: number;
+  completedTestsCount: number;
 }
 
 const initialState: TestsState = {
@@ -33,6 +35,8 @@ const initialState: TestsState = {
   localPackagePath: '',
   packingDirectory: '',
   isPacking: false,
+  initialQueueSize: 0,
+  completedTestsCount: 0,
 };
 
 const testsSlice = createSlice({
@@ -74,6 +78,15 @@ const testsSlice = createSlice({
         id: action.payload.id,
         position: action.payload.position,
       };
+      // Track initial queue size when first test is added
+      const totalTests = Object.keys(state.queuedTests).length + Object.keys(state.runningTests).length;
+      if (state.initialQueueSize === 0) {
+        state.initialQueueSize = totalTests;
+        state.completedTestsCount = 0;
+      } else {
+        // Update if queue grew
+        state.initialQueueSize = Math.max(state.initialQueueSize, totalTests + state.completedTestsCount);
+      }
     },
     testStarted: (state, action: PayloadAction<{ testName: string; id: string }>) => {
       delete state.queuedTests[action.payload.testName];
@@ -130,6 +143,14 @@ const testsSlice = createSlice({
         const test = state.runningTests[testName];
         test.status = action.payload.status;
         test.exitCode = action.payload.exitCode;
+        state.completedTestsCount++;
+        
+        // Reset queue tracking when queue is empty
+        const remainingTests = Object.keys(state.queuedTests).length + Object.keys(state.runningTests).length;
+        if (remainingTests === 1) { // This test is still in runningTests
+          state.initialQueueSize = 0;
+          state.completedTestsCount = 0;
+        }
         
         // Move to results after delay
         setTimeout(() => {
@@ -147,6 +168,8 @@ const testsSlice = createSlice({
     queueCleared: (state) => {
       state.queuedTests = {};
       state.runningTests = {};
+      state.initialQueueSize = 0;
+      state.completedTestsCount = 0;
     },
     clearTestResult: (state, action: PayloadAction<string>) => {
       delete state.testResults[action.payload];
