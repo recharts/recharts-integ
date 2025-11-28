@@ -19,9 +19,19 @@ interface PhaseOutputProps {
 }
 
 function PhaseOutput({ phases, currentPhase }: PhaseOutputProps) {
-  const [expandedPhases, setExpandedPhases] = useState(
-    () => currentPhase ? { [currentPhase]: true } : {}
-  );
+  const [expandedPhases, setExpandedPhases] = useState(() => {
+    // For running tests, expand the current phase
+    if (currentPhase) {
+      return { [currentPhase]: true };
+    }
+    
+    // For completed tests, expand the most recent phase (last non-pending phase)
+    const lastNonPendingPhase = PHASE_ORDER.slice().reverse().find(
+      phaseName => phases[phaseName] && phases[phaseName].status !== 'pending'
+    );
+    
+    return lastNonPendingPhase ? { [lastNonPendingPhase]: true } : {};
+  });
 
   const togglePhase = (phaseName: keyof Phases) => {
     setExpandedPhases(prev => ({
@@ -50,7 +60,7 @@ function PhaseOutput({ phases, currentPhase }: PhaseOutputProps) {
     return `${ms}ms`;
   };
 
-  // Auto-expand current phase
+  // Auto-expand current phase when running
   useEffect(() => {
     if (currentPhase && !expandedPhases[currentPhase]) {
       setExpandedPhases(prev => ({
@@ -58,7 +68,7 @@ function PhaseOutput({ phases, currentPhase }: PhaseOutputProps) {
         [currentPhase]: true
       }));
     }
-  }, [currentPhase, expandedPhases]);
+  }, [currentPhase]);
 
   return (
     <div className="phase-output">

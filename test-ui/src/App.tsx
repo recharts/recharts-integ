@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import {
   setTests,
@@ -18,11 +18,183 @@ import {
   setPackingDirectory,
   setIsPacking,
 } from "./store/testsSlice";
-import { Test, TestRun } from "./types";
+import { Test, TestRun, TestStatus, Phases } from "./types";
 import PhaseOutput from "./PhaseOutput";
 import "./App.css";
 
 const API_BASE = "/api";
+
+interface TestItemProps {
+  test: Test;
+  status: TestStatus | null;
+  isSelected: boolean;
+  isRunning: boolean;
+  isQueued: boolean;
+  hasResult: boolean;
+  onToggleSelection: () => void;
+  onRun: () => void;
+  onClearResult: () => void;
+}
+
+function TestItem({
+  test,
+  status,
+  isSelected,
+  isRunning,
+  isQueued,
+  hasResult,
+  onToggleSelection,
+  onRun,
+  onClearResult,
+}: TestItemProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const testName = test.name;
+
+  const runningTest = status && status.status === "running" ? (status as TestRun) : null;
+  const completedTest = hasResult && status && status.status !== "running" && status.status !== "queued" ? (status as TestRun) : null;
+
+  const getOneLineSummary = (phases: Phases | undefined) => {
+    if (!phases) return null;
+
+    const phaseOrder = ["clean", "setVersion", "install", "test", "build", "verify"] as const;
+    const phaseLabels = {
+      clean: "Clean",
+      setVersion: "Set Version",
+      install: "Install",
+      test: "Test",
+      build: "Build",
+      verify: "Verify",
+    };
+    const icons = {
+      pending: "⏸️",
+      running: "⏳",
+      passed: "✅",
+      failed: "❌",
+    };
+
+    return (
+      <div className="phase-summary">
+        {phaseOrder.map((phaseName) => {
+          const phase = phases[phaseName];
+          const label = phaseLabels[phaseName];
+          const icon = icons[phase.status];
+          const durationText = phase.duration ? ` (${(phase.duration / 1000).toFixed(1)}s)` : "";
+          
+          return (
+            <span
+              key={phaseName}
+              className={`phase-summary-item ${phase.status}`}
+              title={`${label}: ${phase.status}${durationText}`}
+            >
+              {icon} {label}
+            </span>
+          );
+        })}
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={`test-item ${isSelected ? "selected" : ""} ${status?.status || ""}`}
+    >
+      <div className="test-item-header">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={onToggleSelection}
+          disabled={isRunning || isQueued}
+        />
+        <span className="test-name">{testName}</span>
+        <span
+          className={`stability-badge ${test.stable ? "stable" : "experimental"}`}
+        >
+          {test.stable ? "✓ Stable" : "⚠ Experimental"}
+        </span>
+        {status && (
+          <span className={`status-badge ${status.status}`}>
+            {status.status === "queued"
+              ? "⏸️"
+              : status.status === "running"
+                ? "⏳"
+                : status.status === "passed"
+                  ? "✅"
+                  : status.status === "cancelled"
+                    ? "⏹"
+                    : "❌"}{" "}
+            {status.status === "queued"
+              ? `Queued (#${(status as any).position})`
+              : status.status}
+          </span>
+        )}
+        <button
+          onClick={onRun}
+          disabled={isRunning || isQueued}
+          className="btn btn-small"
+        >
+          Run
+        </button>
+        {(runningTest || completedTest) && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="btn btn-small btn-expand"
+            title={isExpanded ? "Collapse details" : "Expand details"}
+          >
+            {isExpanded ? "▼ Hide" : "▶ Show"}
+          </button>
+        )}
+        {completedTest && (
+          <button
+            onClick={onClearResult}
+            className="btn btn-clear"
+            title="Clear this result"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
+      {(runningTest || completedTest) && (
+        <div className="test-item-summary">
+          {getOneLineSummary((runningTest || completedTest)?.phases)}
+        </div>
+      )}
+
+      {isExpanded && runningTest && (
+        <div className="test-item-details">
+          {runningTest.phases ? (
+            <PhaseOutput
+              phases={runningTest.phases}
+              currentPhase={runningTest.currentPhase}
+            />
+          ) : (
+            <div className="output-box">
+              <pre>{runningTest.output}</pre>
+              {runningTest.error && (
+                <pre className="error-output">{runningTest.error}</pre>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {isExpanded && completedTest && (
+        <div className="test-item-details">
+          {completedTest.phases ? (
+            <PhaseOutput phases={completedTest.phases} currentPhase={null} />
+          ) : (
+            <div className="output-box">
+              <pre>{completedTest.output}</pre>
+              {completedTest.error && (
+                <pre className="error-output">{completedTest.error}</pre>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function App() {
   const dispatch = useAppDispatch();
@@ -459,68 +631,6 @@ function App() {
       <div className="content">
         <div className="test-list">
           <h2>Tests ({filteredTests.length})</h2>
-          {filteredTests.map((test) => {
-            const testName = test.name;
-            const status = getTestStatus(testName);
-            const isSelected = selectedTests.some((t) => t.name === testName);
-            const isRunning = !!runningTests[testName];
-            const isQueued = !!queuedTests[testName];
-
-            return (
-              <div
-                key={testName}
-                className={`test-item ${isSelected ? "selected" : ""} ${status?.status || ""}`}
-              >
-                <div className="test-item-header">
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => dispatch(toggleTestSelection(test))}
-                    disabled={isRunning || isQueued}
-                  />
-                  <span className="test-name">{testName}</span>
-                  <span
-                    className={`stability-badge ${test.stable ? "stable" : "experimental"}`}
-                  >
-                    {test.stable ? "✓ Stable" : "⚠ Experimental"}
-                  </span>
-                  {status && (
-                    <span className={`status-badge ${status.status}`}>
-                      {status.status === "queued"
-                        ? "⏸️"
-                        : status.status === "running"
-                          ? "⏳"
-                          : status.status === "passed"
-                            ? "✅"
-                            : "❌"}{" "}
-                      {status.status === "queued"
-                        ? `Queued (#${(status as any).position})`
-                        : status.status}
-                    </span>
-                  )}
-                  <button
-                    onClick={() => runTest(test)}
-                    disabled={isRunning || isQueued}
-                    className="btn btn-small"
-                  >
-                    Run
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="results-panel">
-          <h2>Test Output</h2>
-          {Object.keys(queuedTests).length === 0 &&
-            Object.keys(runningTests).length === 0 &&
-            Object.keys(testResults).length === 0 && (
-              <div className="empty-state">
-                No tests running. Select and run tests to see output.
-              </div>
-            )}
-
           {Object.keys(queuedTests).length > 0 && (
             <div className="queue-info">
               <h3>
@@ -539,60 +649,29 @@ function App() {
               </ul>
             </div>
           )}
+          {filteredTests.map((test) => {
+            const testName = test.name;
+            const status = getTestStatus(testName);
+            const isSelected = selectedTests.some((t) => t.name === testName);
+            const isRunning = !!runningTests[testName];
+            const isQueued = !!queuedTests[testName];
+            const hasResult = !!testResults[testName];
 
-          {Object.entries(runningTests).map(([testName, data]) => (
-            <div key={testName} className="result-item">
-              <h3>
-                {testName}
-                <span className="status-badge running">⏳ Running</span>
-              </h3>
-              {data.phases ? (
-                <PhaseOutput
-                  phases={data.phases}
-                  currentPhase={data.currentPhase}
-                />
-              ) : (
-                <div className="output-box">
-                  <pre>{data.output}</pre>
-                  {data.error && (
-                    <pre className="error-output">{data.error}</pre>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-
-          {Object.entries(testResults).map(([testName, data]) => (
-            <div key={testName} className="result-item">
-              <h3>
-                {testName}
-                <span className={`status-badge ${data.status}`}>
-                  {data.status === "passed"
-                    ? "✅ Passed"
-                    : data.status === "cancelled"
-                      ? "⏹ Cancelled"
-                      : "❌ Failed"}
-                </span>
-                <button
-                  onClick={() => handleClearTestResult(testName)}
-                  className="btn btn-clear"
-                  title="Clear this result"
-                >
-                  ✕
-                </button>
-              </h3>
-              {data.phases ? (
-                <PhaseOutput phases={data.phases} currentPhase={null} />
-              ) : (
-                <div className="output-box">
-                  <pre>{data.output}</pre>
-                  {data.error && (
-                    <pre className="error-output">{data.error}</pre>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+            return (
+              <TestItem
+                key={testName}
+                test={test}
+                status={status}
+                isSelected={isSelected}
+                isRunning={isRunning}
+                isQueued={isQueued}
+                hasResult={hasResult}
+                onToggleSelection={() => dispatch(toggleTestSelection(test))}
+                onRun={() => runTest(test)}
+                onClearResult={() => handleClearTestResult(testName)}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
