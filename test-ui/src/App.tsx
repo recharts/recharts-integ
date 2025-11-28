@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from './store/hooks';
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
 import {
   setTests,
   setLoading,
@@ -17,12 +17,12 @@ import {
   setLocalPackagePath,
   setPackingDirectory,
   setIsPacking,
-} from './store/testsSlice';
-import { Test, TestRun } from './types';
-import PhaseOutput from './PhaseOutput';
-import './App.css';
+} from "./store/testsSlice";
+import { Test, TestRun } from "./types";
+import PhaseOutput from "./PhaseOutput";
+import "./App.css";
 
-const API_BASE = '/api';
+const API_BASE = "/api";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ function App() {
   // Persist test results to sessionStorage
   useEffect(() => {
     if (Object.keys(testResults).length > 0) {
-      sessionStorage.setItem('testResults', JSON.stringify(testResults));
+      sessionStorage.setItem("testResults", JSON.stringify(testResults));
     }
   }, [testResults]);
 
@@ -63,12 +63,12 @@ function App() {
       const response = await fetch(`${API_BASE}/tests`);
       const data = await response.json();
       const testsArray: Test[] = data.tests.map((test: any) =>
-        typeof test === 'string' ? { name: test, stable: false } : test
+        typeof test === "string" ? { name: test, stable: false } : test,
       );
       dispatch(setTests(testsArray));
       dispatch(setError(null));
     } catch (err) {
-      dispatch(setError('Failed to load tests: ' + (err as Error).message));
+      dispatch(setError("Failed to load tests: " + (err as Error).message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -76,21 +76,21 @@ function App() {
 
   const loadPersistedResultsFromStorage = () => {
     try {
-      const stored = sessionStorage.getItem('testResults');
+      const stored = sessionStorage.getItem("testResults");
       if (stored) {
         const results: Record<string, TestRun> = JSON.parse(stored);
         dispatch(loadPersistedResults(results));
       }
     } catch (err) {
-      console.error('Failed to load persisted results:', err);
+      console.error("Failed to load persisted results:", err);
     }
   };
 
   const loadPersistedPackingDirectory = () => {
     try {
-      const storedDirectory = localStorage.getItem('packingDirectory');
-      const storedPackagePath = localStorage.getItem('localPackagePath');
-      
+      const storedDirectory = localStorage.getItem("packingDirectory");
+      const storedPackagePath = localStorage.getItem("localPackagePath");
+
       if (storedDirectory) {
         dispatch(setPackingDirectory(storedDirectory));
       }
@@ -98,7 +98,7 @@ function App() {
         dispatch(setLocalPackagePath(storedPackagePath));
       }
     } catch (err) {
-      console.error('Failed to load persisted packing directory:', err);
+      console.error("Failed to load persisted packing directory:", err);
     }
   };
 
@@ -106,17 +106,17 @@ function App() {
     try {
       dispatch(setLoadingVersions(true));
       // Fetch from npm registry
-      const response = await fetch('https://registry.npmjs.org/recharts');
+      const response = await fetch("https://registry.npmjs.org/recharts");
       const data = await response.json();
-      
+
       // Get versions and sort from latest to oldest
       const versions = Object.keys(data.versions || {})
-        .filter(v => !v.includes('-')) // Filter out pre-release versions
+        .filter((v) => !v.includes("-")) // Filter out pre-release versions
         .sort((a, b) => {
           // Compare version numbers (simple sort by version string works for semver)
-          const aParts = a.split('.').map(Number);
-          const bParts = b.split('.').map(Number);
-          
+          const aParts = a.split(".").map(Number);
+          const bParts = b.split(".").map(Number);
+
           for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
             const aVal = aParts[i] || 0;
             const bVal = bParts[i] || 0;
@@ -127,10 +127,10 @@ function App() {
           return 0;
         })
         .slice(0, 50); // Limit to 50 most recent versions
-      
+
       dispatch(setAvailableVersions(versions));
     } catch (err) {
-      console.error('Failed to load Recharts versions:', err);
+      console.error("Failed to load Recharts versions:", err);
       dispatch(setLoadingVersions(false));
     }
   };
@@ -144,8 +144,8 @@ function App() {
       }
 
       const response = await fetch(`${API_BASE}/tests/run`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           testName: test.name,
           rechartsVersion: versionToUse || undefined,
@@ -153,13 +153,13 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to start test');
+        throw new Error("Failed to start test");
       }
 
       const data = await response.json();
-      console.log('Test started:', data);
+      console.log("Test started:", data);
     } catch (err) {
-      dispatch(setError('Failed to run test: ' + (err as Error).message));
+      dispatch(setError("Failed to run test: " + (err as Error).message));
     }
   };
 
@@ -173,28 +173,35 @@ function App() {
   const cancelQueue = async () => {
     try {
       const response = await fetch(`${API_BASE}/tests/cancel`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to cancel queue');
+        throw new Error("Failed to cancel queue");
       }
 
       const data = await response.json();
-      console.log('Queue cancelled:', data);
+      console.log("Queue cancelled:", data);
     } catch (err) {
-      dispatch(setError('Failed to cancel queue: ' + (err as Error).message));
+      dispatch(setError("Failed to cancel queue: " + (err as Error).message));
     }
   };
 
   const handleClearTestResult = (testName: string) => {
     dispatch(clearTestResult(testName));
+    // clear single item from session storage
+    const stored = sessionStorage.getItem("testResults");
+    if (stored) {
+      const results: Record<string, TestRun> = JSON.parse(stored);
+      delete results[testName];
+      sessionStorage.setItem("testResults", JSON.stringify(results));
+    }
   };
 
   const handleClearAllResults = () => {
     dispatch(clearAllResults());
-    sessionStorage.removeItem('testResults');
+    sessionStorage.removeItem("testResults");
   };
 
   const handleDirectorySelect = async () => {
@@ -202,32 +209,40 @@ function App() {
       // Use the File System Access API for directory selection
       // @ts-ignore - Not all browsers support this yet
       if (!window.showDirectoryPicker) {
-        dispatch(setError('Directory picker not supported in this browser. Please use Chrome or Edge.'));
+        dispatch(
+          setError(
+            "Directory picker not supported in this browser. Please use Chrome or Edge.",
+          ),
+        );
         return;
       }
 
       // @ts-ignore
       const dirHandle = await window.showDirectoryPicker();
       const dirPath = dirHandle.name; // This gives us just the name, not full path
-      
+
       // In a real implementation, we'd need to pass the handle to the backend
       // For now, we'll ask the user to input the full path
-      const fullPath = prompt(`Selected: ${dirPath}\n\nPlease enter the full absolute path to this directory:`);
-      
+      const fullPath = prompt(
+        `Selected: ${dirPath}\n\nPlease enter the full absolute path to this directory:`,
+      );
+
       if (fullPath) {
         dispatch(setPackingDirectory(fullPath));
-        localStorage.setItem('packingDirectory', fullPath);
+        localStorage.setItem("packingDirectory", fullPath);
       }
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
-        dispatch(setError('Failed to select directory: ' + (err as Error).message));
+      if ((err as Error).name !== "AbortError") {
+        dispatch(
+          setError("Failed to select directory: " + (err as Error).message),
+        );
       }
     }
   };
 
   const handlePackDirectory = async () => {
     if (!packingDirectory) {
-      dispatch(setError('Please select a directory first'));
+      dispatch(setError("Please select a directory first"));
       return;
     }
 
@@ -236,27 +251,27 @@ function App() {
       dispatch(setError(null));
 
       const response = await fetch(`${API_BASE}/pack`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ directory: packingDirectory }),
       });
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to pack directory');
+        throw new Error(data.error || "Failed to pack directory");
       }
 
       dispatch(setLocalPackagePath(data.packagePath));
       dispatch(setError(null));
-      
+
       // Persist to localStorage
-      localStorage.setItem('packingDirectory', packingDirectory);
-      localStorage.setItem('localPackagePath', data.packagePath);
-      
-      console.log('Packed successfully:', data);
+      localStorage.setItem("packingDirectory", packingDirectory);
+      localStorage.setItem("localPackagePath", data.packagePath);
+
+      console.log("Packed successfully:", data);
     } catch (err) {
-      dispatch(setError('Failed to pack directory: ' + (err as Error).message));
+      dispatch(setError("Failed to pack directory: " + (err as Error).message));
     } finally {
       dispatch(setIsPacking(false));
     }
@@ -267,19 +282,21 @@ function App() {
 
     const filterLower = filter.toLowerCase();
 
-    if (filterLower === 'stable') {
+    if (filterLower === "stable") {
       return tests.filter((test) => test.stable === true);
     }
-    if (filterLower === 'experimental') {
+    if (filterLower === "experimental") {
       return tests.filter((test) => test.stable === false);
     }
 
-    return tests.filter((test) => test.name.toLowerCase().includes(filterLower));
+    return tests.filter((test) =>
+      test.name.toLowerCase().includes(filterLower),
+    );
   };
 
   const getTestStatus = (testName: string) => {
     if (queuedTests[testName]) {
-      return { ...queuedTests[testName], status: 'queued' as const };
+      return { ...queuedTests[testName], status: "queued" as const };
     }
     if (runningTests[testName]) {
       return runningTests[testName];
@@ -332,7 +349,7 @@ function App() {
               onChange={(e) => {
                 dispatch(setRechartsVersion(e.target.value));
                 if (e.target.value) {
-                  dispatch(setLocalPackagePath(''));
+                  dispatch(setLocalPackagePath(""));
                 }
               }}
               className="version-select"
@@ -358,7 +375,7 @@ function App() {
               value={packingDirectory}
               onChange={(e) => {
                 dispatch(setPackingDirectory(e.target.value));
-                localStorage.setItem('packingDirectory', e.target.value);
+                localStorage.setItem("packingDirectory", e.target.value);
               }}
               className="directory-input"
               disabled={isPacking}
@@ -377,15 +394,15 @@ function App() {
               disabled={!packingDirectory || isPacking}
               title="Build and pack the selected directory"
             >
-              {isPacking ? '⏳ Packing...' : '📦 Pack'}
+              {isPacking ? "⏳ Packing..." : "📦 Pack"}
             </button>
             {localPackagePath && (
               <button
                 onClick={() => {
-                  dispatch(setLocalPackagePath(''));
-                  dispatch(setPackingDirectory(''));
-                  localStorage.removeItem('localPackagePath');
-                  localStorage.removeItem('packingDirectory');
+                  dispatch(setLocalPackagePath(""));
+                  dispatch(setPackingDirectory(""));
+                  localStorage.removeItem("localPackagePath");
+                  localStorage.removeItem("packingDirectory");
                 }}
                 className="btn btn-secondary btn-small"
                 title="Clear local package"
@@ -403,10 +420,16 @@ function App() {
         )}
 
         <div className="control-row">
-          <button onClick={() => dispatch(selectAllTests(filteredTests))} className="btn btn-secondary">
+          <button
+            onClick={() => dispatch(selectAllTests(filteredTests))}
+            className="btn btn-secondary"
+          >
             Select All ({filteredTests.length})
           </button>
-          <button onClick={() => dispatch(deselectAllTests())} className="btn btn-secondary">
+          <button
+            onClick={() => dispatch(deselectAllTests())}
+            className="btn btn-secondary"
+          >
             Deselect All
           </button>
           <button
@@ -416,13 +439,17 @@ function App() {
           >
             Run Selected ({selectedTests.length})
           </button>
-          {(Object.keys(queuedTests).length > 0 || Object.keys(runningTests).length > 0) && (
+          {(Object.keys(queuedTests).length > 0 ||
+            Object.keys(runningTests).length > 0) && (
             <button onClick={cancelQueue} className="btn btn-danger">
               ⏹ Cancel & Clear Queue
             </button>
           )}
           {Object.keys(testResults).length > 0 && (
-            <button onClick={handleClearAllResults} className="btn btn-secondary">
+            <button
+              onClick={handleClearAllResults}
+              className="btn btn-secondary"
+            >
               🗑 Clear All Results
             </button>
           )}
@@ -442,7 +469,7 @@ function App() {
             return (
               <div
                 key={testName}
-                className={`test-item ${isSelected ? 'selected' : ''} ${status?.status || ''}`}
+                className={`test-item ${isSelected ? "selected" : ""} ${status?.status || ""}`}
               >
                 <div className="test-item-header">
                   <input
@@ -452,25 +479,30 @@ function App() {
                     disabled={isRunning || isQueued}
                   />
                   <span className="test-name">{testName}</span>
-                  <span className={`stability-badge ${test.stable ? 'stable' : 'experimental'}`}>
-                    {test.stable ? '✓ Stable' : '⚠ Experimental'}
+                  <span
+                    className={`stability-badge ${test.stable ? "stable" : "experimental"}`}
+                  >
+                    {test.stable ? "✓ Stable" : "⚠ Experimental"}
                   </span>
                   {status && (
                     <span className={`status-badge ${status.status}`}>
-                      {status.status === 'queued'
-                        ? '⏸️'
-                        : status.status === 'running'
-                        ? '⏳'
-                        : status.status === 'passed'
-                        ? '✅'
-                        : '❌'}
-                      {' '}
-                      {status.status === 'queued'
+                      {status.status === "queued"
+                        ? "⏸️"
+                        : status.status === "running"
+                          ? "⏳"
+                          : status.status === "passed"
+                            ? "✅"
+                            : "❌"}{" "}
+                      {status.status === "queued"
                         ? `Queued (#${(status as any).position})`
                         : status.status}
                     </span>
                   )}
-                  <button onClick={() => runTest(test)} disabled={isRunning || isQueued} className="btn btn-small">
+                  <button
+                    onClick={() => runTest(test)}
+                    disabled={isRunning || isQueued}
+                    className="btn btn-small"
+                  >
                     Run
                   </button>
                 </div>
@@ -484,12 +516,17 @@ function App() {
           {Object.keys(queuedTests).length === 0 &&
             Object.keys(runningTests).length === 0 &&
             Object.keys(testResults).length === 0 && (
-              <div className="empty-state">No tests running. Select and run tests to see output.</div>
+              <div className="empty-state">
+                No tests running. Select and run tests to see output.
+              </div>
             )}
 
           {Object.keys(queuedTests).length > 0 && (
             <div className="queue-info">
-              <h3>⏸️ Queue ({Object.keys(queuedTests).length} test{Object.keys(queuedTests).length !== 1 ? 's' : ''})</h3>
+              <h3>
+                ⏸️ Queue ({Object.keys(queuedTests).length} test
+                {Object.keys(queuedTests).length !== 1 ? "s" : ""})
+              </h3>
               <p>Tests will run one at a time in series.</p>
               <ul>
                 {Object.entries(queuedTests)
@@ -510,11 +547,16 @@ function App() {
                 <span className="status-badge running">⏳ Running</span>
               </h3>
               {data.phases ? (
-                <PhaseOutput phases={data.phases} currentPhase={data.currentPhase} />
+                <PhaseOutput
+                  phases={data.phases}
+                  currentPhase={data.currentPhase}
+                />
               ) : (
                 <div className="output-box">
                   <pre>{data.output}</pre>
-                  {data.error && <pre className="error-output">{data.error}</pre>}
+                  {data.error && (
+                    <pre className="error-output">{data.error}</pre>
+                  )}
                 </div>
               )}
             </div>
@@ -525,13 +567,17 @@ function App() {
               <h3>
                 {testName}
                 <span className={`status-badge ${data.status}`}>
-                  {data.status === 'passed'
-                    ? '✅ Passed'
-                    : data.status === 'cancelled'
-                    ? '⏹ Cancelled'
-                    : '❌ Failed'}
+                  {data.status === "passed"
+                    ? "✅ Passed"
+                    : data.status === "cancelled"
+                      ? "⏹ Cancelled"
+                      : "❌ Failed"}
                 </span>
-                <button onClick={() => handleClearTestResult(testName)} className="btn btn-clear" title="Clear this result">
+                <button
+                  onClick={() => handleClearTestResult(testName)}
+                  className="btn btn-clear"
+                  title="Clear this result"
+                >
                   ✕
                 </button>
               </h3>
@@ -540,7 +586,9 @@ function App() {
               ) : (
                 <div className="output-box">
                   <pre>{data.output}</pre>
-                  {data.error && <pre className="error-output">{data.error}</pre>}
+                  {data.error && (
+                    <pre className="error-output">{data.error}</pre>
+                  )}
                 </div>
               )}
             </div>
