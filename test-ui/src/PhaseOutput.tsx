@@ -16,10 +16,16 @@ const PHASE_ORDER: PhaseName[] = ['clean', 'setVersion', 'install', 'test', 'bui
 interface PhaseOutputProps {
   phases: Phases;
   currentPhase?: PhaseName | null;
+  initialExpandedPhase?: PhaseName | null;
 }
 
-function PhaseOutput({ phases, currentPhase }: PhaseOutputProps) {
+function PhaseOutput({ phases, currentPhase, initialExpandedPhase }: PhaseOutputProps) {
   const [expandedPhases, setExpandedPhases] = useState(() => {
+    // If specific phase requested, expand that
+    if (initialExpandedPhase) {
+      return { [initialExpandedPhase]: true };
+    }
+    
     // For running tests, expand the current phase
     if (currentPhase) {
       return { [currentPhase]: true };
@@ -32,6 +38,16 @@ function PhaseOutput({ phases, currentPhase }: PhaseOutputProps) {
     
     return lastNonPendingPhase ? { [lastNonPendingPhase]: true } : {};
   });
+
+  // Handle initial expanded phase changes
+  useEffect(() => {
+    if (initialExpandedPhase) {
+      setExpandedPhases(prev => ({
+        ...prev,
+        [initialExpandedPhase]: true
+      }));
+    }
+  }, [initialExpandedPhase]);
 
   const togglePhase = (phaseName: keyof Phases) => {
     setExpandedPhases(prev => ({

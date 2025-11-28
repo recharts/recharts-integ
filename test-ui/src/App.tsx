@@ -48,10 +48,18 @@ function TestItem({
   onClearResult,
 }: TestItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
   const testName = test.name;
 
   const runningTest = status && status.status === "running" ? (status as TestRun) : null;
   const completedTest = hasResult && status && status.status !== "running" && status.status !== "queued" ? (status as TestRun) : null;
+
+  const handlePhaseClick = (phaseName: string) => {
+    if (!isExpanded) {
+      setIsExpanded(true);
+    }
+    setExpandedPhase(phaseName);
+  };
 
   const getOneLineSummary = (phases: Phases | undefined) => {
     if (!phases) return null;
@@ -81,13 +89,14 @@ function TestItem({
           const durationText = phase.duration ? ` (${(phase.duration / 1000).toFixed(1)}s)` : "";
           
           return (
-            <span
+            <button
               key={phaseName}
               className={`phase-summary-item ${phase.status}`}
               title={`${label}: ${phase.status}${durationText}`}
+              onClick={() => handlePhaseClick(phaseName)}
             >
               {icon} {label}
-            </span>
+            </button>
           );
         })}
       </div>
@@ -166,6 +175,7 @@ function TestItem({
             <PhaseOutput
               phases={runningTest.phases}
               currentPhase={runningTest.currentPhase}
+              initialExpandedPhase={expandedPhase as any}
             />
           ) : (
             <div className="output-box">
@@ -181,7 +191,11 @@ function TestItem({
       {isExpanded && completedTest && (
         <div className="test-item-details">
           {completedTest.phases ? (
-            <PhaseOutput phases={completedTest.phases} currentPhase={null} />
+            <PhaseOutput 
+              phases={completedTest.phases} 
+              currentPhase={null}
+              initialExpandedPhase={expandedPhase as any}
+            />
           ) : (
             <div className="output-box">
               <pre>{completedTest.output}</pre>
