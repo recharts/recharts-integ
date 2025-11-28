@@ -7,10 +7,10 @@ import { fileURLToPath } from "url";
 import WebSocket from "ws";
 import { WebSocketServer } from "ws";
 import * as http from "http";
-import { NpmController } from "../../scripts/NpmController.ts";
-import { YarnController } from "../../scripts/YarnController.ts";
-import type { Controller } from "../../scripts/Controller.ts";
-import { TestOutcome } from "../../scripts/TestOutcome.ts";
+import { NpmController } from "./scripts/NpmController.ts";
+import { YarnController } from "./scripts/YarnController.ts";
+import type { Controller } from "./scripts/Controller.ts";
+import { TestOutcome } from "./scripts/TestOutcome.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

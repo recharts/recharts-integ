@@ -1,7 +1,7 @@
 const path = require("path");
 
-const {NpmController} = require("./NpmController.js");
-const {YarnController} = require("./YarnController");
+const {NpmController} = require("../test-ui/server/scripts/NpmController.ts");
+const {YarnController} = require("../test-ui/server/scripts/YarnController.ts");
 
 /**
  * @param {Controller} controller
