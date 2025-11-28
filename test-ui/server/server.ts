@@ -76,6 +76,7 @@ const activeTests = new Map<string, TestData>();
 const testQueue: QueueItem[] = [];
 let isRunningTest = false;
 let currentTestAbortController: AbortController | null = null;
+let shouldCancelQueue = false;
 
 // WebSocket connections
 const clients = new Set<WebSocket>();
@@ -123,6 +124,11 @@ async function runPhase(
   testData: TestData,
   fn: () => TestOutcome,
 ): Promise<void> {
+  // Check if cancelled before starting phase
+  if (shouldCancelQueue) {
+    throw new Error("Test cancelled");
+  }
+
   const phase = testData.phases[phaseName];
   phase.status = "running";
   phase.startTime = new Date().toISOString();
@@ -435,16 +441,28 @@ async function executeTest(
     const { fn } = getController(testName, rechartsVersion);
     await fn(testData);
 
-    // Determine overall status
-    const failedPhases = Object.values(testData.phases).filter(
-      (p) => p.status === "failed",
-    );
-    testData.status = failedPhases.length > 0 ? "failed" : "passed";
-    testData.exitCode = failedPhases.length > 0 ? 1 : 0;
+    // Check if cancelled after execution
+    if (shouldCancelQueue) {
+      testData.status = "cancelled";
+      testData.exitCode = -1;
+    } else {
+      // Determine overall status
+      const failedPhases = Object.values(testData.phases).filter(
+        (p) => p.status === "failed",
+      );
+      testData.status = failedPhases.length > 0 ? "failed" : "passed";
+      testData.exitCode = failedPhases.length > 0 ? 1 : 0;
+    }
   } catch (error: any) {
-    testData.status = "failed";
-    testData.error += `\nTest execution error: ${error.message}`;
-    testData.exitCode = 1;
+    if (shouldCancelQueue || error.message === "Test cancelled") {
+      testData.status = "cancelled";
+      testData.error += `\nTest cancelled`;
+      testData.exitCode = -1;
+    } else {
+      testData.status = "failed";
+      testData.error += `\nTest execution error: ${error.message}`;
+      testData.exitCode = 1;
+    }
   }
 
   testData.endTime = new Date().toISOString();
@@ -466,15 +484,17 @@ async function processQueue(): Promise<void> {
   }
 
   isRunningTest = true;
+  shouldCancelQueue = false;
 
-  while (testQueue.length > 0) {
+  while (testQueue.length > 0 && !shouldCancelQueue) {
     const item = testQueue.shift();
-    if (item) {
+    if (item && !shouldCancelQueue) {
       await executeTest(item.testName, item.rechartsVersion, item.testId);
     }
   }
 
   isRunningTest = false;
+  shouldCancelQueue = false;
 }
 
 // Run a single test (adds to queue)
@@ -538,6 +558,9 @@ app.get("/api/tests/queue", (req: Request, res: Response) => {
 app.post("/api/tests/cancel", (req: Request, res: Response) => {
   const cancelledCount = testQueue.length;
   const wasRunning = isRunningTest;
+
+  // Signal to stop processing queue
+  shouldCancelQueue = true;
 
   // Clear the queue
   testQueue.length = 0;
