@@ -4,6 +4,8 @@ import { NpmController } from "../test-ui/server/scripts/NpmController.ts";
 import { YarnController } from "../test-ui/server/scripts/YarnController.ts";
 import type { Controller } from "../test-ui/server/scripts/Controller.ts";
 import type { TestOutcome } from "../test-ui/server/scripts/TestOutcome.ts";
+import {getTestMetadata} from "../test-ui/server/scripts/test-registry.ts";
+import type {TestMetadata} from "../test-ui/server/scripts/test-registry.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -71,46 +73,35 @@ function getControllerConstructor(packageManager: string): typeof NpmController 
     }
 }
 
-async function runLibraryTest(testName: string, rechartsVersion: string): Promise<TestOutcome[]> {
-    const [packageManager, library, app] = testName.split(":");
-    const libPath = path.join(__dirname, "../libraries", library);
-    const appPath = path.join(__dirname, "../apps-3rd-party", app);
-    const Controller = getControllerConstructor(packageManager);
+async function runLibraryTest(metadata: TestMetadata, rechartsVersion: string): Promise<TestOutcome[]> {
+    const libPath = path.join(__dirname, "../libraries", metadata.libraryName!);
+    const appPath = path.join(__dirname, "../apps-3rd-party", metadata.appName!);
+    const Controller = getControllerConstructor(metadata.packageManager);
     return await runLibraryInLibraryTest(new Controller(libPath), new Controller(appPath), rechartsVersion);
 }
 
-async function runDirectDependencyTest(testName: string, rechartsVersion: string): Promise<TestOutcome[]> {
-    const [packageManager, testType] = testName.split(":");
-    const Controller = getControllerConstructor(packageManager);
-    return await runDirectDependencyAppTest(new Controller(testType), rechartsVersion);
+async function runDirectDependencyTest(metadata: TestMetadata, rechartsVersion: string): Promise<TestOutcome[]> {
+    const Controller = getControllerConstructor(metadata.packageManager);
+    return await runDirectDependencyAppTest(new Controller(metadata.integrationPath!), rechartsVersion);
 }
 
 export async function runTest(testName: string, rechartsVersion: string): Promise<TestOutcome[]> {
-    if (testName.split(":").length > 2) {
-        return await runLibraryTest(testName, rechartsVersion);
-    }
-    if (testName.split(":").length === 2) {
-        return await runDirectDependencyTest(testName, rechartsVersion);
-    }
+    // First try to get metadata from registry
+    const metadata: TestMetadata = getTestMetadata(testName);
 
-    const absolutePath = path.resolve(__dirname, "../", testName);
-    if (absolutePath.includes('npm')) {
-        return await runDirectDependencyAppTest(new NpmController(absolutePath), rechartsVersion);
-    } else if (absolutePath.includes('yarn')) {
-        return await runDirectDependencyAppTest(new YarnController(absolutePath), rechartsVersion);
-    } else if (absolutePath.includes('library-inside-library')) {
-        const libPath = path.join(absolutePath, 'my-charts');
-        const appPath = path.join(absolutePath, 'app');
-        return await runLibraryInLibraryTest(new NpmController(libPath), new NpmController(appPath), rechartsVersion);
-    } else {
-        console.error('Unknown test type. Please provide a valid test path.');
-        process.exit(1);
+    if (!metadata) {
+        throw new Error(`Test "${testName}" not found in registry.`);
+    }
+    if (metadata.type === 'library') {
+        return await runLibraryTest(metadata, rechartsVersion);
+    } else if (metadata.type === 'direct') {
+        return await runDirectDependencyTest(metadata, rechartsVersion);
     }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
     if (process.argv.length < 3 || process.argv.length > 4) {
-        console.error('Usage: node scripts/run.ts <absolute-path> [<recharts-version>]');
+        console.error('Usage: node scripts/run.mts <absolute-path> [<recharts-version>]');
         process.exit(1);
     }
 

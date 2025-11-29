@@ -1,6 +1,12 @@
 export interface Test {
   name: string;
   stable: boolean;
+  type?: 'direct' | 'library';
+  packageManager?: 'npm' | 'yarn';
+  dependencies?: {
+    react?: string;
+    [key: string]: string | undefined;
+  };
 }
 
 export interface NpmVersion {

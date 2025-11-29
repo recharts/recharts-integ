@@ -11,6 +11,7 @@ import { NpmController } from "./scripts/NpmController.ts";
 import { YarnController } from "./scripts/YarnController.ts";
 import type { Controller } from "./scripts/Controller.ts";
 import { TestOutcome } from "./scripts/TestOutcome.ts";
+import { getTestMetadata, getAllTests } from "./scripts/test-registry.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -104,15 +105,14 @@ function broadcast(data: BroadcastMessage): void {
 // Get list of all tests with stability information
 app.get("/api/tests", async (req: Request, res: Response) => {
   try {
-    const listModule = await import(path.join(rootDir, "list.js"));
-    const listAllTests = listModule.listAllTests;
+    const allTests = getAllTests();
 
-    const allTests: string[] = listAllTests(false);
-    const stableTests = new Set<string>(listAllTests(true));
-
-    const testsWithMetadata = allTests.map((testName) => ({
-      name: testName,
-      stable: stableTests.has(testName),
+    const testsWithMetadata = allTests.map((metadata) => ({
+      name: metadata.name,
+      stable: metadata.stability === "stable",
+      type: metadata.type,
+      packageManager: metadata.packageManager,
+      dependencies: metadata.dependencies,
     }));
 
     res.json({ tests: testsWithMetadata });
@@ -304,72 +304,56 @@ function getController(
         return TestOutcome.ok("setVersion");
       });
 
-      await runPhase("install", testData, async () => await appController.install());
+      await runPhase(
+        "install",
+        testData,
+        async () => await appController.install(),
+      );
       if (testData.phases.install.status === "failed") {
         return;
       }
 
       await runPhase("test", testData, async () => await appController.test());
-      await runPhase("build", testData, async () => await appController.build());
-      await runPhase("verify", testData, async () =>
-        await verifyAllSingleDependencyVersions(appController, testData),
+      await runPhase(
+        "build",
+        testData,
+        async () => await appController.build(),
+      );
+      await runPhase(
+        "verify",
+        testData,
+        async () =>
+          await verifyAllSingleDependencyVersions(appController, testData),
       );
     };
   };
 
-  const parts = testName.split(":");
   const version = rechartsVersion || "latest";
 
-  if (parts.length > 2) {
-    // Library in library test: packageManager:library:app
-    const [packageManager, library, app] = parts;
-    const libPath = path.join(rootDir, "libraries", library);
-    const appPath = path.join(rootDir, "apps-3rd-party", app);
-    const factory = getControllerFactory(packageManager);
+  // Try to get metadata from registry
+  const metadata = getTestMetadata(testName);
+
+  if (!metadata) {
+    throw new Error("Test not found in registry: " + testName);
+  }
+  // Use registry metadata
+  const factory = getControllerFactory(metadata.packageManager);
+
+  if (metadata.type === "library") {
+    const libPath = path.join(rootDir, "libraries", metadata.libraryName!);
+    const appPath = path.join(rootDir, "apps-3rd-party", metadata.appName!);
     return {
       controller: null,
       fn: runLibraryInLibraryTest(factory(libPath), factory(appPath), version),
     };
-  } else if (parts.length === 2) {
-    // Direct dependency test: packageManager:testType
-    const [packageManager, testType] = parts;
-    const factory = getControllerFactory(packageManager);
-    const absolutePath = path.join(rootDir, testType);
+  } else if (metadata.type === "direct") {
+    const absolutePath = path.join(rootDir, metadata.integrationPath!);
     const controller = factory(absolutePath);
     return {
       controller,
       fn: runDirectDependencyAppTest(controller, version),
     };
-  } else {
-    // Absolute path
-    const absolutePath = path.resolve(rootDir, testName);
-    if (absolutePath.includes("npm")) {
-      const controller = new NpmController(absolutePath);
-      return {
-        controller,
-        fn: runDirectDependencyAppTest(controller, version),
-      };
-    } else if (absolutePath.includes("yarn")) {
-      const controller = new YarnController(absolutePath);
-      return {
-        controller,
-        fn: runDirectDependencyAppTest(controller, version),
-      };
-    } else if (absolutePath.includes("library-inside-library")) {
-      const libPath = path.join(absolutePath, "my-charts");
-      const appPath = path.join(absolutePath, "app");
-      return {
-        controller: null,
-        fn: runLibraryInLibraryTest(
-          new NpmController(libPath),
-          new NpmController(appPath),
-          version,
-        ),
-      };
-    }
   }
-
-  throw new Error("Unknown test type: " + testName);
 }
 
 // Function to actually run a test
@@ -495,7 +479,7 @@ async function processQueue(): Promise<void> {
     try {
       await executeTest(item.testName, item.rechartsVersion, item.testId);
     } catch (error) {
-      console.error('Error executing test:', error);
+      console.error("Error executing test:", error);
     }
   }
 
