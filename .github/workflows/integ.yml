@@ -20,6 +20,10 @@ jobs:
       # Output the list of directories as a JSON array string
       directories: ${{ steps.set_matrix.outputs.directories }}
     steps:
+      - name: Setup node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
       - name: Checkout Integration Tests Repository
         uses: actions/checkout@v4
         with:
@@ -56,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test app and check dependencies
