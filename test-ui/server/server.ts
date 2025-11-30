@@ -44,6 +44,8 @@ interface TestData {
   currentPhase: PhaseName;
 }
 
+// Note: These type definitions are duplicated in test-ui/src/types.ts.
+// Consider extracting to a shared types module if drift becomes an issue.
 interface Phase {
   status: "pending" | "running" | "passed" | "failed";
   output: string;
