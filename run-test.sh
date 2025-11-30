@@ -27,4 +27,4 @@ fi
 
 version="${2:-}"
 
-node scripts/run.js "$test_name" "$version"
+node scripts/run.mts "$test_name" "$version"

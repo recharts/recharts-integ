@@ -1,0 +1,90 @@
+.phase-output {
+  margin: 0;
+  padding: 0.75rem;
+}
+
+.phase-section {
+  margin-bottom: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.phase-section.current {
+  border-color: #ffa726;
+  box-shadow: 0 0 0 1px #ffa726;
+}
+
+.phase-section.passed {
+  border-left: 4px solid #66bb6a;
+}
+
+.phase-section.failed {
+  border-left: 4px solid #ef5350;
+}
+
+.phase-section.running {
+  border-left: 4px solid #ffa726;
+}
+
+.phase-section.pending {
+  border-left: 4px solid #bdbdbd;
+}
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  user-select: none;
+}
+
+.phase-header:hover {
+  background: #f0f1f2;
+}
+
+.phase-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.phase-name {
+  flex: 1;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.phase-duration {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #666;
+  min-width: 60px;
+  text-align: right;
+}
+
+.phase-toggle {
+  color: #999;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.phase-output-content {
+  padding: 0.75rem;
+  background: #1e1e1e;
+  border-top: 1px solid #e0e0e0;
+}
+
+.phase-output-content pre {
+  margin: 0;
+  color: #d4d4d4;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+}
