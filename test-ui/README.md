@@ -72,7 +72,7 @@ npm run dev
 
 ## Architecture
 
-### Backend (server.js)
+### Backend (server/server.ts)
 
 - Express API server on port 3001
 - WebSocket server for real-time updates
