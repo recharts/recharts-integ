@@ -35,13 +35,33 @@ export class NpmController extends Controller {
     return this.tgzFileNameToPackageJsonReference(output.trim());
   }
 
-  async verifySingleDependencyVersion(dependencyName: string): Promise<TestOutcome> {
-    const versions = await this.execAsync(`npm ls ${dependencyName} --json`);
-    const parsedVersions = JSON.parse(versions);
+  async verifySingleDependencyVersion(
+    dependencyName: string,
+  ): Promise<TestOutcome> {
+    let rawJson: string;
+    try {
+      rawJson = await this.execAsync(`npm ls ${dependencyName} --json`);
+    } catch (ex) {
+      return TestOutcome.fail(
+        dependencyName,
+        ex instanceof Error ? ex : new Error(String(ex)),
+      );
+    }
+
+    let parsedVersions: any;
+    try {
+      parsedVersions = JSON.parse(rawJson);
+    } catch (ex) {
+      return TestOutcome.fail(
+        dependencyName,
+        new Error('Failed to parse npm ls JSON output'),
+      );
+    }
 
     const installedVersions = new Set<string>();
 
-    function walkDependencies(dependencies: any) {
+    function walkDependencies(dependencies: any | undefined) {
+      if (!dependencies) return;
       for (const [key, value] of Object.entries(dependencies)) {
         if (key === dependencyName) {
           installedVersions.add((value as any).version);
@@ -54,6 +74,13 @@ export class NpmController extends Controller {
 
     walkDependencies(parsedVersions.dependencies);
 
+    if (installedVersions.size === 0) {
+      return TestOutcome.fail(
+        dependencyName,
+        new Error(`Dependency ${dependencyName} is not installed`),
+      );
+    }
+
     if (installedVersions.size > 1) {
       return TestOutcome.fail(
         dependencyName,
@@ -63,7 +90,9 @@ export class NpmController extends Controller {
       );
     }
 
-    const msg = `Dependency ${dependencyName} is installed and only one version is present: ${Array.from(installedVersions).join(", ")}`;
+    const msg = `Dependency ${dependencyName} is installed and only one version is present: ${Array.from(
+      installedVersions,
+    ).join(", ")}`;
     console.log(msg);
     return TestOutcome.ok(msg);
   }

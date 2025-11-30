@@ -151,11 +151,6 @@ const testsSlice = createSlice({
           state.initialQueueSize = 0;
           state.completedTestsCount = 0;
         }
-        
-        // Move to results after delay
-        setTimeout(() => {
-          // We need to dispatch this through the store
-        }, 1000);
       }
     },
     moveToResults: (state, action: PayloadAction<string>) => {

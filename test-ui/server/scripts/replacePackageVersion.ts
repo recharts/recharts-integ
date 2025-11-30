@@ -6,8 +6,11 @@ export function replacePackageVersion(packageJsonPath: string, dependencyName: s
         return TestOutcome.ok('replace-package-version');
     }
 
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    } catch (error) {
+      return TestOutcome.fail('replace-package-version', new Error(`Failed to read ${packageJsonPath}: ${error}`));
+    }
     let replaced = false;
 
     if (packageJson.dependencies && packageJson.dependencies[dependencyName]) {
@@ -27,6 +30,10 @@ export function replacePackageVersion(packageJsonPath: string, dependencyName: s
         return TestOutcome.fail('replace-package-version', new Error(`Dependency ${dependencyName} not found in ${packageJsonPath}`));
     }
 
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-    return TestOutcome.ok('replace-package-version');
+    try {
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+      return TestOutcome.ok('replace-package-version');
+    } catch (error) {
+      return TestOutcome.fail('replace-package-version', new Error(`Failed to write ${packageJsonPath}: ${error}`));
+    }
 }

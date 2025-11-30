@@ -229,9 +229,12 @@ async function verifyAllSingleDependencyVersions(
         ? `✅ ${dep}: single version verified\n`
         : `❌ ${dep}: ${result.error}\n`;
       testData.phases.verify.output += output;
-      return result;
+      if (!result.success) {
+        return result; // Return early on first failure
+      }
     } catch (error: any) {
       testData.phases.verify.output += `❌ ${dep}: ${error.message}\n`;
+      return TestOutcome.fail("verify", error);
     }
   }
   return TestOutcome.ok("verify");
