@@ -41,6 +41,12 @@ export class TestOutcome {
     if (error instanceof Error && "output" in error) {
       return new TestOutcome(name, error, stringify(error.output).trim());
     }
+    if (error instanceof Error && "stdout" in error) {
+      return new TestOutcome(name, error, stringify(error.stdout).trim());
+    }
+    if (error instanceof Error && "stderr" in error) {
+      return new TestOutcome(name, error, stringify(error.stderr).trim());
+    }
     return new TestOutcome(name, error);
   }
 }
