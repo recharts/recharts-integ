@@ -6,28 +6,28 @@ Reorganized the test runner UI to attach test outcomes directly to each test wit
 ## Changes Made
 
 ### 1. **App.tsx - TestItem Component**
-   - Updated the phase summary to display phase names alongside status icons
-   - Added duration display in tooltips for each phase
-   - Improved the one-line summary to be more informative with phase labels
-   - Reordered buttons for better UX (Run, Show/Hide, Clear)
-   - Phase summary now always visible (not dependent on expanded state)
-   - Made expand/collapse more intuitive with "Show"/"Hide" labels
+- Updated the phase summary to display phase names alongside status icons
+- Added duration display in tooltips for each phase
+- Improved the one-line summary to be more informative with phase labels
+- Reordered buttons for better UX (Run, Show/Hide, Clear)
+- Phase summary now always visible (not dependent on expanded state)
+- Made expand/collapse more intuitive with "Show"/"Hide" labels
 
 ### 2. **App.css - Styling Updates**
-   - Enhanced `.test-item-summary` with a subtle background color for better visibility
-   - Updated `.phase-summary` to use flexbox with proper wrapping
-   - Improved `.phase-summary-item` styling:
-     - Each item now has a border and background
-     - Different states (pending, running, passed, failed) have distinct visual appearance
-     - Padding and spacing improved for better readability
-   - Added color-coded backgrounds for different phase states
+- Enhanced `.test-item-summary` with a subtle background color for better visibility
+- Updated `.phase-summary` to use flexbox with proper wrapping
+- Improved `.phase-summary-item` styling:
+  - Each item now has a border and background
+  - Different states (pending, running, passed, failed) have distinct visual appearance
+  - Padding and spacing improved for better readability
+- Added color-coded backgrounds for different phase states
 
 ### 3. **PhaseOutput.tsx - Collapsible Phase Details**
-   - Updated initial state logic to expand the most recent phase by default
-   - For running tests: expands the current phase
-   - For completed tests: expands the last non-pending phase (where the action happened)
-   - Simplified the `useEffect` to avoid unnecessary re-renders
-   - Users can still manually expand/collapse any phase
+- Updated initial state logic to expand the most recent phase by default
+- For running tests: expands the current phase
+- For completed tests: expands the last non-pending phase (where the action happened)
+- Simplified the `useEffect` to avoid unnecessary re-renders
+- Users can still manually expand/collapse any phase
 
 ## Key Features
 
