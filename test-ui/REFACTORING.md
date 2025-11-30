@@ -74,7 +74,7 @@ const dispatch = useAppDispatch();
 
 ## 📁 New Project Structure
 
-```
+```text
 test-ui/
 ├── src/
 │   ├── store/
