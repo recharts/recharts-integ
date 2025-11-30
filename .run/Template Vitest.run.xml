@@ -4,6 +4,7 @@
     <node-interpreter value="project" />
     <vitest-package value="$PROJECT_DIR$/test-ui/node_modules/vitest" />
     <working-dir value="$PROJECT_DIR$/test-ui" />
+    <!-- No environment variables required for running Vitest tests -->
     <envs />
     <scope-kind value="ALL" />
     <method v="2" />
