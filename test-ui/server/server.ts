@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
-import { spawn } from "child_process";
+import { spawn, execSync } from "child_process";
 import * as path from "node:path";
 import { fileURLToPath } from "url";
 import WebSocket from "ws";
@@ -124,6 +124,29 @@ app.get("/api/tests", async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error("Failed to list tests:", error);
     res.status(500).json({ error: "Failed to list tests: " + error.message });
+  }
+});
+
+// Get environment versions
+app.get("/api/versions", (req: Request, res: Response) => {
+  try {
+    const nodeVersion = execSync("node -v", { encoding: "utf-8" }).trim();
+    const npmVersion = execSync("npm -v", { encoding: "utf-8" }).trim();
+    let yarnVersion = "N/A";
+    try {
+      yarnVersion = execSync("yarn -v", { encoding: "utf-8" }).trim();
+    } catch {
+      // Yarn might not be installed
+    }
+
+    res.json({
+      node: nodeVersion,
+      npm: npmVersion,
+      yarn: yarnVersion,
+    });
+  } catch (error: any) {
+    console.error("Failed to get versions:", error);
+    res.status(500).json({ error: "Failed to get versions: " + error.message });
   }
 });
 

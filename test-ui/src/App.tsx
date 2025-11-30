@@ -351,6 +351,11 @@ function App() {
   const runningTestsList = useAppSelector(selectAllRunningTests);
 
   const [globalElapsedTime, setGlobalElapsedTime] = useState(0);
+  const [versions, setVersions] = useState<{
+    node: string;
+    npm: string;
+    yarn: string;
+  } | null>(null);
 
   // Track global elapsed time using ref to avoid stale closure
   const globalStartTimeRef = useRef<number | null>(null);
@@ -383,6 +388,7 @@ function App() {
     loadPersistedResultsFromStorage();
     loadRechartsVersions();
     loadPersistedPackingDirectory();
+    loadVersions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -435,6 +441,16 @@ function App() {
       }
     } catch (err) {
       console.error("Failed to load persisted packing directory:", err);
+    }
+  };
+
+  const loadVersions = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/versions`);
+      const data = await response.json();
+      setVersions(data);
+    } catch (err) {
+      console.error("Failed to load versions:", err);
     }
   };
 
@@ -665,6 +681,13 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>🧪 Recharts Integration Test Runner</h1>
+        {versions && (
+          <div className="versions">
+            <span>Node: {versions.node}</span>
+            <span>npm: {versions.npm}</span>
+            <span>Yarn: {versions.yarn}</span>
+          </div>
+        )}
       </header>
 
       {(runningTestsList.length > 0 || Object.keys(queuedTests).length > 0) && (

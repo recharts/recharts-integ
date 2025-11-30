@@ -14,6 +14,19 @@
 .header h1 {
   font-size: 1.8rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.header .versions {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+}
+
+.header .versions span {
+  font-weight: 500;
 }
 
 .global-progress-bar {
