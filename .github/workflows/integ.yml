@@ -58,7 +58,7 @@ jobs:
         # Dynamically generate the matrix from the JSON output of the previous job
         test_dir: ${{ fromJson(needs.list_integration_tests.outputs.directories) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node.js
         uses: actions/setup-node@v6
         with:
