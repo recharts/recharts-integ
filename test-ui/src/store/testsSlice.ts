@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Test, TestRun, Phases, PhaseName } from '../types';
 
+// Note: queuedTests and runningTests use testName as key for simplicity.
+// If supporting multiple concurrent runs of the same test becomes needed,
+// consider using test id as the primary key instead.
 interface TestsState {
   tests: Test[];
   loading: boolean;
