@@ -70,7 +70,7 @@ function PhaseOutput({ phases, currentPhase, initialExpandedPhase, estimatedPhas
   };
 
   const formatDuration = (duration:Phase['duration']) => {
-    if (!duration) return '-';
+    if (!duration || duration < 0) return '-';
     const seconds = Math.floor(duration / 1000);
     const ms = duration % 1000;
     if (seconds > 0) {
@@ -87,6 +87,7 @@ function PhaseOutput({ phases, currentPhase, initialExpandedPhase, estimatedPhas
         [currentPhase]: true
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- expandedPhases intentionally omitted to prevent infinite loop
   }, [currentPhase]);
 
   // Track elapsed time for running phases
