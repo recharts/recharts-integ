@@ -359,6 +359,8 @@ function getController(
       controller,
       fn: runDirectDependencyAppTest(controller, version),
     };
+  } else {
+    throw new Error(`Unknown test type: ${metadata.type}`);
   }
 }
 
