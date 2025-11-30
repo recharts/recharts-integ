@@ -4,7 +4,7 @@ Since this is a text-based documentation, here's a detailed description of what 
 
 ## 🎨 Visual Layout
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │  🧪 Recharts Integration Test Runner                                    │
 │  [Purple gradient header]                                               │
@@ -89,7 +89,7 @@ Since this is a text-based documentation, here's a detailed description of what 
 │  🧪 Recharts Integration Test Runner    │
 └─────────────────────────────────────────┘
 ```
-- Full width gradient background
+- Full-width gradient background
 - Large centered title with emoji
 - Box shadow for depth
 
