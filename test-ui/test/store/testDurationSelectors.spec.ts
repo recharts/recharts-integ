@@ -101,7 +101,7 @@ describe("selectAllTestResults", () => {
     const store = prepareStore();
     const testResults = selectAllTestResults(store.getState());
 
-    expect(Object.keys(testResults).length).toBe(
+    expect(testResults.length).toBe(
       Object.keys(exampleTestResults).length,
     );
     expect(testResults).toEqual(Object.values(exampleTestResults));
