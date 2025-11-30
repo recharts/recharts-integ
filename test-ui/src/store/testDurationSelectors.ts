@@ -143,12 +143,16 @@ export const selectRunningTestsETA: (state: RootState) => number =
           return;
         }
 
-        /*
-         * The phases are executed in a specific order, but for the purpose
-         * of estimating the remaining time, the order is not interesting.
-         * Here we have all information to know which phases are remaining.
-         */
-        const phaseNames = Object.keys(test.phases) as PhaseName[];
+        // Use explicit phase order to ensure consistent calculation
+        const PHASE_ORDER: PhaseName[] = [
+          "clean",
+          "setVersion",
+          "install",
+          "test",
+          "build",
+          "verify",
+        ];
+        const phaseNames = PHASE_ORDER;
         const currentPhaseIndex = phaseNames.indexOf(test.currentPhase);
         if (currentPhaseIndex === -1) {
           return;
