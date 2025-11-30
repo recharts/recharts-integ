@@ -6,7 +6,7 @@ function stringify(output: unknown): string {
     return output;
   }
   if (Array.isArray(output)) {
-    return output.map((item) => stringify(item)).join("/n");
+    return output.map((item) => stringify(item)).join("\n");
   }
   try {
     return JSON.stringify(output, null, 2);
