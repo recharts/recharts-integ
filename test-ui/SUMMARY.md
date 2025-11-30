@@ -6,15 +6,18 @@ A complete React-based web application for managing and running Recharts integra
 
 ### Files Created
 
-```
+```text
 test-ui/
 ├── src/
-│   ├── App.jsx           # Main React component (341 lines)
-│   ├── App.css           # Application styles (280 lines)
-│   ├── main.jsx          # React entry point
-│   └── index.css         # Global CSS reset and base styles
-├── server.js             # Express + WebSocket backend (173 lines)
-├── vite.config.js        # Vite build configuration
+│   ├── App.tsx           # Main React component (TypeScript)
+│   ├── App.css           # Application styles
+│   ├── main.tsx          # React entry point (TypeScript)
+│   ├── index.css         # Global CSS reset and base styles
+│   └── store/            # Redux store and slices
+├── server/
+│   ├── server.ts         # Express + WebSocket backend (TypeScript)
+│   └── scripts/          # Test controllers and registry
+├── vite.config.ts        # Vite build configuration (TypeScript)
 ├── index.html            # HTML template
 ├── package.json          # Dependencies and scripts
 ├── .gitignore            # Git ignore rules
@@ -70,7 +73,7 @@ npm install
 npm start
 ```
 
-Open http://localhost:3000
+Open <http://localhost:3000>
 
 ## 📡 API Endpoints
 
