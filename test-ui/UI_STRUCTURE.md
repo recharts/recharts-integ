@@ -2,7 +2,7 @@
 
 ## Test Item Layout (Collapsed)
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────┐
 │ [✓] npm-react18                        ✓ Stable   ✅ passed        │
 │                                              [Run] [▶ Show] [✕]     │
