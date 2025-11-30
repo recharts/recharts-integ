@@ -119,18 +119,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const results = await runTest(testName, rechartsVersion);
 
     const errors = results.filter(result => result.success === false);
-    const skipped = results.filter(result => result.success == null);
     const passed = results.filter(result => result.success === true);
 
     if (passed.length > 0) {
         passed.forEach(result => {
             console.log(`✅ ${result.name}`);
-        });
-    }
-
-    if (skipped.length > 0) {
-        skipped.forEach(result => {
-            console.warn(`⏭️  ${result.name}: ${result.error}`);
         });
     }
 
