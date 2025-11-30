@@ -153,6 +153,9 @@ describe("selectRunningTestsETA", () => {
     const state = store.getState();
     const eta = selectRunningTestsETA(state);
 
-    expect(eta).toBe(53682); // Based on the remaining durations of the two running tests
+    // Based on the remaining durations of the two running tests
+    // Note: This expectation uses snapshot values from fixture and may be brittle
+    // if fixture timestamps change. Consider using toBeCloseTo or mocking Date.now().
+    expect(eta).toBe(53682);
   });
 });
