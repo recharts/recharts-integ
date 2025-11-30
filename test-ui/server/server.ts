@@ -163,8 +163,7 @@ async function runPhase(
         if (result.error) {
           phase.output = String(result.error);
         }
-      } else if (typeof result === "string") {
-        phase.output = result;
+      } else {
         phase.status = "passed";
       }
     } else if (typeof result === "string") {
