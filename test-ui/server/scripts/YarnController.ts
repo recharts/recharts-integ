@@ -26,7 +26,7 @@ interface YarnPackage {
 
 export class YarnController extends Controller {
     async clean(): Promise<TestOutcome> {
-        super.clean();
+        await super.clean();
         await this.execAsync('yarn cache clean');
         return TestOutcome.ok('clean');
     }
