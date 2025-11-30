@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-```
+```text
 test-ui/
 ├── src/
 │   ├── App.jsx         # Main React component
