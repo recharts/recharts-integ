@@ -109,14 +109,14 @@ export async function runTest(testName: string, rechartsVersion: string): Promis
 
 if (import.meta.url === `file://${process.argv[1]}`) {
     if (process.argv.length < 3 || process.argv.length > 4) {
-        console.error('Usage: node scripts/run.mts <absolute-path> [<recharts-version>]');
+        console.error('Usage: node scripts/run.mts <test-name> [<recharts-version>]');
         process.exit(1);
     }
 
-    const absolutePath = process.argv[2];
+    const testName = process.argv[2];
     const rechartsVersion = process.argv[3];
 
-    const results = await runTest(absolutePath, rechartsVersion);
+    const results = await runTest(testName, rechartsVersion);
 
     const errors = results.filter(result => result.success === false);
     const skipped = results.filter(result => result.success == null);
