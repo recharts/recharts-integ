@@ -80,6 +80,9 @@ const activeTests = new Map<string, TestData>();
 // Test queue for serial execution
 const testQueue: QueueItem[] = [];
 let isRunningTest = false;
+// Note: currentTestAbortController is declared but not currently used for cancellation.
+// Test cancellation is handled via shouldCancelQueue flag. Implementing proper abort
+// signal support would require refactoring controller methods to accept AbortSignal.
 let currentTestAbortController: AbortController | null = null;
 let shouldCancelQueue = false;
 
