@@ -74,15 +74,21 @@ function getControllerConstructor(packageManager: string): typeof NpmController 
 }
 
 async function runLibraryTest(metadata: TestMetadata, rechartsVersion: string): Promise<TestOutcome[]> {
-    const libPath = path.join(__dirname, "../libraries", metadata.libraryName!);
-    const appPath = path.join(__dirname, "../apps-3rd-party", metadata.appName!);
+    if (!metadata.libraryName || !metadata.appName) {
+        throw new Error(`Library test "${metadata.name}" missing required libraryName or appName`);
+    }
+    const libPath = path.join(__dirname, "../libraries", metadata.libraryName);
+    const appPath = path.join(__dirname, "../apps-3rd-party", metadata.appName);
     const Controller = getControllerConstructor(metadata.packageManager);
     return await runLibraryInLibraryTest(new Controller(libPath), new Controller(appPath), rechartsVersion);
 }
 
 async function runDirectDependencyTest(metadata: TestMetadata, rechartsVersion: string): Promise<TestOutcome[]> {
+    if (!metadata.integrationPath) {
+        throw new Error(`Direct test "${metadata.name}" missing required integrationPath`);
+    }
     const Controller = getControllerConstructor(metadata.packageManager);
-    return await runDirectDependencyAppTest(new Controller(metadata.integrationPath!), rechartsVersion);
+    return await runDirectDependencyAppTest(new Controller(metadata.integrationPath), rechartsVersion);
 }
 
 export async function runTest(testName: string, rechartsVersion: string): Promise<TestOutcome[]> {
