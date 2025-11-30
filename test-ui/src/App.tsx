@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import {
   setTests,
@@ -240,8 +240,8 @@ function TestItem({
                   : status.status === "cancelled"
                     ? "⏹"
                     : "❌"}{" "}
-            {status.status === "queued"
-              ? `Queued (#${(status as any).position})`
+            {status.status === "queued" && "position" in status
+              ? `Queued (#${status.position})`
               : status.status}
           </span>
         )}
@@ -351,38 +351,39 @@ function App() {
   const runningTestsList = useAppSelector(selectAllRunningTests);
 
   const [globalElapsedTime, setGlobalElapsedTime] = useState(0);
-  const [globalStartTime, setGlobalStartTime] = useState<number | null>(null);
 
-  // Track global elapsed time
+  // Track global elapsed time using ref to avoid stale closure
+  const globalStartTimeRef = useRef<number | null>(null);
   useEffect(() => {
     const hasRunningOrQueued =
       runningTestsList.length > 0 || Object.keys(queuedTests).length > 0;
 
     if (!hasRunningOrQueued) {
       setGlobalElapsedTime(0);
-      setGlobalStartTime(null);
+      globalStartTimeRef.current = null;
       return;
     }
 
     // Set start time only once when queue starts
-    if (globalStartTime === null) {
-      setGlobalStartTime(Date.now());
+    if (globalStartTimeRef.current === null) {
+      globalStartTimeRef.current = Date.now();
     }
 
     const interval = setInterval(() => {
-      if (globalStartTime !== null) {
-        setGlobalElapsedTime(Date.now() - globalStartTime);
+      if (globalStartTimeRef.current !== null) {
+        setGlobalElapsedTime(Date.now() - globalStartTimeRef.current);
       }
     }, 100);
 
     return () => clearInterval(interval);
-  }, [runningTestsList.length, queuedTests, globalStartTime]);
+  }, [runningTestsList.length, queuedTests]);
 
   useEffect(() => {
     loadTests();
     loadPersistedResultsFromStorage();
     loadRechartsVersions();
     loadPersistedPackingDirectory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Persist test results to sessionStorage
@@ -540,6 +541,8 @@ function App() {
   };
 
   const handleDirectorySelect = async () => {
+    // Note: File System Access API doesn't provide full paths for security reasons.
+    // We use a text input instead, which works since the server runs locally.
     try {
       // Use the File System Access API for directory selection
       // @ts-ignore - Not all browsers support this yet
