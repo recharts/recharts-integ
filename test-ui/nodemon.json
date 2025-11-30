@@ -1,6 +1,6 @@
 {
   "watch": ["server", "../scripts"],
-  "ext": "ts",
+  "ext": "ts,mts,js",
   "exec": "node server/server.ts",
   "env": {
     "NODE_ENV": "development"
