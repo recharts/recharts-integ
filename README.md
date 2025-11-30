@@ -11,7 +11,7 @@ A modern React-based web interface for managing and running integration tests. N
 ./start-ui.sh
 ```
 
-Then open http://localhost:3000 in your browser.
+Then open <http://localhost:3000> in your browser.
 
 ### Features
 
