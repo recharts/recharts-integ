@@ -223,6 +223,11 @@
   transition: all 0.2s;
 }
 
+.btn:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -406,6 +411,11 @@ button.phase-summary-item:hover {
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   border-color: #667eea;
+}
+
+button.phase-summary-item:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
 }
 
 .phase-summary-item.pending {
