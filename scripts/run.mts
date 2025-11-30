@@ -87,7 +87,7 @@ async function runDirectDependencyTest(metadata: TestMetadata, rechartsVersion: 
 
 export async function runTest(testName: string, rechartsVersion: string): Promise<TestOutcome[]> {
     // First try to get metadata from registry
-    const metadata: TestMetadata = getTestMetadata(testName);
+    const metadata = getTestMetadata(testName);
 
     if (!metadata) {
         throw new Error(`Test "${testName}" not found in registry.`);
@@ -96,6 +96,8 @@ export async function runTest(testName: string, rechartsVersion: string): Promis
         return await runLibraryTest(metadata, rechartsVersion);
     } else if (metadata.type === 'direct') {
         return await runDirectDependencyTest(metadata, rechartsVersion);
+    } else {
+        throw new Error(`Unknown test type: ${(metadata as TestMetadata).type}`);
     }
 }
 
