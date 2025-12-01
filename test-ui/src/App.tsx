@@ -229,6 +229,11 @@ function TestItem({
         >
           {test.stable ? "✓ Stable" : "⚠ Experimental"}
         </span>
+        {test.description && (
+          <span className="test-description" title={test.description}>
+            {test.description}
+          </span>
+        )}
         {status && "status" in status && (
           <span className={`status-badge ${status.status}`}>
             {status.status === "queued"

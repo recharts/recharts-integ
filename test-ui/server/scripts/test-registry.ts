@@ -29,6 +29,8 @@ export interface TestMetadata {
     react?: string;
     [key: string]: string | undefined;
   };
+  /** Optional description of what this test validates */
+  description?: string;
 }
 
 export interface TestRegistry {
@@ -159,6 +161,7 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "npm",
     integrationPath: "integrations/ts-skip-lib-check-false",
     dependencies: {},
+    description: "Tests typescript with skipLibCheck: false. See https://github.com/recharts/recharts/issues/6664",
   },
   {
     name: "yarn:integrations/ts-skip-lib-check-false",
@@ -167,6 +170,7 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "yarn",
     integrationPath: "integrations/ts-skip-lib-check-false",
     dependencies: {},
+    description: "Tests typescript with skipLibCheck: false. See https://github.com/recharts/recharts/issues/6664",
   },
   {
     name: "npm:integrations/ts-react16-skip-lib-check-false",
@@ -175,6 +179,7 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "npm",
     integrationPath: "integrations/ts-react16-skip-lib-check-false",
     dependencies: {},
+    description: "Tests typescript with skipLibCheck: false, React 16, and redux-toolkit 2. See https://github.com/recharts/recharts/issues/6664",
   },
   {
     name: "yarn:integrations/ts-react16-skip-lib-check-false",
@@ -183,6 +188,7 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "yarn",
     integrationPath: "integrations/ts-react16-skip-lib-check-false",
     dependencies: {},
+    description: "Tests typescript with skipLibCheck: false, React 16, and redux-toolkit 2. See https://github.com/recharts/recharts/issues/6664",
   },
 ];
 

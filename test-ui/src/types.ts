@@ -7,6 +7,7 @@ export interface Test {
     react?: string;
     [key: string]: string | undefined;
   };
+  description?: string;
 }
 
 export interface NpmVersion {

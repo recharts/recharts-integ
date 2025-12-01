@@ -118,6 +118,7 @@ app.get("/api/tests", async (req: Request, res: Response) => {
       type: metadata.type,
       packageManager: metadata.packageManager,
       dependencies: metadata.dependencies,
+      description: metadata.description,
     }));
 
     res.json({ tests: testsWithMetadata });
