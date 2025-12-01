@@ -175,6 +175,7 @@ When tests fail:
 - **Test framework:** Vitest
 - **Test location:** `test-ui/test/`
 - **Run tests:** `npm test` in `test-ui/`
+- **Run type checking:** `npm run check-types` in `test-ui/`
 - **Unit tests exist for:**
   - Utility functions (`formatDuration`)
   - Redux selectors (`testDurationSelectors`)
