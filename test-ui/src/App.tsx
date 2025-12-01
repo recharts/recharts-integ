@@ -206,6 +206,7 @@ function App() {
             <span>Node: {versions.node}</span>
             <span>npm: {versions.npm}</span>
             <span>Yarn: {versions.yarn}</span>
+            <span>pnpm: {versions.pnpm}</span>
           </div>
         )}
       </header>

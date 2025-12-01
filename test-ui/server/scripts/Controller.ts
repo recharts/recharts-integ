@@ -24,6 +24,7 @@ export abstract class Controller {
       force: true,
     });
     fs.rmSync(path.join(this.absolutePath, "yarn.lock"), { force: true });
+    fs.rmSync(path.join(this.absolutePath, "pnpm-lock.yaml"), { force: true });
     const files = fs.readdirSync(this.absolutePath);
     files
       .filter((file) => file.endsWith(".tgz"))

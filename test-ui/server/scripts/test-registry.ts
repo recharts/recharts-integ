@@ -5,7 +5,7 @@
  * All test definitions, metadata, and execution logic should reference this registry.
  */
 
-export type PackageManager = "npm" | "yarn";
+export type PackageManager = "npm" | "yarn" | "pnpm";
 export type TestType = "direct" | "library";
 export type TestStability = "stable" | "experimental";
 
@@ -200,6 +200,14 @@ const directDependencyTests: TestMetadata[] = [
     dependencies: {},
     description:
       "Tests typescript with skipLibCheck: false, React 16, and redux-toolkit 2. See https://github.com/recharts/recharts/issues/6664",
+  },
+  {
+    name: "pnpm:react19",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "pnpm",
+    integrationPath: "integrations/ts-react19",
+    dependencies: { react: "19" },
   },
 ];
 

@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { NpmController } from "../test-ui/server/scripts/NpmController.ts";
 import { YarnController } from "../test-ui/server/scripts/YarnController.ts";
+import { PnpmController } from "../test-ui/server/scripts/PnpmController.ts";
 import type { Controller } from "../test-ui/server/scripts/Controller.ts";
 import type { TestOutcome } from "../test-ui/server/scripts/TestOutcome.ts";
 import {getTestMetadata} from "../test-ui/server/scripts/test-registry.ts";
@@ -63,11 +64,13 @@ async function runLibraryInLibraryTest(libController: Controller, appController:
     return results;
 }
 
-function getControllerConstructor(packageManager: string): typeof NpmController | typeof YarnController {
+function getControllerConstructor(packageManager: string): typeof NpmController | typeof YarnController | typeof PnpmController {
     if (packageManager === "npm") {
         return NpmController;
     } else if (packageManager === "yarn") {
         return YarnController;
+    } else if (packageManager === "pnpm") {
+        return PnpmController;
     } else {
         throw new Error(`Unknown package manager: ${packageManager}`);
     }
