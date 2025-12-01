@@ -8,7 +8,6 @@ import {
   deselectAllTests,
   clearTestResult,
   setLocalPackagePath,
-  setPackingDirectory,
   setIsPacking,
 } from "./store/testsSlice";
 import {
@@ -18,9 +17,15 @@ import {
   selectAllRunningTests,
 } from "./store/testDurationSelectors";
 import { selectFilteredTests } from "./store/filteredTestsSelector";
+import {
+  selectPackingDirectory,
+  selectIsPacking,
+  selectLocalPackagePath,
+} from "./store/packingDirectorySelector";
 import { Test, TestRun } from "./types";
 import { TestItem } from "./components/TestItem";
 import { ControlRow, ControlRowContainer } from "./components/ControlRow";
+import { DirectoryInput } from "./components/DirectoryInput";
 import { formatDuration } from "./utils/formatDuration";
 import { useLoadAllInfo } from "./hooks/useLoadAllInfo";
 import "./App.css";
@@ -40,12 +45,13 @@ function App() {
     rechartsVersion,
     availableVersions,
     loadingVersions,
-    localPackagePath,
-    packingDirectory,
-    isPacking,
     initialQueueSize,
     completedTestsCount,
   } = useAppSelector((state) => state.tests);
+
+  const localPackagePath = useAppSelector(selectLocalPackagePath);
+  const packingDirectory = useAppSelector(selectPackingDirectory);
+  const isPacking = useAppSelector(selectIsPacking);
 
   const queuedETA = useAppSelector(selectQueuedTestsETA);
   const runningETA = useAppSelector(selectRunningTestsETA);
@@ -151,44 +157,6 @@ function App() {
       const results: Record<string, TestRun> = JSON.parse(stored);
       delete results[testName];
       sessionStorage.setItem("testResults", JSON.stringify(results));
-    }
-  };
-
-  const handleDirectorySelect = async () => {
-    // Note: File System Access API doesn't provide full paths for security reasons.
-    // We use a text input instead, which works since the server runs locally.
-    try {
-      // Use the File System Access API for directory selection
-      // @ts-ignore - Not all browsers support this yet
-      if (!window.showDirectoryPicker) {
-        dispatch(
-          setError(
-            "Directory picker not supported in this browser. Please use Chrome or Edge.",
-          ),
-        );
-        return;
-      }
-
-      // @ts-ignore
-      const dirHandle = await window.showDirectoryPicker();
-      const dirPath = dirHandle.name; // This gives us just the name, not full path
-
-      // In a real implementation, we'd need to pass the handle to the backend
-      // For now, we'll ask the user to input the full path
-      const fullPath = prompt(
-        `Selected: ${dirPath}\n\nPlease enter the full absolute path to this directory:`,
-      );
-
-      if (fullPath) {
-        dispatch(setPackingDirectory(fullPath));
-        localStorage.setItem("packingDirectory", fullPath);
-      }
-    } catch (err) {
-      if ((err as Error).name !== "AbortError") {
-        dispatch(
-          setError("Failed to select directory: " + (err as Error).message),
-        );
-      }
     }
   };
 
@@ -339,25 +307,7 @@ function App() {
 
           <div className="version-group local-package-group">
             <label>Local Package:</label>
-            <input
-              type="text"
-              placeholder="Select directory to pack..."
-              value={packingDirectory}
-              onChange={(e) => {
-                dispatch(setPackingDirectory(e.target.value));
-                localStorage.setItem("packingDirectory", e.target.value);
-              }}
-              className="directory-input"
-              disabled={isPacking}
-            />
-            <button
-              onClick={handleDirectorySelect}
-              className="btn btn-secondary btn-small"
-              disabled={isPacking}
-              title="Browse for directory"
-            >
-              📁 Browse
-            </button>
+            <DirectoryInput disabled={isPacking} />
             <button
               onClick={handlePackDirectory}
               className="btn btn-primary btn-small"
@@ -370,9 +320,7 @@ function App() {
               <button
                 onClick={() => {
                   dispatch(setLocalPackagePath(""));
-                  dispatch(setPackingDirectory(""));
                   localStorage.removeItem("localPackagePath");
-                  localStorage.removeItem("packingDirectory");
                 }}
                 className="btn btn-secondary btn-small"
                 title="Clear local package"
