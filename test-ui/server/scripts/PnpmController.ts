@@ -52,6 +52,7 @@ export class PnpmController extends Controller {
     }
 
     walkDependencies(parsedVersions[0]?.dependencies);
+    walkDependencies(parsedVersions[0]?.devDependencies);
     return installedVersions;
   }
 
