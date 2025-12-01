@@ -29,6 +29,8 @@ export interface TestMetadata {
     react?: string;
     [key: string]: string | undefined;
   };
+  /** Optional description of what this test validates */
+  description?: string;
 }
 
 export interface TestRegistry {
@@ -53,6 +55,9 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "npm",
     integrationPath: "integrations/ts-react16",
     dependencies: { react: "16" },
+    description: `This test fails because redux-toolkit 2+ requires React 18+.
+    Recharts does support redux-toolkit 1 but both npm and yarn will by default install the most recent peer dependency.
+    See https://github.com/recharts/recharts/wiki/How-to-install-Recharts-in-React-16-and-17-project`,
   },
   {
     name: "npm:integrations/ts-react16-overrides",
@@ -61,6 +66,8 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "npm",
     integrationPath: "integrations/ts-react16-overrides",
     dependencies: { react: "16" },
+    description:
+      'Demonstrates the use of "overrides" to force redux-toolkit 1.x with React 16 in npm project',
   },
   {
     name: "npm:integrations/ts-react16-resolutions",
@@ -69,10 +76,12 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "npm",
     integrationPath: "integrations/ts-react16-resolutions",
     dependencies: { react: "16" },
+    description:
+      'Demonstrates the use of "resolutions" to force redux-toolkit 1.x with React 16 in yarn project',
   },
   {
     name: "npm:integrations/ts-react18",
-    stability: "experimental",
+    stability: "stable",
     type: "direct",
     packageManager: "npm",
     integrationPath: "integrations/ts-react18",
@@ -80,7 +89,7 @@ const directDependencyTests: TestMetadata[] = [
   },
   {
     name: "npm:integrations/ts-react19",
-    stability: "experimental",
+    stability: "stable",
     type: "direct",
     packageManager: "npm",
     integrationPath: "integrations/ts-react19",
@@ -151,6 +160,46 @@ const directDependencyTests: TestMetadata[] = [
     packageManager: "yarn",
     integrationPath: "integrations/ts4-react17",
     dependencies: { react: "17" },
+  },
+  {
+    name: "npm:integrations/ts-skip-lib-check-false",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/ts-skip-lib-check-false",
+    dependencies: {},
+    description:
+      "Tests typescript with skipLibCheck: false. See https://github.com/recharts/recharts/issues/6664",
+  },
+  {
+    name: "yarn:integrations/ts-skip-lib-check-false",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/ts-skip-lib-check-false",
+    dependencies: {},
+    description:
+      "Tests typescript with skipLibCheck: false. See https://github.com/recharts/recharts/issues/6664",
+  },
+  {
+    name: "npm:integrations/ts-react16-skip-lib-check-false",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/ts-react16-skip-lib-check-false",
+    dependencies: {},
+    description:
+      "Tests typescript with skipLibCheck: false, React 16, and redux-toolkit 2. See https://github.com/recharts/recharts/issues/6664",
+  },
+  {
+    name: "yarn:integrations/ts-react16-skip-lib-check-false",
+    stability: "stable",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/ts-react16-skip-lib-check-false",
+    dependencies: {},
+    description:
+      "Tests typescript with skipLibCheck: false, React 16, and redux-toolkit 2. See https://github.com/recharts/recharts/issues/6664",
   },
 ];
 

@@ -1,0 +1,17 @@
+{
+  "name": "ts-skip-lib-check-false",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.x.x",
+    "react-dom": "^19.x.x",
+    "react-is": "^19.x.x",
+    "recharts": "latest",
+    "typescript": "latest",
+    "@types/react": "latest"
+  }
+}

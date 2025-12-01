@@ -502,6 +502,16 @@ button.phase-summary-item.failed:hover {
   color: #e65100;
 }
 
+.test-description {
+  color: #666;
+  font-size: 0.85rem;
+  font-style: italic;
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .status-badge {
   padding: 0.25rem 0.6rem;
   border-radius: 12px;

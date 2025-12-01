@@ -118,6 +118,7 @@ app.get("/api/tests", async (req: Request, res: Response) => {
       type: metadata.type,
       packageManager: metadata.packageManager,
       dependencies: metadata.dependencies,
+      description: metadata.description,
     }));
 
     res.json({ tests: testsWithMetadata });
@@ -180,23 +181,8 @@ async function runPhase(
     const result = await fn();
 
     console.log("received result", result);
-
-    // Capture output if result has it
-    if (result && typeof result === "object") {
-      if (result.success !== undefined) {
-        phase.status = result.success ? "passed" : "failed";
-        if (result.error) {
-          phase.output = String(result.error);
-        }
-      } else {
-        phase.status = "passed";
-      }
-    } else if (typeof result === "string") {
-      phase.output = result;
-      phase.status = "passed";
-    } else {
-      phase.status = "passed";
-    }
+    phase.status = result.success ? "passed" : "failed";
+    phase.output = result.output;
   } catch (error: any) {
     phase.status = "failed";
 
@@ -252,10 +238,7 @@ async function verifyAllSingleDependencyVersions(
   for (const dep of dependencies) {
     try {
       const result = await controller.verifySingleDependencyVersion(dep);
-      const output = result.success
-        ? `✅ ${dep}: single version verified\n`
-        : `❌ ${dep}: ${result.error}\n`;
-      testData.phases.verify.output += output;
+      testData.phases.verify.output += result.output + `\n`;
       if (!result.success) {
         return result; // Return early on first failure
       }
@@ -264,7 +247,7 @@ async function verifyAllSingleDependencyVersions(
       return TestOutcome.fail("verify", error);
     }
   }
-  return TestOutcome.ok("verify");
+  return TestOutcome.ok("verify", testData.phases.verify.output);
 }
 
 function getControllerFactory(
