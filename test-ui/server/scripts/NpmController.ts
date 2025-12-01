@@ -54,7 +54,7 @@ export class NpmController extends Controller {
     } catch (ex) {
       return TestOutcome.fail(
         dependencyName,
-        new Error('Failed to parse npm ls JSON output'),
+        new Error("Failed to parse npm ls JSON output"),
       );
     }
 
@@ -93,7 +93,6 @@ export class NpmController extends Controller {
     const msg = `Dependency ${dependencyName} is installed and only one version is present: ${Array.from(
       installedVersions,
     ).join(", ")}`;
-    console.log(msg);
-    return TestOutcome.ok(msg);
+    return TestOutcome.ok("verify", msg);
   }
 }

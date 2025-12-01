@@ -33,8 +33,8 @@ export class TestOutcome {
     return this.error == null;
   }
 
-  static ok(name: string): TestOutcome {
-    return new TestOutcome(name);
+  static ok(name: string, output?: string): TestOutcome {
+    return new TestOutcome(name, undefined, output);
   }
 
   static fail(name: string, error: unknown): TestOutcome {
