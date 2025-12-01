@@ -1,6 +1,33 @@
 # recharts-integ
 Recharts integration tests for different React versions and various other frameworks.
 
+## 📦 Prerequisites
+
+This repository tests Recharts with multiple package managers. Install the ones you need:
+
+### npm
+Comes with Node.js - no separate installation needed.
+
+### Yarn
+```bash
+npm install -g yarn
+# or via Homebrew on macOS
+brew install yarn
+```
+
+### pnpm
+```bash
+npm install -g pnpm
+# or via Homebrew on macOS
+brew install pnpm
+# or using standalone installer
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+For more installation options, see:
+- [Yarn Installation](https://classic.yarnpkg.com/en/docs/install)
+- [pnpm Installation](https://pnpm.io/installation)
+
 ## 🎯 Test UI (New!)
 
 A modern React-based web interface for managing and running integration tests. No more command-line juggling!

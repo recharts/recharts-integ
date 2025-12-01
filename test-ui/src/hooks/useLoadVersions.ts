@@ -1,7 +1,7 @@
 const API_BASE = "/api";
 
 export async function loadVersions(
-  setVersions: (versions: { node: string; npm: string; yarn: string }) => void,
+  setVersions: (versions: { node: string; npm: string; yarn: string; pnpm: string }) => void,
 ) {
   try {
     const response = await fetch(`${API_BASE}/versions`);

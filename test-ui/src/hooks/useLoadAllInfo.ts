@@ -12,6 +12,7 @@ export function useLoadAllInfo() {
     node: string;
     npm: string;
     yarn: string;
+    pnpm: string;
   } | null>(null);
 
   useEffect(() => {

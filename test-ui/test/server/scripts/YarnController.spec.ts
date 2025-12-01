@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { YarnController } from "./YarnController.ts";
+import { YarnController } from "../../../server/scripts/YarnController";
 
 describe("YarnController", () => {
   it("should parse multiple React versions from yarn list output", () => {

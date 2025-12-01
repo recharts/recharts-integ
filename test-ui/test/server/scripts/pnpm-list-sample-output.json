@@ -1,0 +1,144 @@
+[
+  {
+    "name": "recharts",
+    "version": "3.5.1",
+    "path": "/absolute/path/github/recharts",
+    "private": false,
+    "dependencies": {
+      "@reduxjs/toolkit": {
+        "from": "@reduxjs/toolkit",
+        "version": "2.11.0",
+        "resolved": "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.11.0.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/@reduxjs+toolkit@2.11.0_react-redux@9.2.0_@types+react@18.3.27_react@18.3.1_redux@5.0.1__react@18.3.1/node_modules/@reduxjs/toolkit",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "react-redux": {
+        "from": "react-redux",
+        "version": "9.2.0",
+        "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-9.2.0.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/react-redux@9.2.0_@types+react@18.3.27_react@18.3.1_redux@5.0.1/node_modules/react-redux",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "use-sync-external-store": {
+        "from": "use-sync-external-store",
+        "version": "1.6.0",
+        "resolved": "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/use-sync-external-store@1.6.0_react@18.3.1/node_modules/use-sync-external-store",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      }
+    },
+    "devDependencies": {
+      "react": {
+        "from": "react",
+        "version": "18.3.1",
+        "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+      },
+      "@storybook/addon-docs": {
+        "from": "@storybook/addon-docs",
+        "version": "10.1.2",
+        "resolved": "https://registry.npmjs.org/@storybook/addon-docs/-/addon-docs-10.1.2.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/@storybook+addon-docs@10.1.2_@types+react@18.3.27_esbuild@0.27.0_rollup@4.53.3_storyboo_c4dfad4f5dc5f19d048c28052f829188/node_modules/@storybook/addon-docs",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "@storybook/addon-links": {
+        "from": "@storybook/addon-links",
+        "version": "10.1.2",
+        "resolved": "https://registry.npmjs.org/@storybook/addon-links/-/addon-links-10.1.2.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/@storybook+addon-links@10.1.2_react@18.3.1_storybook@10.1.2_@testing-library+dom@10.4.1_565930c96a4d2d2668cca92e07b3c91a/node_modules/@storybook/addon-links",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "@storybook/icons": {
+        "from": "@storybook/icons",
+        "version": "1.6.0",
+        "resolved": "https://registry.npmjs.org/@storybook/icons/-/icons-1.6.0.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/@storybook+icons@1.6.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@storybook/icons",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "@storybook/react-vite": {
+        "from": "@storybook/react-vite",
+        "version": "10.1.2",
+        "resolved": "https://registry.npmjs.org/@storybook/react-vite/-/react-vite-10.1.2.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/@storybook+react-vite@10.1.2_esbuild@0.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1_5dbe196b873a932f273991973bbfa1ed/node_modules/@storybook/react-vite",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "@testing-library/react": {
+        "from": "@testing-library/react",
+        "version": "16.3.0",
+        "resolved": "https://registry.npmjs.org/@testing-library/react/-/react-16.3.0.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/@testing-library+react@16.3.0_@testing-library+dom@10.4.1_@types+react-dom@18.3.7_@type_518e95b9fd5d6a2824e6f20b085f4963/node_modules/@testing-library/react",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      },
+      "react-dom": {
+        "from": "react-dom",
+        "version": "18.3.1",
+        "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz",
+        "path": "/absolute/path/github/recharts/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom",
+        "dependencies": {
+          "react": {
+            "from": "react",
+            "version": "18.3.1",
+            "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+            "path": "/absolute/path/github/recharts/node_modules/.pnpm/react@18.3.1/node_modules/react"
+          }
+        }
+      }
+    }
+  }
+]

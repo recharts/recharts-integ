@@ -9,6 +9,7 @@ import { WebSocketServer } from "ws";
 import * as http from "http";
 import { NpmController } from "./scripts/NpmController.ts";
 import { YarnController } from "./scripts/YarnController.ts";
+import { PnpmController } from "./scripts/PnpmController.ts";
 import type { Controller } from "./scripts/Controller.ts";
 import { TestOutcome } from "./scripts/TestOutcome.ts";
 import { getTestMetadata, getAllTests } from "./scripts/test-registry.ts";
@@ -141,11 +142,18 @@ app.get("/api/versions", (_req: Request, res: Response) => {
     } catch {
       // Yarn might not be installed
     }
+    let pnpmVersion = "N/A";
+    try {
+      pnpmVersion = execSync("pnpm -v", { encoding: "utf-8" }).trim();
+    } catch {
+      // pnpm might not be installed
+    }
 
     res.json({
       node: nodeVersion,
       npm: npmVersion,
       yarn: yarnVersion,
+      pnpm: pnpmVersion,
     });
   } catch (error: any) {
     console.error("Failed to get versions:", error);
@@ -260,6 +268,8 @@ function getControllerFactory(
       return new NpmController(projectPath);
     } else if (packageManager === "yarn") {
       return new YarnController(projectPath);
+    } else if (packageManager === "pnpm") {
+      return new PnpmController(projectPath);
     } else {
       throw new Error(`Unknown package manager: ${packageManager}`);
     }
