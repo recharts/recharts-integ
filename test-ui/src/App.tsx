@@ -1,17 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import {
-  setTests,
-  setLoading,
   setError,
   setFilter,
   setRechartsVersion,
   toggleTestSelection,
   deselectAllTests,
   clearTestResult,
-  loadPersistedResults,
-  setAvailableVersions,
-  setLoadingVersions,
   setLocalPackagePath,
   setPackingDirectory,
   setIsPacking,
@@ -27,6 +22,7 @@ import { Test, TestRun } from "./types";
 import { TestItem } from "./components/TestItem";
 import { ControlRow, ControlRowContainer } from "./components/ControlRow";
 import { formatDuration } from "./utils/formatDuration";
+import { useLoadAllInfo } from "./hooks/useLoadAllInfo";
 import "./App.css";
 
 const API_BASE = "/api";
@@ -58,12 +54,8 @@ function App() {
   );
   const runningTestsList = useAppSelector(selectAllRunningTests);
 
+  const { versions } = useLoadAllInfo();
   const [globalElapsedTime, setGlobalElapsedTime] = useState(0);
-  const [versions, setVersions] = useState<{
-    node: string;
-    npm: string;
-    yarn: string;
-  } | null>(null);
 
   // Track global elapsed time using ref to avoid stale closure
   const globalStartTimeRef = useRef<number | null>(null);
@@ -91,109 +83,12 @@ function App() {
     return () => clearInterval(interval);
   }, [runningTestsList.length, queuedTests]);
 
-  useEffect(() => {
-    loadTests();
-    loadPersistedResultsFromStorage();
-    loadRechartsVersions();
-    loadPersistedPackingDirectory();
-    loadVersions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // Persist test results to sessionStorage
   useEffect(() => {
     if (Object.keys(testResults).length > 0) {
       sessionStorage.setItem("testResults", JSON.stringify(testResults));
     }
   }, [testResults]);
-
-  const loadTests = async () => {
-    try {
-      dispatch(setLoading(true));
-      const response = await fetch(`${API_BASE}/tests`);
-      const data = await response.json();
-      const testsArray: Test[] = data.tests.map((test: any) =>
-        typeof test === "string" ? { name: test, stable: false } : test,
-      );
-      dispatch(setTests(testsArray));
-      dispatch(setError(null));
-    } catch (err) {
-      dispatch(setError("Failed to load tests: " + (err as Error).message));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  const loadPersistedResultsFromStorage = () => {
-    try {
-      const stored = sessionStorage.getItem("testResults");
-      if (stored) {
-        const results: Record<string, TestRun> = JSON.parse(stored);
-        dispatch(loadPersistedResults(results));
-      }
-    } catch (err) {
-      console.error("Failed to load persisted results:", err);
-    }
-  };
-
-  const loadPersistedPackingDirectory = () => {
-    try {
-      const storedDirectory = localStorage.getItem("packingDirectory");
-      const storedPackagePath = localStorage.getItem("localPackagePath");
-
-      if (storedDirectory) {
-        dispatch(setPackingDirectory(storedDirectory));
-      }
-      if (storedPackagePath) {
-        dispatch(setLocalPackagePath(storedPackagePath));
-      }
-    } catch (err) {
-      console.error("Failed to load persisted packing directory:", err);
-    }
-  };
-
-  const loadVersions = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/versions`);
-      const data = await response.json();
-      setVersions(data);
-    } catch (err) {
-      console.error("Failed to load versions:", err);
-    }
-  };
-
-  const loadRechartsVersions = async () => {
-    try {
-      dispatch(setLoadingVersions(true));
-      // Fetch from npm registry
-      const response = await fetch("https://registry.npmjs.org/recharts");
-      const data = await response.json();
-
-      // Get versions and sort from latest to oldest
-      const versions = Object.keys(data.versions || {})
-        .filter((v) => !v.includes("-")) // Filter out pre-release versions
-        .sort((a, b) => {
-          // Compare version numbers (simple sort by version string works for semver)
-          const aParts = a.split(".").map(Number);
-          const bParts = b.split(".").map(Number);
-
-          for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-            const aVal = aParts[i] || 0;
-            const bVal = bParts[i] || 0;
-            if (aVal !== bVal) {
-              return bVal - aVal; // Descending order
-            }
-          }
-          return 0;
-        })
-        .slice(0, 50); // Limit to 50 most recent versions
-
-      dispatch(setAvailableVersions(versions));
-    } catch (err) {
-      console.error("Failed to load Recharts versions:", err);
-      dispatch(setLoadingVersions(false));
-    }
-  };
 
   const runTest = async (test: Test) => {
     try {
