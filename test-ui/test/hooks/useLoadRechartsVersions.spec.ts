@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { loadRechartsVersions } from "../../src/hooks/useLoadRechartsVersions";
 import {
   setLoadingVersions,
@@ -6,14 +6,17 @@ import {
 } from "../../src/store/testsSlice";
 import type { AppDispatch } from "../../src/store";
 
-global.fetch = vi.fn();
-
 describe("loadRechartsVersions", () => {
   let mockDispatch: AppDispatch;
 
   beforeEach(() => {
     mockDispatch = vi.fn() as unknown as AppDispatch;
+    global.fetch = vi.fn();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("should successfully load and sort recharts versions", async () => {

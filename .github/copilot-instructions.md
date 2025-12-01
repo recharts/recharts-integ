@@ -82,7 +82,7 @@ It's important that these are stable and reliable, but we don't use them directl
 
 **Architecture:**
 - **Frontend:** React + TypeScript + Redux Toolkit + Vite
-- **Backend:** Express + WebSocket (TypeScript, runs with Node.js v25)
+- **Backend:** Express + WebSocket (TypeScript, runs with Node.js v22.18+)
 - **State Management:** Redux with WebSocket middleware for real-time updates
 
 **Features:**
@@ -115,7 +115,7 @@ It's important that these are stable and reliable, but we don't use them directl
 
 ### Environment
 
-!!! IMPORTANT ALWAYS DOUBLE CHECK NODE_ENV WHEN RUNNING TESTS !!!
+!!! IMPORTANT ALWAYS DOUBLE-CHECK NODE_ENV WHEN RUNNING TESTS !!!
 
 - Double check that `NODE_ENV` is set to `development` when running tests locally.
 - The default in your environment may be `production` or unset so make sure to set it explicitly if needed.

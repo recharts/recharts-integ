@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Test, TestRun, TestStatus, Phases, PhaseName } from "../types";
+import { PhaseName, Phases, Test, TestRun, TestStatus } from "../types";
 import PhaseOutput from "../PhaseOutput";
 import { formatDuration } from "../utils/formatDuration";
+import { phaseOrder } from "../utils/phaseOrder.ts";
 
 interface TestItemProps {
   test: Test;
@@ -16,6 +17,14 @@ interface TestItemProps {
   estimatedPhaseDurations: Record<PhaseName, number>;
 }
 
+const STATUS_ICONS: Record<string, string> = {
+  queued: "⏸️",
+  running: "⏳",
+  passed: "✅",
+  cancelled: "⏹",
+  failed: "❌",
+};
+
 export function TestItem({
   test,
   status,
@@ -29,7 +38,7 @@ export function TestItem({
   estimatedPhaseDurations,
 }: TestItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
+  const [expandedPhase, setExpandedPhase] = useState<PhaseName | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const testName = test.name;
 
@@ -48,21 +57,17 @@ export function TestItem({
 
   // Calculate progress for running test
   useEffect(() => {
-    if (!runningTest || !runningTest.phases) return;
+    if (!runningTest || !runningTest.phases) {
+      setElapsedTime(0);
+      return;
+    }
 
     const interval = setInterval(() => {
       const now = Date.now();
       let totalElapsed = 0;
 
       // Calculate elapsed time across all phases
-      const phaseOrder: PhaseName[] = [
-        "clean",
-        "setVersion",
-        "install",
-        "test",
-        "build",
-        "verify",
-      ];
+
       phaseOrder.forEach((phaseName) => {
         const phase = runningTest.phases![phaseName];
         if (phase.startTime) {
@@ -90,7 +95,7 @@ export function TestItem({
     ? Math.min((elapsedTime / totalEstimated) * 100, 100)
     : 0;
 
-  const handlePhaseClick = (phaseName: string) => {
+  const handlePhaseClick = (phaseName: PhaseName) => {
     if (!isExpanded) {
       setIsExpanded(true);
     }
@@ -100,14 +105,6 @@ export function TestItem({
   const getOneLineSummary = (phases: Phases | undefined) => {
     if (!phases) return null;
 
-    const phaseOrder = [
-      "clean",
-      "setVersion",
-      "install",
-      "test",
-      "build",
-      "verify",
-    ] as const;
     const phaseLabels = {
       clean: "Clean",
       setVersion: "Set Version",
@@ -195,15 +192,7 @@ export function TestItem({
         )}
         {status && "status" in status && (
           <span className={`status-badge ${status.status}`}>
-            {status.status === "queued"
-              ? "⏸️"
-              : status.status === "running"
-                ? "⏳"
-                : status.status === "passed"
-                  ? "✅"
-                  : status.status === "cancelled"
-                    ? "⏹"
-                    : "❌"}{" "}
+            {STATUS_ICONS[status.status] || "❌"}{" "}
             {status.status === "queued" && "position" in status
               ? `Queued (#${status.position})`
               : status.status}
@@ -249,7 +238,7 @@ export function TestItem({
             <PhaseOutput
               phases={runningTest.phases}
               currentPhase={runningTest.currentPhase}
-              initialExpandedPhase={expandedPhase as any}
+              initialExpandedPhase={expandedPhase}
               estimatedPhaseDurations={estimatedPhaseDurations}
             />
           ) : (
@@ -269,7 +258,7 @@ export function TestItem({
             <PhaseOutput
               phases={completedTest.phases}
               currentPhase={null}
-              initialExpandedPhase={expandedPhase as any}
+              initialExpandedPhase={expandedPhase}
               estimatedPhaseDurations={estimatedPhaseDurations}
             />
           ) : (

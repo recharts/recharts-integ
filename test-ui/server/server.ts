@@ -483,8 +483,17 @@ async function executeTest(
   });
 }
 
-// Helper function to pack the directory
-async function packDirectoryAsync(directory: string): Promise<string> {
+// Shared helper function to pack a directory
+// Expands ~ to home dir, runs npm build && npm pack, captures output,
+// detects the .tgz filename, and returns the absolute file: URI or rejects with error
+async function packDirectoryAsyncShared(
+  directory: string,
+): Promise<{
+  packagePath: string;
+  output: string;
+  packedFile: string;
+  expandedDirectory: string;
+}> {
   return new Promise((resolve, reject) => {
     const expandedDirectory = directory.startsWith("~")
       ? path.join(
@@ -531,12 +540,23 @@ async function packDirectoryAsync(directory: string): Promise<string> {
     packProcess.on("close", (code: number | null) => {
       if (code === 0 && packedFile) {
         const absolutePath = path.resolve(expandedDirectory, packedFile);
-        resolve(`file:${absolutePath}`);
+        resolve({
+          packagePath: `file:${absolutePath}`,
+          output,
+          packedFile: absolutePath,
+          expandedDirectory,
+        });
       } else {
         reject(new Error(error || "Failed to pack directory"));
       }
     });
   });
+}
+
+// Helper function to pack the directory (wrapper for backwards compatibility)
+async function packDirectoryAsync(directory: string): Promise<string> {
+  const result = await packDirectoryAsyncShared(directory);
+  return result.packagePath;
 }
 
 // Process the test queue (non-blocking, processes one test at a time)
@@ -705,76 +725,26 @@ app.post("/api/tests/cancel", (_req: Request, res: Response) => {
 });
 
 // Pack a local directory
-app.post("/api/pack", (req: Request, res: Response) => {
+app.post("/api/pack", async (req: Request, res: Response) => {
   const { directory } = req.body;
 
   if (!directory) {
     return res.status(400).json({ error: "Directory path is required" });
   }
 
-  // Expand ~ to home directory
-  const expandedDirectory = directory.startsWith("~")
-    ? path.join(
-        process.env.HOME || process.env.USERPROFILE || "",
-        directory.slice(1),
-      )
-    : directory;
-
-  // Run pack-and-run.sh equivalent: build and pack
-  const packProcess = spawn(
-    "bash",
-    [
-      "-c",
-      `
-    cd "${expandedDirectory}" && \
-    npm run build && \
-    npm pack | tail -n 1
-  `,
-    ],
-    {
-      cwd: rootDir,
-      env: { ...process.env },
-    },
-  );
-
-  let output = "";
-  let error = "";
-  let packedFile = "";
-
-  packProcess.stdout?.on("data", (data: Buffer) => {
-    const text = data.toString();
-    output += text;
-
-    // Capture the last line which should be the packed filename
-    const lines = output.trim().split("\n");
-    const lastLine = lines[lines.length - 1];
-    if (lastLine.endsWith(".tgz")) {
-      packedFile = lastLine;
-    }
-  });
-
-  packProcess.stderr?.on("data", (data: Buffer) => {
-    error += data.toString();
-  });
-
-  packProcess.on("close", (code: number | null) => {
-    if (code === 0 && packedFile) {
-      const absolutePath = path.resolve(expandedDirectory, packedFile);
-      res.json({
-        success: true,
-        packagePath: `file:${absolutePath}`,
-        output,
-        packedFile: absolutePath,
-        expandedDirectory,
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: error || "Failed to pack directory",
-        output,
-      });
-    }
-  });
+  try {
+    const result = await packDirectoryAsyncShared(directory);
+    res.json({
+      success: true,
+      ...result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to pack directory",
+      output: error.stdout || "",
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3001;
