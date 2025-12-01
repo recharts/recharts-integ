@@ -92,7 +92,7 @@ export function TestItem({
     0,
   );
   const progressPercent = runningTest
-    ? Math.min((elapsedTime / totalEstimated) * 100, 100)
+    ? totalEstimated > 0 ? Math.min((elapsedTime / totalEstimated) * 100, 100) : 0
     : 0;
 
   const handlePhaseClick = (phaseName: PhaseName) => {
