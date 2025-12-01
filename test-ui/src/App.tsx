@@ -7,10 +7,8 @@ import {
   setFilter,
   setRechartsVersion,
   toggleTestSelection,
-  selectAllTests,
   deselectAllTests,
   clearTestResult,
-  clearAllResults,
   loadPersistedResults,
   setAvailableVersions,
   setLoadingVersions,
@@ -24,6 +22,7 @@ import {
   selectElapsedTimeForRunningTestPhases,
   selectAllRunningTests,
 } from "./store/testDurationSelectors";
+import { selectFilteredTests } from "./store/filteredTestsSelector";
 import { Test, TestRun } from "./types";
 import { TestItem } from "./components/TestItem";
 import { ControlRow, ControlRowContainer } from "./components/ControlRow";
@@ -35,7 +34,6 @@ const API_BASE = "/api";
 function App() {
   const dispatch = useAppDispatch();
   const {
-    tests,
     loading,
     error,
     filter,
@@ -336,23 +334,6 @@ function App() {
     }
   };
 
-  const getFilteredTests = (): Test[] => {
-    if (!filter) return tests;
-
-    const filterLower = filter.toLowerCase();
-
-    if (filterLower === "stable") {
-      return tests.filter((test) => test.stable === true);
-    }
-    if (filterLower === "experimental") {
-      return tests.filter((test) => test.stable === false);
-    }
-
-    return tests.filter((test) =>
-      test.name.toLowerCase().includes(filterLower),
-    );
-  };
-
   const getTestStatus = (testName: string) => {
     if (queuedTests[testName]) {
       return { ...queuedTests[testName], status: "queued" as const };
@@ -366,7 +347,7 @@ function App() {
     return null;
   };
 
-  const filteredTests = getFilteredTests();
+  const filteredTests = useAppSelector(selectFilteredTests);
 
   // Calculate global progress using test counts instead of phase counts
   const totalTests = initialQueueSize || 0;

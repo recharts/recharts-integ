@@ -10,7 +10,9 @@
     "server": "node server/server.ts",
     "server:dev": "nodemon",
     "start": "concurrently \"npm run server:dev\" \"npm run dev\"",
-    "test": "vitest"
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": "",

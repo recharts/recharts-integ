@@ -1,5 +1,4 @@
-import React from 'react';
-import { Test } from '../types';
+import React from "react";
 
 export interface ControlRowViewProps {
   selectedTestsCount: number;
@@ -26,16 +25,10 @@ export const ControlRowView: React.FC<ControlRowViewProps> = ({
 }) => {
   return (
     <div className="control-row">
-      <button
-        onClick={onSelectAll}
-        className="btn btn-secondary"
-      >
+      <button onClick={onSelectAll} className="btn btn-secondary">
         Select All ({filteredTestsCount})
       </button>
-      <button
-        onClick={onDeselectAll}
-        className="btn btn-secondary"
-      >
+      <button onClick={onDeselectAll} className="btn btn-secondary">
         Deselect All
       </button>
       <button
@@ -51,10 +44,7 @@ export const ControlRowView: React.FC<ControlRowViewProps> = ({
         </button>
       )}
       {hasResults && (
-        <button
-          onClick={onClearAllResults}
-          className="btn btn-secondary"
-        >
+        <button onClick={onClearAllResults} className="btn btn-secondary">
           X Clear All Results
         </button>
       )}
