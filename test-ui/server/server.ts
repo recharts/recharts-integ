@@ -22,7 +22,7 @@ const wss = new WebSocketServer({ server });
 
 app.use(cors());
 app.use(express.json());
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
@@ -87,6 +87,8 @@ let isRunningTest = false;
 // signal support would require refactoring controller methods to accept AbortSignal.
 let currentTestAbortController: AbortController | null = null;
 let shouldCancelQueue = false;
+let needsPackingBeforeNextRun = false;
+let packingDirectory: string | null = null;
 
 // WebSocket connections
 const clients = new Set<WebSocket>();
@@ -108,7 +110,7 @@ function broadcast(data: BroadcastMessage): void {
 }
 
 // Get list of all tests with stability information
-app.get("/api/tests", async (req: Request, res: Response) => {
+app.get("/api/tests", async (_req: Request, res: Response) => {
   try {
     const allTests = getAllTests();
 
@@ -129,7 +131,7 @@ app.get("/api/tests", async (req: Request, res: Response) => {
 });
 
 // Get environment versions
-app.get("/api/versions", (req: Request, res: Response) => {
+app.get("/api/versions", (_req: Request, res: Response) => {
   try {
     const nodeVersion = execSync("node -v", { encoding: "utf-8" }).trim();
     const npmVersion = execSync("npm -v", { encoding: "utf-8" }).trim();
@@ -182,7 +184,7 @@ async function runPhase(
 
     console.log("received result", result);
     phase.status = result.success ? "passed" : "failed";
-    phase.output = result.output;
+    phase.output = result.output || "";
   } catch (error: any) {
     phase.status = "failed";
 
@@ -481,6 +483,82 @@ async function executeTest(
   });
 }
 
+// Shared helper function to pack a directory
+// Expands ~ to home dir, runs npm build && npm pack, captures output,
+// detects the .tgz filename, and returns the absolute file: URI or rejects with error
+async function packDirectoryAsyncShared(
+  directory: string,
+): Promise<{
+  packagePath: string;
+  output: string;
+  packedFile: string;
+  expandedDirectory: string;
+}> {
+  return new Promise((resolve, reject) => {
+    const expandedDirectory = directory.startsWith("~")
+      ? path.join(
+          process.env.HOME || process.env.USERPROFILE || "",
+          directory.slice(1),
+        )
+      : directory;
+
+    const packProcess = spawn(
+      "bash",
+      [
+        "-c",
+        `
+      cd "${expandedDirectory}" && \
+      npm run build && \
+      npm pack | tail -n 1
+    `,
+      ],
+      {
+        cwd: rootDir,
+        env: { ...process.env },
+      },
+    );
+
+    let output = "";
+    let error = "";
+    let packedFile = "";
+
+    packProcess.stdout?.on("data", (data: Buffer) => {
+      const text = data.toString();
+      output += text;
+
+      const lines = output.trim().split("\n");
+      const lastLine = lines[lines.length - 1];
+      if (lastLine.endsWith(".tgz")) {
+        packedFile = lastLine;
+      }
+    });
+
+    packProcess.stderr?.on("data", (data: Buffer) => {
+      error += data.toString();
+    });
+
+    packProcess.on("close", (code: number | null) => {
+      if (code === 0 && packedFile) {
+        const absolutePath = path.resolve(expandedDirectory, packedFile);
+        resolve({
+          packagePath: `file:${absolutePath}`,
+          output,
+          packedFile: absolutePath,
+          expandedDirectory,
+        });
+      } else {
+        reject(new Error(error || "Failed to pack directory"));
+      }
+    });
+  });
+}
+
+// Helper function to pack the directory (wrapper for backwards compatibility)
+async function packDirectoryAsync(directory: string): Promise<string> {
+  const result = await packDirectoryAsyncShared(directory);
+  return result.packagePath;
+}
+
 // Process the test queue (non-blocking, processes one test at a time)
 async function processQueue(): Promise<void> {
   if (isRunningTest || testQueue.length === 0) {
@@ -488,6 +566,41 @@ async function processQueue(): Promise<void> {
   }
 
   isRunningTest = true;
+
+  // Pack once before processing the queue if needed
+  if (needsPackingBeforeNextRun && packingDirectory) {
+    try {
+      broadcast({
+        type: "packing-started",
+        data: { directory: packingDirectory },
+      });
+
+      const packagePath = await packDirectoryAsync(packingDirectory);
+
+      broadcast({
+        type: "packing-completed",
+        data: { packagePath, success: true },
+      });
+
+      // Update all queued tests to use the packed version
+      testQueue.forEach((item) => {
+        item.rechartsVersion = packagePath;
+      });
+
+      needsPackingBeforeNextRun = false;
+    } catch (error: any) {
+      broadcast({
+        type: "packing-failed",
+        data: { error: error.message, success: false },
+      });
+
+      // Clear queue on packing failure
+      testQueue.length = 0;
+      isRunningTest = false;
+      needsPackingBeforeNextRun = false;
+      return;
+    }
+  }
 
   const item = testQueue.shift();
   if (item && !shouldCancelQueue) {
@@ -511,13 +624,20 @@ async function processQueue(): Promise<void> {
 
 // Run a single test (adds to queue)
 app.post("/api/tests/run", (req: Request, res: Response) => {
-  const { testName, rechartsVersion } = req.body;
+  const { testName, rechartsVersion, packDirectory } = req.body;
 
   if (!testName) {
     return res.status(400).json({ error: "testName is required" });
   }
 
   const testId = `${testName}-${Date.now()}`;
+
+  // If packDirectory is provided and this is the first test in a new queue,
+  // mark that packing is needed
+  if (packDirectory && testQueue.length === 0 && !isRunningTest) {
+    needsPackingBeforeNextRun = true;
+    packingDirectory = packDirectory;
+  }
 
   // Add to queue
   testQueue.push({ testName, rechartsVersion, testId });
@@ -536,6 +656,7 @@ app.post("/api/tests/run", (req: Request, res: Response) => {
     message: testQueue.length === 1 ? "Test started" : "Test queued",
     testName,
     queuePosition: testQueue.length,
+    willPackFirst: needsPackingBeforeNextRun && testQueue.length === 1,
   });
 });
 
@@ -552,13 +673,13 @@ app.get("/api/tests/:testId", (req: Request, res: Response) => {
 });
 
 // Get all active tests
-app.get("/api/tests/active/all", (req: Request, res: Response) => {
+app.get("/api/tests/active/all", (_req: Request, res: Response) => {
   const tests = Array.from(activeTests.values());
   res.json({ tests });
 });
 
 // Get queue status
-app.get("/api/tests/queue", (req: Request, res: Response) => {
+app.get("/api/tests/queue", (_req: Request, res: Response) => {
   res.json({
     queue: testQueue,
     isRunning: isRunningTest,
@@ -567,7 +688,7 @@ app.get("/api/tests/queue", (req: Request, res: Response) => {
 });
 
 // Cancel current test and clear queue
-app.post("/api/tests/cancel", (req: Request, res: Response) => {
+app.post("/api/tests/cancel", (_req: Request, res: Response) => {
   const cancelledCount = testQueue.length;
   const wasRunning = isRunningTest;
 
@@ -576,6 +697,10 @@ app.post("/api/tests/cancel", (req: Request, res: Response) => {
 
   // Clear the queue
   testQueue.length = 0;
+
+  // Reset packing flags
+  needsPackingBeforeNextRun = false;
+  packingDirectory = null;
 
   // Signal abort for current test (controllers don't support cancellation yet)
   if (currentTestAbortController) {
@@ -600,76 +725,26 @@ app.post("/api/tests/cancel", (req: Request, res: Response) => {
 });
 
 // Pack a local directory
-app.post("/api/pack", (req: Request, res: Response) => {
+app.post("/api/pack", async (req: Request, res: Response) => {
   const { directory } = req.body;
 
   if (!directory) {
     return res.status(400).json({ error: "Directory path is required" });
   }
 
-  // Expand ~ to home directory
-  const expandedDirectory = directory.startsWith("~")
-    ? path.join(
-        process.env.HOME || process.env.USERPROFILE || "",
-        directory.slice(1),
-      )
-    : directory;
-
-  // Run pack-and-run.sh equivalent: build and pack
-  const packProcess = spawn(
-    "bash",
-    [
-      "-c",
-      `
-    cd "${expandedDirectory}" && \
-    npm run build && \
-    npm pack | tail -n 1
-  `,
-    ],
-    {
-      cwd: rootDir,
-      env: { ...process.env },
-    },
-  );
-
-  let output = "";
-  let error = "";
-  let packedFile = "";
-
-  packProcess.stdout?.on("data", (data: Buffer) => {
-    const text = data.toString();
-    output += text;
-
-    // Capture the last line which should be the packed filename
-    const lines = output.trim().split("\n");
-    const lastLine = lines[lines.length - 1];
-    if (lastLine.endsWith(".tgz")) {
-      packedFile = lastLine;
-    }
-  });
-
-  packProcess.stderr?.on("data", (data: Buffer) => {
-    error += data.toString();
-  });
-
-  packProcess.on("close", (code: number | null) => {
-    if (code === 0 && packedFile) {
-      const absolutePath = path.resolve(expandedDirectory, packedFile);
-      res.json({
-        success: true,
-        packagePath: `file:${absolutePath}`,
-        output,
-        packedFile: absolutePath,
-        expandedDirectory,
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: error || "Failed to pack directory",
-        output,
-      });
-    }
-  });
+  try {
+    const result = await packDirectoryAsyncShared(directory);
+    res.json({
+      success: true,
+      ...result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to pack directory",
+      output: error.stdout || "",
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3001;

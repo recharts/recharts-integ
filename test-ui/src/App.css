@@ -218,12 +218,25 @@
   color: #2e7d32;
 }
 
+.local-package-info.packing {
+  background: #fff3e0;
+  border-color: #ffa726;
+  color: #e65100;
+}
+
 .local-package-info code {
   background: white;
   padding: 0.2rem 0.5rem;
   border-radius: 3px;
   font-family: 'Courier New', monospace;
   color: #1b5e20;
+}
+
+.packing-info {
+  font-size: 0.85rem;
+  color: #ffa726;
+  font-weight: 500;
+  margin-left: 0.5rem;
 }
 
 .btn {
