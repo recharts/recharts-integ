@@ -9,7 +9,11 @@ export function replacePackageVersion(
   if (version == null || version === "") {
     return TestOutcome.ok("replace-package-version");
   }
-  let packageJson: Record<string, unknown>;
+  let packageJson: {
+    dependencies?: Record<string, string>;
+    peerDependencies?: Record<string, string>;
+    [key: string]: unknown;
+  };
 
   try {
     packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));

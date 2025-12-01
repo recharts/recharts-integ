@@ -7,6 +7,9 @@ import {
   testCompleted,
   queueCleared,
   moveToResults,
+  setIsPacking,
+  setLocalPackagePath,
+  setError,
 } from './testsSlice';
 
 const WS_URL = 'ws://localhost:3001';
@@ -100,6 +103,22 @@ const websocketMiddleware: Middleware = (store) => {
 
       case 'queue-cleared':
         dispatch(queueCleared());
+        break;
+
+      case 'packing-started':
+        dispatch(setIsPacking(true));
+        break;
+
+      case 'packing-completed':
+        dispatch(setIsPacking(false));
+        dispatch(setLocalPackagePath(data.packagePath));
+        // Persist to localStorage
+        localStorage.setItem('localPackagePath', data.packagePath);
+        break;
+
+      case 'packing-failed':
+        dispatch(setIsPacking(false));
+        dispatch(setError('Failed to pack directory: ' + data.error));
         break;
 
       default:

@@ -35,7 +35,7 @@ export abstract class Controller {
 
   async execAsync(cmd: string): Promise<string> {
     const env = this.getEnv();
-    const { stdout, stderr } = await execAsync(cmd, {
+    const { stdout } = await execAsync(cmd, {
       cwd: this.absolutePath,
       encoding: "utf-8",
       env,

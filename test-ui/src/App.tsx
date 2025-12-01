@@ -8,7 +8,6 @@ import {
   deselectAllTests,
   clearTestResult,
   setLocalPackagePath,
-  setIsPacking,
 } from "./store/testsSlice";
 import {
   selectQueuedTestsETA,
@@ -100,7 +99,13 @@ function App() {
     try {
       // Determine which version to use
       let versionToUse = rechartsVersion;
-      if (localPackagePath) {
+      let packDir = undefined;
+      
+      // If packingDirectory is set, pass it to the server to pack before running
+      if (packingDirectory) {
+        packDir = packingDirectory;
+      } else if (localPackagePath) {
+        // Use already packed version
         versionToUse = localPackagePath;
       }
 
@@ -110,6 +115,7 @@ function App() {
         body: JSON.stringify({
           testName: test.name,
           rechartsVersion: versionToUse || undefined,
+          packDirectory: packDir,
         }),
       });
 
@@ -160,42 +166,7 @@ function App() {
     }
   };
 
-  const handlePackDirectory = async () => {
-    if (!packingDirectory) {
-      dispatch(setError("Please select a directory first"));
-      return;
-    }
 
-    try {
-      dispatch(setIsPacking(true));
-      dispatch(setError(null));
-
-      const response = await fetch(`${API_BASE}/pack`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ directory: packingDirectory }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || "Failed to pack directory");
-      }
-
-      dispatch(setLocalPackagePath(data.packagePath));
-      dispatch(setError(null));
-
-      // Persist to localStorage
-      localStorage.setItem("packingDirectory", packingDirectory);
-      localStorage.setItem("localPackagePath", data.packagePath);
-
-      console.log("Packed successfully:", data);
-    } catch (err) {
-      dispatch(setError("Failed to pack directory: " + (err as Error).message));
-    } finally {
-      dispatch(setIsPacking(false));
-    }
-  };
 
   const getTestStatus = (testName: string) => {
     if (queuedTests[testName]) {
@@ -306,16 +277,13 @@ function App() {
           <div className="version-divider">OR</div>
 
           <div className="version-group local-package-group">
-            <label>Local Package:</label>
+            <label>Local Package Directory:</label>
             <DirectoryInput disabled={isPacking} />
-            <button
-              onClick={handlePackDirectory}
-              className="btn btn-primary btn-small"
-              disabled={!packingDirectory || isPacking}
-              title="Build and pack the selected directory"
-            >
-              {isPacking ? "⏳ Packing..." : "📦 Pack"}
-            </button>
+            {packingDirectory && (
+              <span className="packing-info">
+                Will pack before running tests
+              </span>
+            )}
             {localPackagePath && (
               <button
                 onClick={() => {
@@ -325,15 +293,25 @@ function App() {
                 className="btn btn-secondary btn-small"
                 title="Clear local package"
               >
-                ✕
+                ✕ Clear
               </button>
             )}
           </div>
         </ControlRowContainer>
 
-        {localPackagePath && (
+        {isPacking && (
+          <div className="local-package-info packing">
+            ⏳ Packing directory...
+          </div>
+        )}
+        {localPackagePath && !isPacking && (
           <div className="local-package-info">
             ✅ Using local package: <code>{localPackagePath}</code>
+          </div>
+        )}
+        {packingDirectory && !localPackagePath && !isPacking && (
+          <div className="local-package-info">
+            📦 Will pack <code>{packingDirectory}</code> before running tests
           </div>
         )}
 
