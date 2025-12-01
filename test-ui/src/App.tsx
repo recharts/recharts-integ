@@ -26,6 +26,7 @@ import {
 } from "./store/testDurationSelectors";
 import { Test, TestRun } from "./types";
 import { TestItem } from "./components/TestItem";
+import { ControlRow, ControlRowContainer } from "./components/ControlRow";
 import { formatDuration } from "./utils/formatDuration";
 import "./App.css";
 
@@ -260,11 +261,6 @@ function App() {
     }
   };
 
-  const handleClearAllResults = () => {
-    dispatch(clearAllResults());
-    sessionStorage.removeItem("testResults");
-  };
-
   const handleDirectorySelect = async () => {
     // Note: File System Access API doesn't provide full paths for security reasons.
     // We use a text input instead, which works since the server runs locally.
@@ -429,7 +425,7 @@ function App() {
       )}
 
       <div className="controls">
-        <div className="control-row">
+        <ControlRowContainer>
           <input
             type="text"
             placeholder="Filter tests... (try: stable, experimental, npm, react18)"
@@ -437,9 +433,9 @@ function App() {
             onChange={(e) => dispatch(setFilter(e.target.value))}
             className="filter-input"
           />
-        </div>
+        </ControlRowContainer>
 
-        <div className="control-row version-controls">
+        <ControlRowContainer className="version-controls">
           <div className="version-group">
             <label>Recharts version:</label>
             <select
@@ -509,7 +505,7 @@ function App() {
               </button>
             )}
           </div>
-        </div>
+        </ControlRowContainer>
 
         {localPackagePath && (
           <div className="local-package-info">
@@ -517,41 +513,11 @@ function App() {
           </div>
         )}
 
-        <div className="control-row">
-          <button
-            onClick={() => dispatch(selectAllTests(filteredTests))}
-            className="btn btn-secondary"
-          >
-            Select All ({filteredTests.length})
-          </button>
-          <button
-            onClick={() => dispatch(deselectAllTests())}
-            className="btn btn-secondary"
-          >
-            Deselect All
-          </button>
-          <button
-            onClick={runSelectedTests}
-            disabled={selectedTests.length === 0}
-            className="btn btn-primary"
-          >
-            Run Selected ({selectedTests.length})
-          </button>
-          {(Object.keys(queuedTests).length > 0 ||
-            Object.keys(runningTests).length > 0) && (
-            <button onClick={cancelQueue} className="btn btn-danger">
-              ⏹ Cancel & Clear Queue
-            </button>
-          )}
-          {Object.keys(testResults).length > 0 && (
-            <button
-              onClick={handleClearAllResults}
-              className="btn btn-secondary"
-            >
-              X Clear All Results
-            </button>
-          )}
-        </div>
+        <ControlRow
+          filteredTests={filteredTests}
+          onRunSelected={runSelectedTests}
+          onCancelQueue={cancelQueue}
+        />
       </div>
 
       <div className="content">
