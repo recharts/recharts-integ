@@ -152,6 +152,38 @@ const directDependencyTests: TestMetadata[] = [
     integrationPath: "integrations/ts4-react17",
     dependencies: { react: "17" },
   },
+  {
+    name: "npm:integrations/ts-skip-lib-check-false",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/ts-skip-lib-check-false",
+    dependencies: {},
+  },
+  {
+    name: "yarn:integrations/ts-skip-lib-check-false",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/ts-skip-lib-check-false",
+    dependencies: {},
+  },
+  {
+    name: "npm:integrations/ts-react16-skip-lib-check-false",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/ts-react16-skip-lib-check-false",
+    dependencies: {},
+  },
+  {
+    name: "yarn:integrations/ts-react16-skip-lib-check-false",
+    stability: "stable",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/ts-react16-skip-lib-check-false",
+    dependencies: {},
+  },
 ];
 
 // Define all library tests
