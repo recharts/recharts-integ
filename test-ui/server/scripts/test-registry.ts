@@ -163,7 +163,7 @@ const directDependencyTests: TestMetadata[] = [
   },
   {
     name: "npm:integrations/ts-skip-lib-check-false",
-    stability: "experimental",
+    stability: "stable",
     type: "direct",
     packageManager: "npm",
     integrationPath: "integrations/ts-skip-lib-check-false",
@@ -173,7 +173,7 @@ const directDependencyTests: TestMetadata[] = [
   },
   {
     name: "yarn:integrations/ts-skip-lib-check-false",
-    stability: "experimental",
+    stability: "stable",
     type: "direct",
     packageManager: "yarn",
     integrationPath: "integrations/ts-skip-lib-check-false",
