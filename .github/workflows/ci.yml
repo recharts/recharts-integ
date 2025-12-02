@@ -31,7 +31,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           # Cache depends on the lock file within the checked-out path
-          cache-dependency-path: 'package-lock.json'
+          cache-dependency-path: 'test-ui/package-lock.json'
 
       - name: Install Dependencies
         working-directory: test-ui
