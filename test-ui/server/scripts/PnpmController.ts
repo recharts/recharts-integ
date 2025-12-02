@@ -71,16 +71,6 @@ export class PnpmController extends Controller {
       );
     }
 
-    let parsedVersions: any;
-    try {
-      parsedVersions = JSON.parse(rawJson);
-    } catch (ex) {
-      return TestOutcome.fail(
-        dependencyName,
-        new Error("Failed to parse pnpm ls JSON output"),
-      );
-    }
-
     const installedVersions = this.parsePnpmLsOutput(rawJson, dependencyName);
 
     if (installedVersions.size === 0) {
