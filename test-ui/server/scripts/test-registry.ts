@@ -209,6 +209,36 @@ const directDependencyTests: TestMetadata[] = [
     integrationPath: "integrations/ts-react19",
     dependencies: { react: "19" },
   },
+  {
+    name: "Vite 7 +  React 19 with npm",
+    description:
+      "Trying to reproduce https://github.com/recharts/recharts/issues/6776",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/vite7-react19",
+    dependencies: { react: "19", vite: "7" },
+  },
+  {
+    name: "Vite 7 +  React 19 with yarn",
+    description:
+      "Trying to reproduce https://github.com/recharts/recharts/issues/6776",
+    stability: "stable",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/vite7-react19",
+    dependencies: { react: "19", vite: "7" },
+  },
+  {
+    name: "Vite 7 +  React 19 with pnpm",
+    description:
+      "Trying to reproduce https://github.com/recharts/recharts/issues/6776",
+    stability: "stable",
+    type: "direct",
+    packageManager: "pnpm",
+    integrationPath: "integrations/vite7-react19",
+    dependencies: { react: "19", vite: "7" },
+  },
 ];
 
 // Define all library tests
