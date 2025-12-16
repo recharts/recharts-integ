@@ -59,9 +59,17 @@ jobs:
         test_dir: ${{ fromJson(needs.list_integration_tests.outputs.directories) }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup node.js
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          cache: true
+
       - name: Test app and check dependencies
-        run: ./run-test.sh ${{ matrix.test_dir }}
+        run: ./run-test.sh "${{ matrix.test_dir }}"
