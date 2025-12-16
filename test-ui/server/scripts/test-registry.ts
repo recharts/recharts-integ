@@ -203,11 +203,11 @@ const directDependencyTests: TestMetadata[] = [
   },
   {
     name: "pnpm:react19",
-    stability: "experimental",
+    stability: "stable",
     type: "direct",
     packageManager: "pnpm",
     integrationPath: "integrations/ts-react19",
-    dependencies: { react: "19" },
+    dependencies: { react: "19", vite: "6" },
   },
   {
     name: "Vite 7 +  React 19 with npm",
