@@ -2,7 +2,7 @@
 
 # script for running integration tests
 # How to use:
-# `./scripts/run-test.sh <test-folder-name> [optional-recharts-version]`
+# `./run-test.sh <test-folder-name> [optional-recharts-version]`
 # The script will run an integration test in the given folder.
 # If a version is provided, it will be used to install the recharts package.
 # You can also provide a tgz file with the version of recharts you want to test

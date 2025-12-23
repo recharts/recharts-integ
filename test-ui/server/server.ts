@@ -299,8 +299,8 @@ function getController(
         return;
       }
 
-      await runPhase("test", testData, () => controller.test());
       await runPhase("build", testData, () => controller.build());
+      await runPhase("test", testData, () => controller.test());
       await runPhase("verify", testData, () =>
         verifyAllSingleDependencyVersions(controller, testData),
       );
@@ -496,9 +496,7 @@ async function executeTest(
 // Shared helper function to pack a directory
 // Expands ~ to home dir, runs npm build && npm pack, captures output,
 // detects the .tgz filename, and returns the absolute file: URI or rejects with error
-async function packDirectoryAsyncShared(
-  directory: string,
-): Promise<{
+async function packDirectoryAsyncShared(directory: string): Promise<{
   packagePath: string;
   output: string;
   packedFile: string;
