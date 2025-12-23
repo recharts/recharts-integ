@@ -38,15 +38,26 @@ export class TestOutcome {
   }
 
   static fail(name: string, error: unknown): TestOutcome {
-    if (error instanceof Error && "output" in error) {
-      return new TestOutcome(name, error, stringify(error.output).trim());
+    if (!(error instanceof Error)) {
+      return new TestOutcome(name, error);
     }
-    if (error instanceof Error && "stdout" in error) {
-      return new TestOutcome(name, error, stringify(error.stdout).trim());
+    const output = [];
+    if ("stdout" in error) {
+      output.push(error.stdout);
     }
-    if (error instanceof Error && "stderr" in error) {
-      return new TestOutcome(name, error, stringify(error.stderr).trim());
+    if ("stderr" in error) {
+      output.push(error.stderr);
     }
-    return new TestOutcome(name, error);
+    if ("output" in error) {
+      output.push(error.output);
+    }
+    return new TestOutcome(
+      name,
+      error,
+      output
+        .map(stringify)
+        .map((chunk) => chunk.trim())
+        .join("\n"),
+    );
   }
 }

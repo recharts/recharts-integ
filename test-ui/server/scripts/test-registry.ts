@@ -239,6 +239,16 @@ const directDependencyTests: TestMetadata[] = [
     integrationPath: "integrations/vite7-react19",
     dependencies: { react: "19", vite: "7" },
   },
+  {
+    name: "nextjs-standalone",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/nextjs-standalone",
+    dependencies: { react: "18", next: "15" },
+    description:
+      "Verifies Next.js standalone build works with Recharts (fixes #6117)",
+  },
 ];
 
 // Define all library tests
