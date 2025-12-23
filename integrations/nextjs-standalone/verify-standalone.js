@@ -6,7 +6,7 @@ const fs = require('fs');
 // In some environments this might install nested. Check your next.config.js for output settings.
 let serverPath = path.join(__dirname, '.next/standalone/server.js');
 
-if (!serverPath) {
+if (!fs.existsSync(serverPath)) {
     console.error('Could not find server.js in .next/standalone');
     process.exit(1);
 }
