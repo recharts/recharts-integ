@@ -1,0 +1,50 @@
+# This workflow runs all CI steps within a single job.
+
+name: Build and test
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: 24.x
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          # Cache depends on the lock file within the checked-out path
+          cache-dependency-path: 'test-ui/package-lock.json'
+
+      - name: Install Dependencies
+        working-directory: test-ui
+        run: npm ci
+
+      - name: Build main
+        working-directory: test-ui
+        run: npm run build
+
+      - name: Unit Tests
+        working-directory: test-ui
+        run: npm run test
+
+      - name: Typecheck
+        working-directory: test-ui
+        run: npm run check-types

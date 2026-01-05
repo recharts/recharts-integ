@@ -9,3 +9,6 @@ yarn.lock
 pnpm-lock.yaml
 *.tgz
 .next
+
+# but we DO want to commit lock files for the main project in test-ui folder
+!/test-ui/package-lock.json

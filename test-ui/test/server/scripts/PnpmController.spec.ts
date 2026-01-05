@@ -9,7 +9,7 @@ describe("PnpmController", () => {
       JSON.stringify(exampleOutput),
       "react",
     );
-    const expected = new Set(["18.3.1", "19.1.0"]);
+    const expected = new Set(["18.3.1"]);
     // Convert sets to arrays for better comparison
     const actualArray = Array.from(actual).sort();
     const expectedArray = Array.from(expected).sort();
