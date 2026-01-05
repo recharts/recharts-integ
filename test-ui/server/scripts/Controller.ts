@@ -20,6 +20,10 @@ export abstract class Controller {
       recursive: true,
       force: true,
     });
+    fs.rmSync(path.join(this.absolutePath, ".next"), {
+      recursive: true,
+      force: true,
+    });
     fs.rmSync(path.join(this.absolutePath, "package-lock.json"), {
       force: true,
     });
@@ -66,7 +70,9 @@ export abstract class Controller {
     return tgzFileNameToPackageJsonReference(this.absolutePath, tgzFileName);
   }
 
-  abstract verifySingleDependencyVersion(dependencyName: string): Promise<TestOutcome>;
+  abstract verifySingleDependencyVersion(
+    dependencyName: string,
+  ): Promise<TestOutcome>;
   abstract install(): Promise<TestOutcome>;
   abstract test(): Promise<TestOutcome>;
   abstract build(): Promise<TestOutcome>;

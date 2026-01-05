@@ -32,8 +32,8 @@ async function runDirectDependencyAppTest(controller: Controller, rechartsVersio
         console.warn('Failed to install the app. Skipping test and build checks because those are guaranteed to fail too!');
         return results;
     }
-    results.push(await controller.test());
     results.push(await controller.build());
+    results.push(await controller.test());
     results.push(...await verifyAllSingleDependencyVersions(controller));
     return results;
 }
@@ -136,7 +136,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         });
         process.exit(1);
     }
-    if (passed.length === 0 && skipped.length === 0) {
+    if (passed.length === 0 && errors.length === 0) {
         console.error('No tests were run.');
         process.exit(1);
     }
