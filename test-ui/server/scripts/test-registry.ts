@@ -247,7 +247,16 @@ const directDependencyTests: TestMetadata[] = [
     integrationPath: "integrations/nextjs-standalone",
     dependencies: { react: "18", next: "15" },
     description:
-      "Verifies Next.js standalone build works with Recharts (fixes #6117)",
+      "Reproduces #6117. Fixing this is a breaking change, will land in Recharts v4",
+  },
+  {
+    name: "astro-react",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/astro-react",
+    dependencies: { react: "19", astro: "5" },
+    description: "https://github.com/recharts/recharts/issues/6857",
   },
 ];
 
