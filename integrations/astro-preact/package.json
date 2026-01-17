@@ -1,0 +1,17 @@
+{
+  "name": "astro-preact",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^4.1.3",
+    "astro": "^5.16.7",
+    "preact": "^10.28.2",
+    "recharts": "latest"
+  }
+}
