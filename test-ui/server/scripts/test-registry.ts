@@ -258,6 +258,15 @@ const directDependencyTests: TestMetadata[] = [
     dependencies: { react: "19", astro: "5" },
     description: "https://github.com/recharts/recharts/issues/6857",
   },
+  {
+    name: "astro-preact",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/astro-preact",
+    dependencies: { preact: "10", astro: "5" },
+    description: "https://github.com/recharts/recharts/issues/6857",
+  },
 ];
 
 // Define all library tests
