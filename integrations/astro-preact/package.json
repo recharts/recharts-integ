@@ -12,6 +12,6 @@
     "@astrojs/preact": "^4.1.3",
     "astro": "^5.16.7",
     "preact": "^10.28.2",
-    "recharts": "file:/Users/pavelvanecek/github/recharts/recharts-3.6.0.tgz"
+    "recharts": "latest"
   }
 }
