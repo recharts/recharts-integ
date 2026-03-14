@@ -69,7 +69,6 @@ jobs:
         name: Install pnpm
         with:
           version: 10
-          cache: true
 
       - name: Test app and check dependencies
         run: ./run-test.sh "${{ matrix.test_dir }}"
