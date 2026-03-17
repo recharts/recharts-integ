@@ -13,5 +13,8 @@
     "astro": "^5.16.7",
     "preact": "^10.28.2",
     "recharts": "latest"
+  },
+  "overrides": {
+    "@preact/preset-vite": "2.10.3"
   }
 }
