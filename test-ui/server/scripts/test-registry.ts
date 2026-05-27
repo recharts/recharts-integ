@@ -250,6 +250,16 @@ const directDependencyTests: TestMetadata[] = [
     dependencies: { react: "19", typescript: "6" },
   },
   {
+    name: "npm:integrations/typescript-7",
+    description:
+      "Confirms recharts compatibility with TypeScript 7 beta via @typescript/native-preview. See https://github.com/recharts/recharts/issues/7314",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/typescript-7",
+    dependencies: { react: "19", typescript: "7" },
+  },
+  {
     name: "nextjs-standalone",
     stability: "experimental",
     type: "direct",
