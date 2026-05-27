@@ -240,6 +240,36 @@ const directDependencyTests: TestMetadata[] = [
     dependencies: { react: "19", vite: "7" },
   },
   {
+    name: "Vite 8 +  React 19 with npm",
+    description:
+      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
+    stability: "stable",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/vite8-react19",
+    dependencies: { react: "19", vite: "8" },
+  },
+  {
+    name: "Vite 8 +  React 19 with yarn",
+    description:
+      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
+    stability: "stable",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/vite8-react19",
+    dependencies: { react: "19", vite: "8" },
+  },
+  {
+    name: "Vite 8 +  React 19 with pnpm",
+    description:
+      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
+    stability: "stable",
+    type: "direct",
+    packageManager: "pnpm",
+    integrationPath: "integrations/vite8-react19",
+    dependencies: { react: "19", vite: "8" },
+  },
+  {
     name: "npm:integrations/typescript-6",
     description:
       "Confirms recharts compatibility with TypeScript 6. See https://github.com/recharts/recharts/issues/7253",
