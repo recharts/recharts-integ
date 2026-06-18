@@ -40,12 +40,23 @@ export interface TestRegistry {
 // Define all direct dependency tests
 const directDependencyTests: TestMetadata[] = [
   {
-    name: "Deno + React 19",
-    description: "Verifies Recharts renders under Deno using npm: specifiers",
+    name: "Deno + React 19 (deno.json)",
+    description:
+      "Verifies Recharts renders under Deno with dependencies in deno.json (npm: specifiers)",
     stability: "stable",
     type: "direct",
     packageManager: "deno",
     integrationPath: "integrations/deno-react19",
+    dependencies: { react: "19" },
+  },
+  {
+    name: "Deno + React 19 (package.json)",
+    description:
+      "Verifies Recharts renders under Deno with dependencies in package.json (npm compatibility mode)",
+    stability: "stable",
+    type: "direct",
+    packageManager: "deno",
+    integrationPath: "integrations/deno-react19-package-json",
     dependencies: { react: "19" },
   },
   // npm direct dependency tests

@@ -1,0 +1,16 @@
+{
+  "name": "deno-react19-package-json",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "recharts": "latest"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "global-jsdom": "^26.0.0"
+  }
+}

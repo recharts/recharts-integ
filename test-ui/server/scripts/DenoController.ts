@@ -14,8 +14,9 @@ export class DenoController extends Controller {
     };
   }
 
-  // Deno keeps dependencies in `deno.json` (under `imports`) rather than a
-  // `package.json`, so the recharts version under test is patched there.
+  // Deno reads both `deno.json` (`imports`) and `package.json`. When the
+  // dependency is declared in `deno.json` imports, patch the specifier there;
+  // otherwise fall back to the base `package.json` implementation.
   override replacePackageJsonVersion(
     dependencyName: string,
     version: string,
@@ -25,31 +26,41 @@ export class DenoController extends Controller {
     }
 
     const denoJsonPath = path.join(this.absolutePath, "deno.json");
-    let denoJson: { imports?: Record<string, string>; [key: string]: unknown };
-    try {
-      denoJson = JSON.parse(fs.readFileSync(denoJsonPath, "utf8"));
-    } catch (error) {
-      return TestOutcome.fail(
-        "replace-package-version",
-        new Error(`Failed to read ${denoJsonPath}: ${error}`),
-      );
+    if (fs.existsSync(denoJsonPath)) {
+      let denoJson: {
+        imports?: Record<string, string>;
+        [key: string]: unknown;
+      };
+      try {
+        denoJson = JSON.parse(fs.readFileSync(denoJsonPath, "utf8"));
+      } catch (error) {
+        return TestOutcome.fail(
+          "replace-package-version",
+          new Error(`Failed to read ${denoJsonPath}: ${error}`),
+        );
+      }
+
+      if (denoJson.imports?.[dependencyName]) {
+        // `version` may be a plain version ("3.8.2"), a `file:` tarball, or an
+        // already-prefixed specifier; only bare versions need the `npm:` prefix.
+        const specifier =
+          version.startsWith("npm:") ||
+          version.startsWith("jsr:") ||
+          version.startsWith("file:") ||
+          version.startsWith("http")
+            ? version
+            : `npm:${dependencyName}@${version}`;
+        denoJson.imports[dependencyName] = specifier;
+        fs.writeFileSync(
+          denoJsonPath,
+          JSON.stringify(denoJson, null, 2) + "\n",
+        );
+        return TestOutcome.ok("replace-package-version");
+      }
     }
 
-    if (denoJson.imports?.[dependencyName]) {
-      // `version` may be a plain version ("3.8.2"), a `file:` tarball, or an
-      // already-prefixed specifier; only bare versions need the `npm:` prefix.
-      const specifier =
-        version.startsWith("npm:") ||
-        version.startsWith("jsr:") ||
-        version.startsWith("file:") ||
-        version.startsWith("http")
-          ? version
-          : `npm:${dependencyName}@${version}`;
-      denoJson.imports[dependencyName] = specifier;
-      fs.writeFileSync(denoJsonPath, JSON.stringify(denoJson, null, 2) + "\n");
-    }
-
-    return TestOutcome.ok("replace-package-version");
+    // Dependency is managed via package.json, which Deno also reads.
+    return super.replacePackageJsonVersion(dependencyName, version);
   }
 
   async install(): Promise<TestOutcome> {
