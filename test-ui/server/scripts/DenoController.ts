@@ -14,6 +14,44 @@ export class DenoController extends Controller {
     };
   }
 
+  // Deno keeps dependencies in `deno.json` (under `imports`) rather than a
+  // `package.json`, so the recharts version under test is patched there.
+  override replacePackageJsonVersion(
+    dependencyName: string,
+    version: string,
+  ): TestOutcome {
+    if (version == null || version === "") {
+      return TestOutcome.ok("replace-package-version");
+    }
+
+    const denoJsonPath = path.join(this.absolutePath, "deno.json");
+    let denoJson: { imports?: Record<string, string>; [key: string]: unknown };
+    try {
+      denoJson = JSON.parse(fs.readFileSync(denoJsonPath, "utf8"));
+    } catch (error) {
+      return TestOutcome.fail(
+        "replace-package-version",
+        new Error(`Failed to read ${denoJsonPath}: ${error}`),
+      );
+    }
+
+    if (denoJson.imports?.[dependencyName]) {
+      // `version` may be a plain version ("3.8.2"), a `file:` tarball, or an
+      // already-prefixed specifier; only bare versions need the `npm:` prefix.
+      const specifier =
+        version.startsWith("npm:") ||
+        version.startsWith("jsr:") ||
+        version.startsWith("file:") ||
+        version.startsWith("http")
+          ? version
+          : `npm:${dependencyName}@${version}`;
+      denoJson.imports[dependencyName] = specifier;
+      fs.writeFileSync(denoJsonPath, JSON.stringify(denoJson, null, 2) + "\n");
+    }
+
+    return TestOutcome.ok("replace-package-version");
+  }
+
   async install(): Promise<TestOutcome> {
     try {
       await this.execAsync("deno install");
