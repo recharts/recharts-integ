@@ -10,6 +10,7 @@ import * as http from "http";
 import { NpmController } from "./scripts/NpmController.ts";
 import { YarnController } from "./scripts/YarnController.ts";
 import { PnpmController } from "./scripts/PnpmController.ts";
+import { DenoController } from "./scripts/DenoController.ts";
 import type { Controller } from "./scripts/Controller.ts";
 import { TestOutcome } from "./scripts/TestOutcome.ts";
 import { getTestMetadata, getAllTests } from "./scripts/test-registry.ts";
@@ -270,6 +271,8 @@ function getControllerFactory(
       return new YarnController(projectPath);
     } else if (packageManager === "pnpm") {
       return new PnpmController(projectPath);
+    } else if (packageManager === "deno") {
+      return new DenoController(projectPath);
     } else {
       throw new Error(`Unknown package manager: ${packageManager}`);
     }

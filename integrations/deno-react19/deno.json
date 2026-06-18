@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxImportSourceTypes": "@types/react",
+    "lib": ["deno.window", "dom", "dom.iterable", "dom.asynciterable"]
+  },
+  "imports": {
+    "react": "npm:react@^19.2.0",
+    "react-dom": "npm:react-dom@^19.2.0",
+    "@types/react": "npm:@types/react@^19.2.5",
+    "@types/react-dom": "npm:@types/react-dom@^19.2.3",
+    "recharts": "npm:recharts@latest",
+    "@testing-library/react": "npm:@testing-library/react@^16.3.0",
+    "global-jsdom": "npm:global-jsdom@^26.0.0",
+    "@std/assert": "jsr:@std/assert@^1"
+  },
+  "tasks": {
+    "test": "deno test -A"
+  }
+}
