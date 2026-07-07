@@ -43,7 +43,7 @@ const directDependencyTests: TestMetadata[] = [
     name: "Deno + React 19 (deno.json)",
     description:
       "Verifies Recharts renders under Deno with dependencies in deno.json (npm: specifiers)",
-    stability: "stable",
+    stability: "experimental",
     type: "direct",
     packageManager: "deno",
     integrationPath: "integrations/deno-react19",
@@ -53,7 +53,7 @@ const directDependencyTests: TestMetadata[] = [
     name: "Deno + React 19 (package.json)",
     description:
       "Verifies Recharts renders under Deno with dependencies in package.json (npm compatibility mode)",
-    stability: "stable",
+    stability: "experimental",
     type: "direct",
     packageManager: "deno",
     integrationPath: "integrations/deno-react19-package-json",
