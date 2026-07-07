@@ -136,6 +136,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (errors.length > 0) {
         errors.forEach(result => {
             console.error(`❌ ${result.name}: ${result.error}`);
+            if (result.output) {
+                console.error(result.output);
+            }
         });
         process.exit(1);
     }
