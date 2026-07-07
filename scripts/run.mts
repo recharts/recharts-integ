@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { NpmController } from "../test-ui/server/scripts/NpmController.ts";
 import { YarnController } from "../test-ui/server/scripts/YarnController.ts";
 import { PnpmController } from "../test-ui/server/scripts/PnpmController.ts";
+import { DenoController } from "../test-ui/server/scripts/DenoController.ts";
 import type { Controller } from "../test-ui/server/scripts/Controller.ts";
 import type { TestOutcome } from "../test-ui/server/scripts/TestOutcome.ts";
 import {getTestMetadata} from "../test-ui/server/scripts/test-registry.ts";
@@ -64,13 +65,15 @@ async function runLibraryInLibraryTest(libController: Controller, appController:
     return results;
 }
 
-function getControllerConstructor(packageManager: string): typeof NpmController | typeof YarnController | typeof PnpmController {
+function getControllerConstructor(packageManager: string): typeof NpmController | typeof YarnController | typeof PnpmController | typeof DenoController {
     if (packageManager === "npm") {
         return NpmController;
     } else if (packageManager === "yarn") {
         return YarnController;
     } else if (packageManager === "pnpm") {
         return PnpmController;
+    } else if (packageManager === "deno") {
+        return DenoController;
     } else {
         throw new Error(`Unknown package manager: ${packageManager}`);
     }
@@ -133,6 +136,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (errors.length > 0) {
         errors.forEach(result => {
             console.error(`❌ ${result.name}: ${result.error}`);
+            if (result.output) {
+                console.error(result.output);
+            }
         });
         process.exit(1);
     }

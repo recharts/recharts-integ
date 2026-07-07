@@ -5,7 +5,7 @@
  * All test definitions, metadata, and execution logic should reference this registry.
  */
 
-export type PackageManager = "npm" | "yarn" | "pnpm";
+export type PackageManager = "npm" | "yarn" | "pnpm" | "deno";
 export type TestType = "direct" | "library";
 export type TestStability = "stable" | "experimental";
 
@@ -39,6 +39,26 @@ export interface TestRegistry {
 
 // Define all direct dependency tests
 const directDependencyTests: TestMetadata[] = [
+  {
+    name: "Deno + React 19 (deno.json)",
+    description:
+      "Verifies Recharts renders under Deno with dependencies in deno.json (npm: specifiers)",
+    stability: "stable",
+    type: "direct",
+    packageManager: "deno",
+    integrationPath: "integrations/deno-react19",
+    dependencies: { react: "19" },
+  },
+  {
+    name: "Deno + React 19 (package.json)",
+    description:
+      "Verifies Recharts renders under Deno with dependencies in package.json (npm compatibility mode)",
+    stability: "stable",
+    type: "direct",
+    packageManager: "deno",
+    integrationPath: "integrations/deno-react19-package-json",
+    dependencies: { react: "19" },
+  },
   // npm direct dependency tests
   {
     name: "npm:integrations/tanstack-start-basic",
