@@ -73,7 +73,7 @@ jobs:
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
-          deno-version: stable
+          deno-version: v2.x
 
       - name: Test app and check dependencies
         run: ./run-test.sh "${{ matrix.test_dir }}"
