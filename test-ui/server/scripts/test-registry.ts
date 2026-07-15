@@ -262,7 +262,7 @@ const directDependencyTests: TestMetadata[] = [
   {
     name: "Vite 8 +  React 19 with npm",
     description:
-      "Covers Vite 8 compatibility and the Rolldown regressions in recharts/recharts#7376 and #7454",
+      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
     stability: "stable",
     type: "direct",
     packageManager: "npm",
@@ -272,7 +272,7 @@ const directDependencyTests: TestMetadata[] = [
   {
     name: "Vite 8 +  React 19 with yarn",
     description:
-      "Covers Vite 8 compatibility and the Rolldown regressions in recharts/recharts#7376 and #7454",
+      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
     stability: "stable",
     type: "direct",
     packageManager: "yarn",
@@ -282,12 +282,22 @@ const directDependencyTests: TestMetadata[] = [
   {
     name: "Vite 8 +  React 19 with pnpm",
     description:
-      "Covers Vite 8 compatibility and the Rolldown regressions in recharts/recharts#7376 and #7454",
+      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
     stability: "stable",
     type: "direct",
     packageManager: "pnpm",
     integrationPath: "integrations/vite8-react19",
     dependencies: { react: "19", vite: "8" },
+  },
+  {
+    name: "Vite 8.0.12 + es-toolkit 1.47 interop with pnpm",
+    description:
+      "Reproduces the Rolldown runtime failure from recharts/recharts#7376 and #7454 without replacing the current Vite 8 coverage",
+    stability: "stable",
+    type: "direct",
+    packageManager: "pnpm",
+    integrationPath: "integrations/vite8-es-toolkit-interop",
+    dependencies: { react: "19", vite: "8.0.12", "es-toolkit": "1.47.0" },
   },
   {
     name: "npm:integrations/typescript-6",

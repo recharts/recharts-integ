@@ -1,0 +1,21 @@
+{
+  "name": "vite8-es-toolkit-interop",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "test": "node scripts/dev-server-test.mjs"
+  },
+  "dependencies": {
+    "es-toolkit": "1.47.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "recharts": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.2",
+    "playwright-core": "1.61.1",
+    "vite": "8.0.12"
+  }
+}

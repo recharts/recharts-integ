@@ -3,11 +3,12 @@ import App from './App'
 import { render } from '@testing-library/react'
 
 describe('App', () => {
-    it('should render svg and a line', () => {
+    it('should render svg and bars', () => {
         const { container } = render(<App />)
         const svg = container.getElementsByTagName('svg')[0]
         expect(svg).toBeDefined()
-        const lines = container.getElementsByClassName('recharts-line-curve')
-        expect(lines).toHaveLength(1)
+        const bars = container.getElementsByClassName('recharts-bar-rectangle')
+        expect(bars).toHaveLength(4)
     })
 })
+
