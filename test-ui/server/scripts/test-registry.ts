@@ -262,7 +262,7 @@ const directDependencyTests: TestMetadata[] = [
   {
     name: "Vite 8 +  React 19 with npm",
     description:
-      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
+      "Covers Vite 8 compatibility and the Rolldown regressions in recharts/recharts#7376 and #7454",
     stability: "stable",
     type: "direct",
     packageManager: "npm",
@@ -272,7 +272,7 @@ const directDependencyTests: TestMetadata[] = [
   {
     name: "Vite 8 +  React 19 with yarn",
     description:
-      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
+      "Covers Vite 8 compatibility and the Rolldown regressions in recharts/recharts#7376 and #7454",
     stability: "stable",
     type: "direct",
     packageManager: "yarn",
@@ -282,7 +282,7 @@ const directDependencyTests: TestMetadata[] = [
   {
     name: "Vite 8 +  React 19 with pnpm",
     description:
-      "Trying to reproduce https://github.com/recharts/recharts/issues/7376",
+      "Covers Vite 8 compatibility and the Rolldown regressions in recharts/recharts#7376 and #7454",
     stability: "stable",
     type: "direct",
     packageManager: "pnpm",
