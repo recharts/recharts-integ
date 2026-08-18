@@ -202,6 +202,26 @@ const directDependencyTests: TestMetadata[] = [
       "Tests typescript with skipLibCheck: false. See https://github.com/recharts/recharts/issues/6664",
   },
   {
+    name: "npm:integrations/ts-declaration-emit",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/ts-declaration-emit",
+    dependencies: {},
+    description:
+      "Tests a consumer that wraps Recharts components and emits its own declaration files. Fails until the fix for https://github.com/recharts/recharts/issues/6291 is released, so it is experimental for now.",
+  },
+  {
+    name: "yarn:integrations/ts-declaration-emit",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/ts-declaration-emit",
+    dependencies: {},
+    description:
+      "Tests a consumer that wraps Recharts components and emits its own declaration files. Fails until the fix for https://github.com/recharts/recharts/issues/6291 is released, so it is experimental for now.",
+  },
+  {
     name: "npm:integrations/ts-react16-skip-lib-check-false",
     stability: "stable",
     type: "direct",
