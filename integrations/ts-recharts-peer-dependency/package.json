@@ -1,0 +1,16 @@
+{
+  "name": "ts-recharts-peer-dependency",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "node verify-package-metadata.mjs"
+  },
+  "dependencies": {
+    "react": "^19.x.x",
+    "recharts": "latest",
+    "typescript": "latest",
+    "@types/react": "latest"
+  }
+}

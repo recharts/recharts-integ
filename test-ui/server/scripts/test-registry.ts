@@ -242,6 +242,26 @@ const directDependencyTests: TestMetadata[] = [
       "Tests typescript with skipLibCheck: false, React 16, and redux-toolkit 2. See https://github.com/recharts/recharts/issues/6664",
   },
   {
+    name: "npm:integrations/ts-recharts-peer-dependency",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "npm",
+    integrationPath: "integrations/ts-recharts-peer-dependency",
+    dependencies: { react: "19" },
+    description:
+      "Checks that Recharts declares @types/react as an optional peer dependency. See https://github.com/recharts/recharts/issues/7709",
+  },
+  {
+    name: "yarn:integrations/ts-recharts-peer-dependency",
+    stability: "experimental",
+    type: "direct",
+    packageManager: "yarn",
+    integrationPath: "integrations/ts-recharts-peer-dependency",
+    dependencies: { react: "19" },
+    description:
+      "Checks that Recharts declares @types/react as an optional peer dependency. See https://github.com/recharts/recharts/issues/7709",
+  },
+  {
     name: "pnpm:react19",
     stability: "stable",
     type: "direct",
