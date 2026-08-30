@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 
-const packageJson = JSON.parse(
-  await readFile("node_modules/recharts/package.json", "utf8"),
+const packageJsonPath = createRequire(import.meta.url).resolve(
+  "recharts/package.json",
 );
+const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
 
 assert.equal(
   packageJson.peerDependencies?.["@types/react"],
